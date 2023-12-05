@@ -20,7 +20,9 @@ namespace Integrity_Checker_MEP
     {
         private Form1 form1;
         private Form2 form2;
-
+        private MainFunc mainFunc;
+        private MainClass2 mainClass2;
+    
         public override int ExecuteCommand(string name, params string[] parameters)
         {
             switch (name)
@@ -28,28 +30,36 @@ namespace Integrity_Checker_MEP
                 case "Button_One":
                     if(form1 == null)
                     {
-                        form1 = new Form1();
-                        form1.Show();
-                        form1.FormClosed += (s, args) => form1 = null;
+                        mainFunc = new MainFunc();
+                        mainFunc.Execute();
+
+                        //form1 = new Form1();
+                        //form1.Show();
+                        //form1.FormClosed += (s, args) => form1 = null;
                     }
                     else
                     {
-                        form1.Close();
-                        form1 = null;
+                        //todo 닫기 구현
+                        //form1.Close();
+                        //form1 = null;
                     }
                     break;
                 case "Button_Two":
                     if (form2 == null)
                     {
-                        form2 = new Form2();
-                        form2.Show();
-                        form2.FormClosed += (s, args) => form2 = null;
+                        mainClass2 = new MainClass2();
+                        mainClass2.Execute();
+
+                        //form2 = new Form2();
+                        //form2.Show();
+                        //form2.FormClosed += (s, args) => form2 = null;
 
                     }
                     else
                     {
-                        form2.Close();
-                        form2 = null;
+                        //todo 닫기 구현
+                        //form2.Close();
+                        //form2 = null;
                     }
                     break;
                 /*case "Button_Three":
