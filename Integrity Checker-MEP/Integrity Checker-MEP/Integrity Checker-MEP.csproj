@@ -67,6 +67,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checker.cs" />
+    <Compile Include="form_ResultViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form_ResultViewer.designer.cs">
+      <DependentUpon>form_ResultViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form_SelectRow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form_SelectRow.designer.cs">
+      <DependentUpon>form_SelectRow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Setting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Setting.Designer.cs">
+      <DependentUpon>Form_Setting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="From_Log.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="From_Log.Designer.cs">
+      <DependentUpon>From_Log.cs</DependentUpon>
+    </Compile>
     <Compile Include="Loader.cs" />
     <Compile Include="CollapsibleListView.cs">
       <SubType>Component</SubType>
@@ -83,22 +107,6 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_ResultViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="form_ResultViewer.designer.cs" />
-    <Compile Include="form_SelectRow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="form_SelectRow.designer.cs" />
-    <Compile Include="Form_Setting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form_Setting.Designer.cs" />
-    <Compile Include="From_Log.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="From_Log.Designer.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="MessageBoxEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -119,10 +127,18 @@
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_ResultViewer.resx" />
-    <EmbeddedResource Include="form_SelectRow.resx" />
-    <EmbeddedResource Include="Form_Setting.resx" />
-    <EmbeddedResource Include="From_Log.resx" />
+    <EmbeddedResource Include="form_ResultViewer.resx">
+      <DependentUpon>form_ResultViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form_SelectRow.resx">
+      <DependentUpon>form_SelectRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Setting.resx">
+      <DependentUpon>Form_Setting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="From_Log.resx">
+      <DependentUpon>From_Log.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
