@@ -13,7 +13,7 @@ using Application = Autodesk.Navisworks.Api.Application;
 using ClashTest2;
 
 namespace Integrity_Checker_MEP {
-    public class MainClass2{
+    public class ResultViewer{
         public int Execute(params string[] parameters) {
             // current document
     

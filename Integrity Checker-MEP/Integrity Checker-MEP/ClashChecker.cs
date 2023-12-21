@@ -65,40 +65,40 @@ class IfcSystemData {
 }
 
 namespace Integrity_Checker_MEP {
-    public class MainFunc {
+    public class ClashChecker {
         bool show_Setting = false;
-
-        Form_Setting form_setting;
-        From_Log form_log;
+        
+        Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
+        From_Log form_log; // 로그 출력 폼
 
         public int Execute(params string[] parameters) {
             try {
                 form_setting = new Form_Setting();
                 form_setting.ShowDialog();
 
-                if (!form_setting.start) return 0;
+                if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
 
-                if (!GetModelFromFolder(@"C:\models\")) return 0;
+                if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
                 form_log = new From_Log();
                 form_log.Show();
                 if (form_setting.export_Result) {
-                    MakeClashTest();
-                    TestClashTest();
-                    GetClashResult();
+                    MakeClashTest(); // 테스트 생성
+                    TestClashTest(); // 테스트 실행
+                    GetClashResult(); // 테스트 결과 받기
                 }
                 if (form_setting.export_Properties) {
-                    GetSpaceHeights();
+                    GetSpaceHeights(); // 공간별 높이 구하기
                 }
                 if (form_setting.Make_ZipFile) {
-                    MakeZipFile(ClashFile, InfoFile);
+                    MakeZipFile(ClashFile, InfoFile); // 압축파일 만들기
                 }
                 if (form_setting.Send_toServer) {
-                    SendtoServer("C:/objectinfo/compressed.zip");
+                    SendtoServer("C:/objectinfo/compressed.zip"); // 서버로 압축파일 전송
                 }
                 if (form_setting.Save_log) {
-                    SaveLog();
+                    SaveLog(); // 로그를 파일로 저장
                 }
-                form_log.UpdateLog("Done");
+                form_log.UpdateLog("종료");
             }
             catch (Exception ex) {
                 form_log.UpdateLog(ex.ToString());
@@ -106,8 +106,6 @@ namespace Integrity_Checker_MEP {
             }
             return 0;
         }
-
-        //todo 닫기 구현
 
         //로그 저장
         void SaveLog() {
@@ -121,7 +119,6 @@ namespace Integrity_Checker_MEP {
 
         double offset;
         double toleroffset;
-        int _i, _j;
         /// <summary>
         /// "path" 폴더 안에있는 .ifc파일을 현재워크시트에 불러옵니다.
         /// </summary>
@@ -134,6 +131,7 @@ namespace Integrity_Checker_MEP {
                     if (Directory.GetFiles(path)[i].Contains(".ifc."))
                         continue;
                     doc.AppendFile(Directory.GetFiles(path)[i]);
+                    form_log.UpdateLog($"ifc 불러오기 : {Directory.GetFiles(path)[i]}");
                 }
             }
 
@@ -166,9 +164,7 @@ namespace Integrity_Checker_MEP {
             return true;
         }
 
-        List<string> lst_ArchDupl = new List<string>();
-        List<string> lst_StrDupl = new List<string>();
-
+        int _i, _j;
         /// <summary>
         /// 지정한 형식으로 테스트 생성
         /// </summary>
@@ -235,6 +231,7 @@ namespace Integrity_Checker_MEP {
         /// <param name="ClashtestName"> 테스트의 DisplayName</param>
         /// <param name="toler"> 테스트의 공차(단위:m)</param>
         void NewClashTest(string ClashtestName, double toler, ClashTestType type) {
+            // 현재 Navisworks에 접근
             DocumentClash documentClash = Autodesk.Navisworks.Api.Application.ActiveDocument.GetClash();
             Document document = Autodesk.Navisworks.Api.Application.ActiveDocument;
             DocumentClashTests oDCT = documentClash.TestsData;
@@ -298,6 +295,8 @@ namespace Integrity_Checker_MEP {
 
 
         string ClashFile = "";
+        List<string> lst_ArchDupl = new List<string>();
+        List<string> lst_StrDupl = new List<string>();
         /// <summary>
         /// 전체/지정된 테스트의 간섭검토 결과를 CSV파일로 export
         /// </summary>
@@ -305,6 +304,7 @@ namespace Integrity_Checker_MEP {
         void GetClashResult(string ClashtestName = null) {
             form_log.UpdateLog("테스트 결과 출력 시작");
             try {
+                // 현재 Navisworks 접근
                 Document document = Application.ActiveDocument;
                 DocumentClash documentClash = document.GetClash();
                 DocumentClashTests oDCT = documentClash.TestsData;
@@ -318,6 +318,7 @@ namespace Integrity_Checker_MEP {
                     oEachTest.DisplayName = test.DisplayName;
                     oEachTest.testType = test.TestType;
 
+                    // 테스트 타입이 Duplicate
                     if (test.TestType == ClashTestType.Duplicate) {
                         foreach (var c in test.Children) {
                             ClashResult nwissue = (ClashResult)c;
@@ -390,6 +391,7 @@ namespace Integrity_Checker_MEP {
                             }
                             continue;
                         }
+                        // 계단과 같은 복합 부재 일 경우 제외
                         string temp11 = "";
                         try {
                             temp11 = Getinfo(nwissue.Item1.FindFirstObjectAncestor(), "항목", "유형");
@@ -487,11 +489,12 @@ namespace Integrity_Checker_MEP {
                         #endregion
 
                         #region IfcSystem이 동일한 MEP부재 모으기
+                        // IfcSystem이 동일한 MEP 간의 간섭은 간섭으로 판단 하지 않음
+                        
                         //출처 파일 가져오기
                         oEachResult.Namespace1 = Getinfo(nwissue.Item1, "항목", "소스 파일").Replace(".ifc", "");
                         oEachResult.Namespace2 = Getinfo(nwissue.Item2, "항목", "소스 파일").Replace(".ifc", "");
                         
-
                         //두 부재가 mep일 때
                         if ((oEachResult.Namespace1.Contains("COMM") && oEachResult.Namespace2.Contains("COMM"))
                             || (oEachResult.Namespace1.Contains("COMM") && oEachResult.Namespace2.Contains("ELEC"))
@@ -508,7 +511,7 @@ namespace Integrity_Checker_MEP {
                             try {
                                 oEachResult.IfcSystem1 = $"\"{Getinfo(nwissue.Item1, "요소", "IfcSystem")}\"";
                             }
-                            catch {
+                            catch { // 가끔 간섭을 일으킨 부재가 IfcSystem 속성을 가지지 않을 때가 있으므로 해당 부재의 부모의 IfcSystem 확인
                                 try {
                                     oEachResult.IfcSystem1 = $"\"{Getinfo(nwissue.Item1.FindFirstObjectAncestor(), "요소", "IfcSystem")}\"";
                                     if (string.IsNullOrEmpty(oEachResult.IfcSystem1)) oEachResult.IfcSystem1 = "";
@@ -557,6 +560,7 @@ namespace Integrity_Checker_MEP {
                         oEachResult.path2ID = getElementID(nwissue.Item2);
 
                         #region 자신과의 충돌
+                        // 드물게 존재하는 케이스
                         if (string.Compare(oEachResult.path1ID, oEachResult.path2ID) == 0) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
@@ -666,7 +670,7 @@ namespace Integrity_Checker_MEP {
                         //간섭거리
                         temp[9] = (tests_array[i].ClashResults[j].distance * offset).ToString("F3");
 
-                        #region CurtainWall의 자식들은 부모의 IfcClass를 가짐
+                        #region 부모의 IfcClass가 CurtainWall이면 자식의 IfcClass도 CurtainWall로 변경
                         //이 부분은 getElement와 같이 수정되어야 함
                         switch (temp[3]) {
                             case "IfcMember":
@@ -853,7 +857,7 @@ namespace Integrity_Checker_MEP {
                     StreamWriter outStream = new StreamWriter(fileStream, Encoding.UTF8);
                     outStream.WriteLine(sb);
                     outStream.Close();
-                    form_log.UpdateLog("AllinOne 파일 출력 완료");
+                    form_log.UpdateLog("파일 출력 완료 : AllinOne");
                 }
                 #endregion
                 #endregion
@@ -871,7 +875,7 @@ namespace Integrity_Checker_MEP {
         /// <param name="name"> 파일 이름</param>
         /// <param name="data"> 저장할 데이터</param>
         StringBuilder SaveCSVFile(string name, List<string[]> data) {
-            form_log.UpdateLog($"    {name}.csv 생성 시작");
+            //form_log.UpdateLog($"    생성 시작 : {name}.csv");
             string[][] output = new string[data.Count][];
             for (int i = 0; i < output.Length; i++) {
                 output[i] = data[i];
@@ -902,7 +906,7 @@ namespace Integrity_Checker_MEP {
             outStream.WriteLine(sb);
             outStream.Close();
 
-            form_log.UpdateLog($"    {name}.csv 생성 완료");
+            //form_log.UpdateLog($"    생성 완료 : {name}.csv");
             return sb;
         }
 
@@ -913,6 +917,7 @@ namespace Integrity_Checker_MEP {
         /// <returns> IfcGUID </returns>
         string getElementID(ModelItem item) {
             try {
+                // CurtainWall의 자식일 경우 IfcClass를 CurtainWall로 변경
                 switch (Getinfo(item, "요소", "IfcClass")) {
                     case "IfcMember":
                     case "IfcPlate":
@@ -931,7 +936,7 @@ namespace Integrity_Checker_MEP {
                     return oDP.Value.ToDisplayString();
             }
             catch {
-                //item 내에서 [IfcGUID]를 찾지 못했을 대
+                //item 내에서 [IfcGUID]를 찾지 못했을 때
                 try {
                     //item의 첫번째 부모에서 [IfcGUID] 찾기
                     DataProperty oDP = item.FindFirstObjectAncestor().PropertyCategories.FindCategoryByName("LcRevitData_Element").Properties.FindPropertyByDisplayName("IfcGUID");
@@ -965,7 +970,7 @@ namespace Integrity_Checker_MEP {
         /// IfcSystem이 같은 MEP부재를 모아서 출력
         /// </summary>
         void ExportSameIfcSystem() {
-            form_log.UpdateLog($"SameIfcSystem 파일 출력 시작");
+            form_log.UpdateLog($"파일 출력 시작 : SameIfcSystem");
             StringBuilder sb = new StringBuilder();
             if (List_sameIfcSystem.Count == 0) {
                 sb.Append("no same ifcsystem");
@@ -994,7 +999,7 @@ namespace Integrity_Checker_MEP {
             outStream.WriteLine(sb);
             outStream.Close();
             List_sameIfcSystem.Clear();
-            form_log.UpdateLog($"SameIfcSystem 파일 출력 완료");
+            form_log.UpdateLog($"파일 출력 완료 : SameIfcSystem");
         }
 
         /// <summary>
@@ -1025,7 +1030,7 @@ namespace Integrity_Checker_MEP {
             //int index = 0;
             //불러와진 모델들의 최하위 오브젝트를 하나씩 콜랙션에 넣기
             for (int i = 0; i < models.Count; i++) {
-                if (models[i].FileName.ToUpper().Contains("COMM")
+                if (models[i].FileName.ToUpper().Contains("COMM") // MEP는 대상에서 제외
                     || models[i].FileName.ToUpper().Contains("ELEC")
                     || models[i].FileName.ToUpper().Contains("FIRE")
                     || models[i].FileName.ToUpper().Contains("MECH")) continue;
@@ -1145,7 +1150,7 @@ namespace Integrity_Checker_MEP {
                 }
             }
 
-            //남는 것들 저장(cut보다 작은 수 들)
+            //결과 저장
             #region 헤더부분
             string[] header2 = new string[3];
             header2[0] = "Guid";
@@ -1169,6 +1174,13 @@ namespace Integrity_Checker_MEP {
             return model.RootItem.Descendants.Where(x => x.HasGeometry);
         }
 
+        /// <summary>
+        /// 'item'의 'category'에 있는 'property'의 값을 반환
+        /// </summary>
+        /// <param name="item">부재</param>
+        /// <param name="category">카테고리의 DisplayName</param>
+        /// <param name="property">속성의 DisplayName</param>
+        /// <returns></returns>
         string Getinfo(ModelItem item, string category, string property) {
             string info = "";
             try {
@@ -1188,7 +1200,11 @@ namespace Integrity_Checker_MEP {
             return info;
         }
 
-        //zip파일 만들기
+        /// <summary>
+        /// compressed.zip파일 생성
+        /// </summary>
+        /// <param name="clashFile">C:\objectinfo\All_in_One.csv</param>
+        /// <param name="infoFile">C:\objectinfo\Properties.csv</param>
         void MakeZipFile(string clashFile = null, string infoFile = null) {
             form_log.UpdateLog("압축파일 만들기 시작");
             try {
@@ -1256,8 +1272,6 @@ namespace Integrity_Checker_MEP {
                 WebClient webClient = new WebClient();
                 byte[] re = webClient.UploadFile(serverIP, filepath);
                 string response = webClient.Encoding.GetString(re);
-
-
                 ShowMessage(response);
             }
             catch (Exception e) {
@@ -1277,7 +1291,7 @@ namespace Integrity_Checker_MEP {
         /// </summary>
         /// <param name="test"></param>
         void ExportUselessClashes() {
-            form_log.UpdateLog("UselessClashes 파일 출력 시작");
+            form_log.UpdateLog("파일 출력 시작 : UselessClashes");
             if (List_uselessClashes.Count == 0)
                 return;
 
@@ -1316,7 +1330,7 @@ namespace Integrity_Checker_MEP {
             outStream.Close();
             List_uselessClashes.Clear();
             List_uselessReasons.Clear();
-            form_log.UpdateLog("UselessClashes 파일 출력 시작");
+            form_log.UpdateLog("파일 출력 시작 : UselessClashes");
         }
 
         void ShowMessage(string content) {

@@ -20,8 +20,8 @@ namespace Integrity_Checker_MEP
     {
         private Form1 form1;
         private Form2 form2;
-        private MainFunc mainFunc;
-        private MainClass2 mainClass2;
+        private ClashChecker clashChecker;
+        private ResultViewer resultViewer;
     
         public override int ExecuteCommand(string name, params string[] parameters)
         {
@@ -30,8 +30,8 @@ namespace Integrity_Checker_MEP
                 case "Clash_Checker":
                     //if(mainFunc == null)
                     //{
-                        mainFunc = new MainFunc();
-                        mainFunc.Execute();
+                        clashChecker = new ClashChecker();
+                        clashChecker.Execute();
 
                         //form1 = new Form1();
                         //form1.Show();
@@ -46,9 +46,9 @@ namespace Integrity_Checker_MEP
                     //}
                     break;
                 case "Result_Receiver":
-                    if (mainClass2 == null) {
-                        mainClass2 = new MainClass2();
-                        mainClass2.Execute();
+                    if (resultViewer == null) {
+                        resultViewer = new ResultViewer();
+                        resultViewer.Execute();
 
                         //form2 = new Form2();
                         //form2.Show();
@@ -59,20 +59,20 @@ namespace Integrity_Checker_MEP
                         //form2.Close();
                         //form2 = null;
 
-                        mainClass2 = null;
+                        resultViewer = null;
                     }
                     break;
                 case "Clash_Checker_split":
-                    mainFunc = new MainFunc();
-                    mainFunc.Execute();
+                    clashChecker = new ClashChecker();
+                    clashChecker.Execute();
 
                     //MessageBox.Show("In three words I can sum up everything I've learned" +
                     //    " about life: it goes on.\n-Robert Frost",
                     //    "Sample - Button Three");
                     break;
                 case "Result_Receiver_split":
-                    mainClass2 = new MainClass2();
-                    mainClass2.Execute();
+                    resultViewer = new ResultViewer();
+                    resultViewer.Execute();
 
                     //MessageBox.Show("Four things for success: work and pray, " +
                     //    "think and believe.\n-Norman Vincent Peale", "Sample - Button Four");
