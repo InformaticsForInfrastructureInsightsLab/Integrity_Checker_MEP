@@ -40,14 +40,16 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.collapsibleListView1 = new ListviewTest.CollapsibleListView();
             this.majorHard = new System.Windows.Forms.Label();
             this.majorSoft = new System.Windows.Forms.Label();
             this.mediumHard = new System.Windows.Forms.Label();
             this.mediumSoft = new System.Windows.Forms.Label();
             this.minorHard = new System.Windows.Forms.Label();
             this.minorSoft = new System.Windows.Forms.Label();
+            this.rdo_hide = new System.Windows.Forms.RadioButton();
+            this.rdo_trans = new System.Windows.Forms.RadioButton();
+            this.rdo_none = new System.Windows.Forms.RadioButton();
+            this.collapsibleListView1 = new ListviewTest.CollapsibleListView();
             this.SuspendLayout();
             // 
             // button1
@@ -151,17 +153,105 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // checkBox3
+            // majorHard
             // 
-            this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(591, 127);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(104, 16);
-            this.checkBox3.TabIndex = 12;
-            this.checkBox3.Text = "선택 외 투명화";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            this.majorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.majorHard.AutoSize = true;
+            this.majorHard.Location = new System.Drawing.Point(589, 302);
+            this.majorHard.Name = "majorHard";
+            this.majorHard.Size = new System.Drawing.Size(89, 12);
+            this.majorHard.TabIndex = 13;
+            this.majorHard.Text = "MAJOR_HARD:";
+            this.majorHard.Visible = false;
+            // 
+            // majorSoft
+            // 
+            this.majorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.majorSoft.AutoSize = true;
+            this.majorSoft.Location = new System.Drawing.Point(589, 322);
+            this.majorSoft.Name = "majorSoft";
+            this.majorSoft.Size = new System.Drawing.Size(89, 12);
+            this.majorSoft.TabIndex = 14;
+            this.majorSoft.Text = "MAJOR_SOFT:\r\n";
+            this.majorSoft.Visible = false;
+            // 
+            // mediumHard
+            // 
+            this.mediumHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.mediumHard.AutoSize = true;
+            this.mediumHard.Location = new System.Drawing.Point(589, 342);
+            this.mediumHard.Name = "mediumHard";
+            this.mediumHard.Size = new System.Drawing.Size(96, 12);
+            this.mediumHard.TabIndex = 15;
+            this.mediumHard.Text = "MEDIUM_HARD:";
+            this.mediumHard.Visible = false;
+            // 
+            // mediumSoft
+            // 
+            this.mediumSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.mediumSoft.AutoSize = true;
+            this.mediumSoft.Location = new System.Drawing.Point(589, 362);
+            this.mediumSoft.Name = "mediumSoft";
+            this.mediumSoft.Size = new System.Drawing.Size(96, 12);
+            this.mediumSoft.TabIndex = 16;
+            this.mediumSoft.Text = "MEDIUM_SOFT:";
+            this.mediumSoft.Visible = false;
+            // 
+            // minorHard
+            // 
+            this.minorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.minorHard.AutoSize = true;
+            this.minorHard.Location = new System.Drawing.Point(589, 382);
+            this.minorHard.Name = "minorHard";
+            this.minorHard.Size = new System.Drawing.Size(87, 12);
+            this.minorHard.TabIndex = 17;
+            this.minorHard.Text = "MINOR_HARD:";
+            this.minorHard.Visible = false;
+            // 
+            // minorSoft
+            // 
+            this.minorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.minorSoft.AutoSize = true;
+            this.minorSoft.Location = new System.Drawing.Point(589, 402);
+            this.minorSoft.Name = "minorSoft";
+            this.minorSoft.Size = new System.Drawing.Size(87, 12);
+            this.minorSoft.TabIndex = 18;
+            this.minorSoft.Text = "MINOR_SOFT:";
+            this.minorSoft.Visible = false;
+            // 
+            // rdo_hide
+            // 
+            this.rdo_hide.AutoSize = true;
+            this.rdo_hide.Location = new System.Drawing.Point(591, 150);
+            this.rdo_hide.Name = "rdo_hide";
+            this.rdo_hide.Size = new System.Drawing.Size(103, 16);
+            this.rdo_hide.TabIndex = 19;
+            this.rdo_hide.Text = "선택 외 숨기기";
+            this.rdo_hide.UseVisualStyleBackColor = true;
+            this.rdo_hide.CheckedChanged += new System.EventHandler(this.rdo_CheckedChanged);
+            // 
+            // rdo_trans
+            // 
+            this.rdo_trans.AutoSize = true;
+            this.rdo_trans.Location = new System.Drawing.Point(591, 173);
+            this.rdo_trans.Name = "rdo_trans";
+            this.rdo_trans.Size = new System.Drawing.Size(103, 16);
+            this.rdo_trans.TabIndex = 20;
+            this.rdo_trans.Text = "선택 외 투명화";
+            this.rdo_trans.UseVisualStyleBackColor = true;
+            this.rdo_trans.CheckedChanged += new System.EventHandler(this.rdo_CheckedChanged);
+            // 
+            // rdo_none
+            // 
+            this.rdo_none.AutoSize = true;
+            this.rdo_none.Checked = true;
+            this.rdo_none.Location = new System.Drawing.Point(591, 128);
+            this.rdo_none.Name = "rdo_none";
+            this.rdo_none.Size = new System.Drawing.Size(87, 16);
+            this.rdo_none.TabIndex = 21;
+            this.rdo_none.TabStop = true;
+            this.rdo_none.Text = "숨기기 없음";
+            this.rdo_none.UseVisualStyleBackColor = true;
             // 
             // collapsibleListView1
             // 
@@ -190,84 +280,20 @@
             this.collapsibleListView1.View = System.Windows.Forms.View.Details;
             this.collapsibleListView1.SelectedIndexChanged += new System.EventHandler(this.collapsibleListView1_SelectedIndexChanged);
             // 
-            // majorHard
-            // 
-            this.majorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.majorHard.AutoSize = true;
-            this.majorHard.Location = new System.Drawing.Point(589, 157);
-            this.majorHard.Name = "majorHard";
-            this.majorHard.Size = new System.Drawing.Size(89, 12);
-            this.majorHard.TabIndex = 13;
-            this.majorHard.Text = "MAJOR_HARD:";
-            this.majorHard.Visible = false;
-            // 
-            // majorSoft
-            // 
-            this.majorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.majorSoft.AutoSize = true;
-            this.majorSoft.Location = new System.Drawing.Point(589, 177);
-            this.majorSoft.Name = "majorSoft";
-            this.majorSoft.Size = new System.Drawing.Size(89, 12);
-            this.majorSoft.TabIndex = 14;
-            this.majorSoft.Text = "MAJOR_SOFT:\r\n";
-            this.majorSoft.Visible = false;
-            // 
-            // mediumHard
-            // 
-            this.mediumHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mediumHard.AutoSize = true;
-            this.mediumHard.Location = new System.Drawing.Point(589, 197);
-            this.mediumHard.Name = "mediumHard";
-            this.mediumHard.Size = new System.Drawing.Size(96, 12);
-            this.mediumHard.TabIndex = 15;
-            this.mediumHard.Text = "MEDIUM_HARD:";
-            this.mediumHard.Visible = false;
-            // 
-            // mediumSoft
-            // 
-            this.mediumSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mediumSoft.AutoSize = true;
-            this.mediumSoft.Location = new System.Drawing.Point(589, 217);
-            this.mediumSoft.Name = "mediumSoft";
-            this.mediumSoft.Size = new System.Drawing.Size(96, 12);
-            this.mediumSoft.TabIndex = 16;
-            this.mediumSoft.Text = "MEDIUM_SOFT:";
-            this.mediumSoft.Visible = false;
-            // 
-            // minorHard
-            // 
-            this.minorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.minorHard.AutoSize = true;
-            this.minorHard.Location = new System.Drawing.Point(589, 237);
-            this.minorHard.Name = "minorHard";
-            this.minorHard.Size = new System.Drawing.Size(87, 12);
-            this.minorHard.TabIndex = 17;
-            this.minorHard.Text = "MINOR_HARD:";
-            this.minorHard.Visible = false;
-            // 
-            // minorSoft
-            // 
-            this.minorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.minorSoft.AutoSize = true;
-            this.minorSoft.Location = new System.Drawing.Point(589, 257);
-            this.minorSoft.Name = "minorSoft";
-            this.minorSoft.Size = new System.Drawing.Size(87, 12);
-            this.minorSoft.TabIndex = 18;
-            this.minorSoft.Text = "MINOR_SOFT:";
-            this.minorSoft.Visible = false;
-            // 
-            // Form1
+            // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(697, 466);
+            this.Controls.Add(this.rdo_none);
+            this.Controls.Add(this.rdo_trans);
+            this.Controls.Add(this.rdo_hide);
             this.Controls.Add(this.minorSoft);
             this.Controls.Add(this.minorHard);
             this.Controls.Add(this.mediumSoft);
             this.Controls.Add(this.mediumHard);
             this.Controls.Add(this.majorSoft);
             this.Controls.Add(this.majorHard);
-            this.Controls.Add(this.checkBox3);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -278,7 +304,7 @@
             this.Controls.Add(this.ID_GUID1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "form_ResultViewer";
             this.Text = "Integrity Checker-MEP Response";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -296,13 +322,15 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Label majorHard;
         private System.Windows.Forms.Label majorSoft;
         private System.Windows.Forms.Label mediumHard;
         private System.Windows.Forms.Label mediumSoft;
         private System.Windows.Forms.Label minorHard;
         private System.Windows.Forms.Label minorSoft;
+        private System.Windows.Forms.RadioButton rdo_hide;
+        private System.Windows.Forms.RadioButton rdo_trans;
+        private System.Windows.Forms.RadioButton rdo_none;
     }
 }
 

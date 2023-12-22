@@ -18,8 +18,6 @@ namespace Integrity_Checker_MEP
     [Command("Result_Receiver_split", Icon = "4_16.png", LargeIcon = "4_32.png")]
     public class MainClass : CommandHandlerPlugin
     {
-        private Form1 form1;
-        private Form2 form2;
         private ClashChecker clashChecker;
         private ResultViewer resultViewer;
     

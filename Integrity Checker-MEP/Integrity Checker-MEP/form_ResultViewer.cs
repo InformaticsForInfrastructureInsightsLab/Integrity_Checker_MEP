@@ -78,6 +78,9 @@ namespace ClashTest2
         private int medium_hard = 0, medium_soft = 0;
         private int minor_hard = 0, minor_soft = 0;
 
+        private string guid1;
+        private string guid2;
+
         public form_ResultViewer()
         {
             InitializeComponent();
@@ -247,7 +250,9 @@ namespace ClashTest2
             {
                 if (collapsibleListView1.SelectedItems[0].SubItems.Count > 1) {
                     ID_GUID1.Text = "Guid1: " + collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text + "  Guid2: " + collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
-                    SelectObjects(collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text, collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
+                    guid1 = collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text;
+                    guid2 = collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
+                    SelectObjects(guid1, guid2);
                 }
 
             }
@@ -561,12 +566,21 @@ namespace ClashTest2
         //부재에 칠할 색
         Color[] colors = { Color.Green, Color.Red };
         bool trans = false;
-        public void SelectObjects(string guid1, string guid2) {
+        bool hide = false;
+        ModelItemCollection invertItemCollection = new ModelItemCollection();
+        public void SelectObjects(string _guid1, string _guid2) {
             doc.Models.ResetAllTemporaryMaterials();
-            ColorTarget("all");
-            ColorTarget(guid1, 0);
-            ColorTarget(guid2, 1);
-            MoveCamBetween(guid1, guid2);
+            doc.Models.ResetAllHiddenToModelState();
+            
+            ModelItem item1 = SelectObjectWithGUID(_guid1); //item1 선택
+            ModelItem item2 = SelectObjectWithGUID(_guid2); //item2 선택
+            invertItemCollection.CopyFrom(doc.CurrentSelection.SelectedItems); //item1, item2가 선택되어 있음
+            invertItemCollection.Invert(doc); // 선택 반전 (전체 - item1 - item2)
+            ColorTarget();
+            ColorTarget(item1, 0);
+            ColorTarget(item2, 1);
+
+            MoveCamBetween(item1, item2);
         }
 
         /// <summary>
@@ -574,25 +588,50 @@ namespace ClashTest2
         /// </summary>
         /// <param name="guid"></param>
         /// <param name="index"></param>
-        void ColorTarget(string guid, int index = -1) {
+        void ColorTarget(ModelItem item = null, int index = -1) {
+            
             if (index == -1) {
-                doc.CurrentSelection.SelectAll();
-                doc.Models.OverrideTemporaryTransparency(doc.CurrentSelection.SelectedItems, trans ? 20 : 0);
+                if (trans) {
+                    doc.Models.OverrideTemporaryTransparency(invertItemCollection, 10);
+                }
+                if (hide) {
+                    doc.Models.SetHidden(invertItemCollection, true);
+                }
                 doc.CurrentSelection.Clear();
             }
             else {
-                SelectObjectWithGUID(guid);
-                doc.Models.OverrideTemporaryColor(doc.CurrentSelection.SelectedItems, colors[index]);
-                doc.Models.OverrideTemporaryTransparency(doc.CurrentSelection.SelectedItems, 0);
+                if (item == null) {
+                    MessageBox.Show("선택한 간섭에 대한 부재가 없습니다.\nitem코드 : " + (index+1));
+                    return;
+                }
+
+                ModelItemCollection modelItemCollection = new ModelItemCollection();
+                modelItemCollection.Add(item);
+                doc.Models.OverrideTemporaryColor(modelItemCollection, colors[index]);
                 doc.CurrentSelection.Clear();
+            }   
+        }
+
+        private void rdo_CheckedChanged(object sender, EventArgs e) {
+            trans = false;
+            hide = false;
+            if (rdo_hide.Checked) {
+                hide = true;
             }
+            else if (rdo_trans.Checked) {
+                trans = true;
+            }
+            else if (rdo_none.Checked) {
+
+            }
+            SelectObjects(guid1, guid2);
         }
 
         /// <summary>
         /// guid를 이용해 오브젝트를 찾고 선택함
         /// </summary>
         /// <param name="guid"></param>
-        public ModelItem SelectObjectWithGUID(string guid) {
+        public ModelItem SelectObjectWithGUID(string guid, bool addtoselect = true) {
             // 검색 객체 생성
             Search search = new Search();
             // 검색 범위 지정
@@ -603,30 +642,32 @@ namespace ClashTest2
             search.SearchConditions.Add(condition);
             // collect model item (if found)
             ModelItem item = search.FindFirst(doc, false);
-            if (item != null) {
+            if (item != null && addtoselect) {
                 doc.CurrentSelection.Add(item);
             }
             return item;
         }
 
 
-        public void MoveCamBetween(string guid1, string guid2) {
-            doc.CurrentSelection.Clear();
-            ModelItem item1 = SelectObjectWithGUID(guid1);
-            Point3D pos1 = new Point3D(item1.Transform.Factor().Translation.X, item1.Transform.Factor().Translation.Y, item1.Transform.Factor().Translation.Z);
+        public void MoveCamBetween(ModelItem item1, ModelItem item2) {
+            try {
+               
+                //doc.CurrentSelection.Clear();
+                //Point3D pos1 = new Point3D(item1.Transform.Factor().Translation.X, item1.Transform.Factor().Translation.Y, item1.Transform.Factor().Translation.Z);
 
-            doc.CurrentSelection.Clear();
-            ModelItem item2 = SelectObjectWithGUID(guid2);
-            Point3D pos2 = new Point3D(item2.Transform.Factor().Translation.X, item2.Transform.Factor().Translation.Y, item2.Transform.Factor().Translation.Z);
+                //doc.CurrentSelection.Clear();
+                //Point3D pos2 = new Point3D(item2.Transform.Factor().Translation.X, item2.Transform.Factor().Translation.Y, item2.Transform.Factor().Translation.Z);
 
-            Point3D posMid = new Point3D((pos1.X + pos2.X)/2,(pos1.Y + pos2.Y) /2,(pos1.Z + pos2.Z) /2);
-            Viewpoint vp = new Viewpoint();
-            vp.Position = posMid;
-            doc.CurrentViewpoint.CopyFrom(vp);
+                //Point3D posMid = new Point3D((pos1.X + pos2.X) / 2, (pos1.Y + pos2.Y) / 2, (pos1.Z + pos2.Z) / 2);
+                //Viewpoint vp = new Viewpoint();
+                //vp.Position = posMid;
+                //doc.CurrentViewpoint.CopyFrom(vp);
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
-        private void checkBox3_CheckedChanged(object sender, EventArgs e) {
-            trans = checkBox3.Checked;
-        }
     }
 }
