@@ -648,7 +648,11 @@ namespace ClashTest2
             return item;
         }
 
-
+        /// <summary>
+        /// item1, item2를 한 화면에 담을 수 있을 정도로 대상을 확대함
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
         public void MoveCamBetween(ModelItem item1, ModelItem item2) {
             try {
                 Viewpoint vpoint = doc.CurrentViewpoint.CreateCopy();
