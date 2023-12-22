@@ -651,17 +651,15 @@ namespace ClashTest2
 
         public void MoveCamBetween(ModelItem item1, ModelItem item2) {
             try {
-               
-                //doc.CurrentSelection.Clear();
-                //Point3D pos1 = new Point3D(item1.Transform.Factor().Translation.X, item1.Transform.Factor().Translation.Y, item1.Transform.Factor().Translation.Z);
+                Viewpoint vpoint = doc.CurrentViewpoint.CreateCopy();
 
-                //doc.CurrentSelection.Clear();
-                //Point3D pos2 = new Point3D(item2.Transform.Factor().Translation.X, item2.Transform.Factor().Translation.Y, item2.Transform.Factor().Translation.Z);
+                ModelItemCollection modelItemCollection = new ModelItemCollection();
+                modelItemCollection.Add(item1);
+                modelItemCollection.Add(item2);
 
-                //Point3D posMid = new Point3D((pos1.X + pos2.X) / 2, (pos1.Y + pos2.Y) / 2, (pos1.Z + pos2.Z) / 2);
-                //Viewpoint vp = new Viewpoint();
-                //vp.Position = posMid;
-                //doc.CurrentViewpoint.CopyFrom(vp);
+                BoundingBox3D bbox = modelItemCollection.BoundingBox(true);
+                vpoint.ZoomBox(bbox);
+                doc.CurrentViewpoint.CopyFrom(vpoint);
             }
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
