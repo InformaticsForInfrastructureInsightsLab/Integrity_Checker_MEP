@@ -82,8 +82,6 @@
             // 
             this.cb_useless.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cb_useless.AutoSize = true;
-            this.cb_useless.Checked = true;
-            this.cb_useless.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_useless.Location = new System.Drawing.Point(58, 88);
             this.cb_useless.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_useless.Name = "cb_useless";
@@ -97,8 +95,6 @@
             // 
             this.cb_sameSystem.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cb_sameSystem.AutoSize = true;
-            this.cb_sameSystem.Checked = true;
-            this.cb_sameSystem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_sameSystem.Location = new System.Drawing.Point(58, 110);
             this.cb_sameSystem.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_sameSystem.Name = "cb_sameSystem";
@@ -127,6 +123,8 @@
             // 
             this.cb_server.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cb_server.AutoSize = true;
+            this.cb_server.Checked = true;
+            this.cb_server.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_server.Location = new System.Drawing.Point(58, 154);
             this.cb_server.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_server.Name = "cb_server";
@@ -171,7 +169,7 @@
             this.cb_savelog.UseVisualStyleBackColor = true;
             this.cb_savelog.CheckedChanged += new System.EventHandler(this.cb_savelog_CheckedChanged);
             // 
-            // Form1
+            // Form_Setting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -191,7 +189,7 @@
             this.Controls.Add(this.cb_parent);
             this.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.Name = "Form1";
+            this.Name = "Form_Setting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Integrity Checker-MEP Request";
             this.ResumeLayout(false);
