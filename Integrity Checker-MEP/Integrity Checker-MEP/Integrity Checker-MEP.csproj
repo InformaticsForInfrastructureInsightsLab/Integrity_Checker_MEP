@@ -91,7 +91,6 @@
     <Compile Include="From_Log.Designer.cs">
       <DependentUpon>From_Log.cs</DependentUpon>
     </Compile>
-    <Compile Include="ResultViewer.cs" />
     <Compile Include="CollapsibleListView.cs">
       <SubType>Component</SubType>
     </Compile>

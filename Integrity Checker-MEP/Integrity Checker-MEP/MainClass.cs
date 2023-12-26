@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Navisworks.Api.Plugins;
+using ClashTest2;
 
 namespace Integrity_Checker_MEP
 {
@@ -19,8 +20,9 @@ namespace Integrity_Checker_MEP
     public class MainClass : CommandHandlerPlugin
     {
         private ClashChecker clashChecker;
-        private ResultViewer resultViewer;
-    
+
+        form_ResultViewer rv;
+
         public override int ExecuteCommand(string name, params string[] parameters)
         {
             switch (name)
@@ -44,9 +46,9 @@ namespace Integrity_Checker_MEP
                     //}
                     break;
                 case "Result_Receiver":
-                    if (resultViewer == null) {
-                        resultViewer = new ResultViewer();
-                        resultViewer.Execute();
+                    if (rv == null) {
+                        rv = new form_ResultViewer();
+                        rv.Show();
 
                         //form2 = new Form2();
                         //form2.Show();
@@ -57,7 +59,7 @@ namespace Integrity_Checker_MEP
                         //form2.Close();
                         //form2 = null;
 
-                        resultViewer = null;
+                        rv = null;
                     }
                     break;
                 case "Clash_Checker_split":
@@ -69,8 +71,8 @@ namespace Integrity_Checker_MEP
                     //    "Sample - Button Three");
                     break;
                 case "Result_Receiver_split":
-                    resultViewer = new ResultViewer();
-                    resultViewer.Execute();
+                    //resultViewer = new ResultViewer();
+                    //resultViewer.Execute();
 
                     //MessageBox.Show("Four things for success: work and pray, " +
                     //    "think and believe.\n-Norman Vincent Peale", "Sample - Button Four");
