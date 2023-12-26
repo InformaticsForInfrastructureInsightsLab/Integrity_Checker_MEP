@@ -87,10 +87,10 @@ namespace ClashTest2
             doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void click_btn_Load(object sender, EventArgs e)
         {
             // return when the list is not empty
-            if (collapsibleListView1.Items.Count > 0)
+            if (lst_Results.Items.Count > 0)
             {
                 return;
             }
@@ -107,17 +107,17 @@ namespace ClashTest2
             if(selectHeader.isCanceled) return;
 
             // 업데이트가 끝날때까지 UI 갱신 중지 -> 빠른 속도
-            collapsibleListView1.BeginUpdate();
+            lst_Results.BeginUpdate();
 
-            checkBox1.Checked = true;
-            checkBox2.Checked = true;
-            checkBox1.Enabled = true;
-            checkBox2.Enabled = true;
+            tog_Hard.Checked = true;
+            tog_Soft.Checked = true;
+            tog_Hard.Enabled = true;
+            tog_Soft.Enabled = true;
 
             // Add column header
             foreach(string item in header)
             {
-                collapsibleListView1.Columns.Add(item);
+                lst_Results.Columns.Add(item);
             }
             while (!file.EndOfStream)
             {
@@ -165,7 +165,7 @@ namespace ClashTest2
                     itemType2.Add(item2);
                 }
                 
-                collapsibleListView1.Items.Add(item2);
+                lst_Results.Items.Add(item2);
 
                 if (structData.Severity == "MAJOR")
                 {
@@ -174,7 +174,7 @@ namespace ClashTest2
                     }
                     else { major_soft++; }
 
-                    collapsibleListView1.Groups[0].Items.Add(item2);
+                    lst_Results.Groups[0].Items.Add(item2);
                     item2.Tag = "MAJOR";
                 }
                 else if (structData.Severity == "MEDIUM")
@@ -184,7 +184,7 @@ namespace ClashTest2
                     }
                     else { medium_soft++; }
 
-                    collapsibleListView1.Groups[1].Items.Add(item2);
+                    lst_Results.Groups[1].Items.Add(item2);
                     item2.Tag = "MEDIUM";
 
                 }
@@ -195,7 +195,7 @@ namespace ClashTest2
                     }
                     else { minor_soft++; }
 
-                    collapsibleListView1.Groups[2].Items.Add(item2);
+                    lst_Results.Groups[2].Items.Add(item2);
                     item2.Tag = "MINOR";
                 }
 
@@ -211,7 +211,7 @@ namespace ClashTest2
             showEachClashNuminfo();
 
             // 리스트뷰를 refresh해서 보여줌
-            collapsibleListView1.EndUpdate();
+            lst_Results.EndUpdate();
         }
 
         private async Task downloadFromServer()
@@ -244,79 +244,79 @@ namespace ClashTest2
             }
         }
 
-        private void collapsibleListView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void lst_Results_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (collapsibleListView1.SelectedIndices.Count > 0)
+            if (lst_Results.SelectedIndices.Count > 0)
             {
-                if (collapsibleListView1.SelectedItems[0].SubItems.Count > 1) {
-                    ID_GUID1.Text = "Guid1: " + collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text + "  Guid2: " + collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
-                    guid1 = collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text;
-                    guid2 = collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
-                    SelectObjects(guid1, guid2);
+                if (lst_Results.SelectedItems[0].SubItems.Count > 1) {
+                    ID_GUID1.Text = "Guid1: " + lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text + "  Guid2: " + lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
+                    guid1 = lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text;
+                    guid2 = lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
+                    SelectClash(guid1, guid2);
                 }
 
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void tog_Hard_CheckedChanged(object sender, EventArgs e)
         {
             // hard type unchecked
-            if (!checkBox1.Checked)
+            if (!tog_Hard.Checked)
             {
-               collapsibleListView1.BeginUpdate();
-               foreach (ListViewItem item in collapsibleListView1.Items)
+               lst_Results.BeginUpdate();
+               foreach (ListViewItem item in lst_Results.Items)
                {
                     item.Remove();
                }
                // only soft type checked
-               if (checkBox2.Checked)
+               if (tog_Soft.Checked)
                {
                     foreach (ListViewItem item in itemType2)
                     {
-                        collapsibleListView1.Items.Add(item);
+                        lst_Results.Items.Add(item);
                         if (item.Tag.ToString() == "MAJOR")
                         {
-                            collapsibleListView1.Groups[0].Items.Add(item);
+                            lst_Results.Groups[0].Items.Add(item);
                         }
                         else if (item.Tag.ToString() == "MEDIUM")
                         {
-                            collapsibleListView1.Groups[1].Items.Add(item);
+                            lst_Results.Groups[1].Items.Add(item);
 
                         }
                         else if (item.Tag.ToString() == "MINOR")
                         {
-                            collapsibleListView1.Groups[2].Items.Add(item);
+                            lst_Results.Groups[2].Items.Add(item);
 
                         }
                     }
-                    collapsibleListView1.Columns[(int)Header.HardClashType].Width = 0;
-                    collapsibleListView1.Columns[(int)Header.ClashDistance].Width = 0;
-                    collapsibleListView1.Columns[(int)Header.ClashPoint].Width = 0;
-                    collapsibleListView1.Columns[(int)Header.ClashVolume].Width = 0;
+                    lst_Results.Columns[(int)Header.HardClashType].Width = 0;
+                    lst_Results.Columns[(int)Header.ClashDistance].Width = 0;
+                    lst_Results.Columns[(int)Header.ClashPoint].Width = 0;
+                    lst_Results.Columns[(int)Header.ClashVolume].Width = 0;
 
                 }
 
-                foreach (ListViewGroup group in collapsibleListView1.Groups)
+                foreach (ListViewGroup group in lst_Results.Groups)
                {
                     if(group.Items.Count == 0)
                     {
                         ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        collapsibleListView1.Items.Add(emptyItem);
+                        lst_Results.Items.Add(emptyItem);
                         group.Items.Add(emptyItem);
                     }
                }
                 showGroupNum();
-                collapsibleListView1.EndUpdate();
+                lst_Results.EndUpdate();
             }
             // hard type checked
-            else if (checkBox1.Checked)
+            else if (tog_Hard.Checked)
             {
-                if(collapsibleListView1.Items.Count == 0)
+                if(lst_Results.Items.Count == 0)
                 {
                     return;
                 }
-                collapsibleListView1.BeginUpdate();
-                foreach (ListViewItem item in collapsibleListView1.Items)
+                lst_Results.BeginUpdate();
+                foreach (ListViewItem item in lst_Results.Items)
                 {
                     if(item.SubItems.Count <= 1)
                     {
@@ -325,98 +325,98 @@ namespace ClashTest2
                 }
                 foreach (ListViewItem item in itemType1)
                 {
-                    collapsibleListView1.Items.Add(item);
+                    lst_Results.Items.Add(item);
                     if (item.Tag.ToString() == "MAJOR")
                     {
-                        collapsibleListView1.Groups[0].Items.Add(item);
+                        lst_Results.Groups[0].Items.Add(item);
                     }
                     else if (item.Tag.ToString() == "MEDIUM")
                     {
-                        collapsibleListView1.Groups[1].Items.Add(item);
+                        lst_Results.Groups[1].Items.Add(item);
 
                     }
                     else if (item.Tag.ToString() == "MINOR")
                     {
-                        collapsibleListView1.Groups[2].Items.Add(item);
+                        lst_Results.Groups[2].Items.Add(item);
 
                     }
                 }
-                foreach (ListViewGroup group in collapsibleListView1.Groups) {
+                foreach (ListViewGroup group in lst_Results.Groups) {
                     if (group.Items.Count == 0) {
                         ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        collapsibleListView1.Items.Add(emptyItem);
+                        lst_Results.Items.Add(emptyItem);
                         group.Items.Add(emptyItem);
                     }
                 }
                 changeColumnHeader(headerBool);
-                if (!checkBox2.Checked) {
-                    collapsibleListView1.Columns[(int)Header.SoftClashType].Width = 0;
-                    collapsibleListView1.Columns[(int)Header.Clearance].Width = 0;
+                if (!tog_Soft.Checked) {
+                    lst_Results.Columns[(int)Header.SoftClashType].Width = 0;
+                    lst_Results.Columns[(int)Header.Clearance].Width = 0;
                 }
                 showGroupNum();
-                collapsibleListView1.EndUpdate();
+                lst_Results.EndUpdate();
             }
 
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void tog_Soft_CheckedChanged(object sender, EventArgs e)
         {
             // soft type unchecked
-            if (!checkBox2.Checked)
+            if (!tog_Soft.Checked)
             {
-                collapsibleListView1.BeginUpdate();
+                lst_Results.BeginUpdate();
                 // Remove both soft/hard
-                foreach (ListViewItem item in collapsibleListView1.Items)
+                foreach (ListViewItem item in lst_Results.Items)
                 {
                     item.Remove();
                 }
                 // Only hard checked
-                if(checkBox1.Checked)
+                if(tog_Hard.Checked)
                 {
                     foreach (ListViewItem item in itemType1)
                     {
-                        collapsibleListView1.Items.Add(item);
+                        lst_Results.Items.Add(item);
                         if (item.Tag.ToString() == "MAJOR")
                         {
-                            collapsibleListView1.Groups[0].Items.Add(item);
+                            lst_Results.Groups[0].Items.Add(item);
                         }
                         else if (item.Tag.ToString() == "MEDIUM")
                         {
-                            collapsibleListView1.Groups[1].Items.Add(item);
+                            lst_Results.Groups[1].Items.Add(item);
 
                         }
                         else if (item.Tag.ToString() == "MINOR")
                         {
-                            collapsibleListView1.Groups[2].Items.Add(item);
+                            lst_Results.Groups[2].Items.Add(item);
 
                         }
                     }
-                   collapsibleListView1.Columns[(int)Header.SoftClashType].Width = 0;
-                   collapsibleListView1.Columns[(int)Header.Clearance].Width = 0;
+                   lst_Results.Columns[(int)Header.SoftClashType].Width = 0;
+                   lst_Results.Columns[(int)Header.Clearance].Width = 0;
                 }
                 
-                foreach (ListViewGroup group in collapsibleListView1.Groups)
+                foreach (ListViewGroup group in lst_Results.Groups)
                 {
                     if (group.Items.Count == 0)
                     {
                         ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        collapsibleListView1.Items.Add(emptyItem);
+                        lst_Results.Items.Add(emptyItem);
                         group.Items.Add(emptyItem);
                     }
                 }
                 showGroupNum();
-                collapsibleListView1.EndUpdate();
+                lst_Results.EndUpdate();
             }
             // soft type checked
-            else if (checkBox2.Checked)
+            else if (tog_Soft.Checked)
             {
-                if (collapsibleListView1.Items.Count == 0)
+                if (lst_Results.Items.Count == 0)
                 {
                     return;
                 }
-                collapsibleListView1.BeginUpdate();
+                lst_Results.BeginUpdate();
                 //only soft type checked
-                foreach (ListViewItem item in collapsibleListView1.Items)
+                foreach (ListViewItem item in lst_Results.Items)
                 {
                     if (item.SubItems.Count <= 1)
                     {
@@ -425,42 +425,42 @@ namespace ClashTest2
                 }
                 foreach (ListViewItem item in itemType2)
                 {
-                    collapsibleListView1.Items.Add(item);
+                    lst_Results.Items.Add(item);
                     if (item.Tag.ToString() == "MAJOR")
                     {
-                        collapsibleListView1.Groups[0].Items.Add(item);
+                        lst_Results.Groups[0].Items.Add(item);
                     }
                     else if (item.Tag.ToString() == "MEDIUM")
                     {
-                        collapsibleListView1.Groups[1].Items.Add(item);
+                        lst_Results.Groups[1].Items.Add(item);
 
                     }
                     else if (item.Tag.ToString() == "MINOR")
                     {
-                        collapsibleListView1.Groups[2].Items.Add(item);
+                        lst_Results.Groups[2].Items.Add(item);
 
                     }
                 }
-                foreach (ListViewGroup group in collapsibleListView1.Groups) {
+                foreach (ListViewGroup group in lst_Results.Groups) {
                     if (group.Items.Count == 0) {
                         ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        collapsibleListView1.Items.Add(emptyItem);
+                        lst_Results.Items.Add(emptyItem);
                         group.Items.Add(emptyItem);
                     }
                 }
                 changeColumnHeader(headerBool);
-                if (!checkBox1.Checked) {
-                    collapsibleListView1.Columns[(int)Header.HardClashType].Width = 0;
-                    collapsibleListView1.Columns[(int)Header.ClashDistance].Width = 0;
-                    collapsibleListView1.Columns[(int)Header.ClashPoint].Width = 0;
-                    collapsibleListView1.Columns[(int)Header.ClashVolume].Width = 0;
+                if (!tog_Hard.Checked) {
+                    lst_Results.Columns[(int)Header.HardClashType].Width = 0;
+                    lst_Results.Columns[(int)Header.ClashDistance].Width = 0;
+                    lst_Results.Columns[(int)Header.ClashPoint].Width = 0;
+                    lst_Results.Columns[(int)Header.ClashVolume].Width = 0;
                 }
                 showGroupNum();
-                collapsibleListView1.EndUpdate();
+                lst_Results.EndUpdate();
             }
         }
 
-        private async void button2_Click(object sender, EventArgs e)
+        private async void click_btn_Download(object sender, EventArgs e)
         {
             await downloadFromServer();
         }
@@ -468,46 +468,46 @@ namespace ClashTest2
         public void changeColumnHeader(bool[] changedHeaders)
         {
             headerBool = changedHeaders;
-            if (collapsibleListView1.Columns.Count > 0)
+            if (lst_Results.Columns.Count > 0)
             {
                 for (int i = 0; i < headerBool.Length; i++)
                 {
                     if (headerBool[i] == true)
                     {
-                        collapsibleListView1.Columns[i].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
+                        lst_Results.Columns[i].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
                     }
                     else
                     {
-                        collapsibleListView1.Columns[i].Width = 0;
+                        lst_Results.Columns[i].Width = 0;
                     }
                 }
             }
         }
 
         private void showGroupNum() {
-            if (collapsibleListView1.Groups[0].Items.Count > 0) {
-                if (collapsibleListView1.Groups[0].Items[0].SubItems.Count > 1) {
-                    collapsibleListView1.Groups[0].Header = "MAJOR(" + collapsibleListView1.Groups[0].Items.Count.ToString() + ")";
+            if (lst_Results.Groups[0].Items.Count > 0) {
+                if (lst_Results.Groups[0].Items[0].SubItems.Count > 1) {
+                    lst_Results.Groups[0].Header = "MAJOR(" + lst_Results.Groups[0].Items.Count.ToString() + ")";
                 }
                 else {
-                    collapsibleListView1.Groups[0].Header = "MAJOR(0)";
+                    lst_Results.Groups[0].Header = "MAJOR(0)";
                 }
             }
             
-            if(collapsibleListView1.Groups[1].Items.Count > 0) {
-                if (collapsibleListView1.Groups[1].Items[0].SubItems.Count > 1) {
-                    collapsibleListView1.Groups[1].Header = "MEDIUM(" + collapsibleListView1.Groups[1].Items.Count.ToString() + ")";
+            if(lst_Results.Groups[1].Items.Count > 0) {
+                if (lst_Results.Groups[1].Items[0].SubItems.Count > 1) {
+                    lst_Results.Groups[1].Header = "MEDIUM(" + lst_Results.Groups[1].Items.Count.ToString() + ")";
                 }
                 else {
-                    collapsibleListView1.Groups[1].Header = "MEDIUM(0)";
+                    lst_Results.Groups[1].Header = "MEDIUM(0)";
                 }
             }
-            if (collapsibleListView1.Groups[2].Items.Count > 0) {
-                if (collapsibleListView1.Groups[2].Items[0].SubItems.Count > 1) {
-                    collapsibleListView1.Groups[2].Header = "MINOR(" + collapsibleListView1.Groups[2].Items.Count.ToString() + ")";
+            if (lst_Results.Groups[2].Items.Count > 0) {
+                if (lst_Results.Groups[2].Items[0].SubItems.Count > 1) {
+                    lst_Results.Groups[2].Header = "MINOR(" + lst_Results.Groups[2].Items.Count.ToString() + ")";
                 }
                 else {
-                    collapsibleListView1.Groups[2].Header = "MINOR(0)";
+                    lst_Results.Groups[2].Header = "MINOR(0)";
                 }
             }
         }
@@ -529,7 +529,7 @@ namespace ClashTest2
             
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private void click_btn_SelectHeader(object sender, EventArgs e)
         {
             SelectHeader selectHeader = new SelectHeader();
             selectHeader.getHeaderBool(headerBool, headerBool.Length);
@@ -537,38 +537,43 @@ namespace ClashTest2
             selectHeader.ShowDialog();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void click_btn_Item1(object sender, EventArgs e)
         {
-            if (collapsibleListView1.SelectedIndices.Count > 0)
+            if (lst_Results.SelectedIndices.Count > 0)
             {
-                if (collapsibleListView1.SelectedItems[0].SubItems.Count > 1)
+                if (lst_Results.SelectedItems[0].SubItems.Count > 1)
                 {
                     //MessageBoxEx.Show(this, collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
                     doc.CurrentSelection.Clear();
-                    SelectObjectWithGUID(collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
+                    SelectObjectWithGUID(lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
                 }
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void click_btn_Item2(object sender, EventArgs e)
         {
-            if (collapsibleListView1.SelectedIndices.Count > 0)
+            if (lst_Results.SelectedIndices.Count > 0)
             {
-                if (collapsibleListView1.SelectedItems[0].SubItems.Count > 1) {
-                    //MessageBoxEx.Show(this, collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
+                if (lst_Results.SelectedItems[0].SubItems.Count > 1) {
                     doc.CurrentSelection.Clear();
-                    SelectObjectWithGUID(collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
+                    SelectObjectWithGUID(lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
                 }
             }
         }
 
         public Document doc;
-        //부재에 칠할 색
-        Color[] colors = { Color.Green, Color.Red };
+        Color[] colors = { Color.Green, Color.Red }; //부재에 칠할 색
         bool trans = false;
         bool hide = false;
-        ModelItemCollection invertItemCollection = new ModelItemCollection();
-        public void SelectObjects(string _guid1, string _guid2) {
+        ModelItemCollection invertItemCollection = new ModelItemCollection(); // 선택 부재 외 나머지 부재
+
+        /// <summary>
+        /// 간섭 결과가 선택 되었을 때 호출. 현재 모델에 선택한 간섭 표시
+        /// </summary>
+        /// <param name="_guid1"></param>
+        /// <param name="_guid2"></param>
+        public void SelectClash(string _guid1, string _guid2) {
+            //모든 부재의 색, 숨김 초기화
             doc.Models.ResetAllTemporaryMaterials();
             doc.Models.ResetAllHiddenToModelState();
             
@@ -576,20 +581,20 @@ namespace ClashTest2
             ModelItem item2 = SelectObjectWithGUID(_guid2); //item2 선택
             invertItemCollection.CopyFrom(doc.CurrentSelection.SelectedItems); //item1, item2가 선택되어 있음
             invertItemCollection.Invert(doc); // 선택 반전 (전체 - item1 - item2)
-            ColorTarget();
-            ColorTarget(item1, 0);
-            ColorTarget(item2, 1);
+            ColorTarget(); // item1, item2 외 모든 부재 색칠하기
+            ColorTarget(item1, 0); // item1 색칠하기
+            ColorTarget(item2, 1); // item2 색칠하기
 
-            MoveCamBetween(item1, item2);
+            FocusClash(item1, item2); // 카메라 이동
         }
 
         /// <summary>
         /// guid를 가진 오브젝트를 index에 맞는 색으로 칠하기
         /// </summary>
-        /// <param name="guid"></param>
-        /// <param name="index"></param>
+        /// <param name="item">색 칠할 대상. 비어있으면 선택하지 않은 부재를 대상으로 함</param>
+        /// <param name="index">0:item1, 1:item2, -1:그 외 모든 부재</param>
         void ColorTarget(ModelItem item = null, int index = -1) {
-            
+            //대상 미지정 : 선택하지 않은 모든 부재를 숨기거나 투명화
             if (index == -1) {
                 if (trans) {
                     doc.Models.OverrideTemporaryTransparency(invertItemCollection, 10);
@@ -612,6 +617,11 @@ namespace ClashTest2
             }   
         }
 
+        /// <summary>
+        /// 간섭 선택 시 나머지 부재들에 대한 옵션(없음/투명화/숨기기)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rdo_CheckedChanged(object sender, EventArgs e) {
             trans = false;
             hide = false;
@@ -624,13 +634,14 @@ namespace ClashTest2
             else if (rdo_none.Checked) {
 
             }
-            SelectObjects(guid1, guid2);
+            SelectClash(guid1, guid2);
         }
 
         /// <summary>
         /// guid를 이용해 오브젝트를 찾고 선택함
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="guid">검색할 부재의 guid</param>
+        /// <param name="addtoselect">검색한 부재를 Selection에 추가할지 말지(false:추가하지 않음)</param>
         public ModelItem SelectObjectWithGUID(string guid, bool addtoselect = true) {
             // 검색 객체 생성
             Search search = new Search();
@@ -653,7 +664,7 @@ namespace ClashTest2
         /// </summary>
         /// <param name="item1"></param>
         /// <param name="item2"></param>
-        public void MoveCamBetween(ModelItem item1, ModelItem item2) {
+        public void FocusClash(ModelItem item1, ModelItem item2) {
             try {
                 Viewpoint vpoint = doc.CurrentViewpoint.CreateCopy();
 

@@ -20,8 +20,7 @@ namespace Integrity_Checker_MEP
     public class MainClass : CommandHandlerPlugin
     {
         private ClashChecker clashChecker;
-
-        form_ResultViewer rv;
+        private form_ResultViewer rv;
 
         public override int ExecuteCommand(string name, params string[] parameters)
         {
