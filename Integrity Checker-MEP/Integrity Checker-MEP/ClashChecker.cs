@@ -78,9 +78,11 @@ namespace Integrity_Checker_MEP {
 
                 if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
 
-                if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
                 form_log = new From_Log();
                 form_log.Show();
+
+                if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
+
                 if (form_setting.export_Result) {
                     MakeClashTest(); // 테스트 생성
                     TestClashTest(); // 테스트 실행
@@ -297,6 +299,7 @@ namespace Integrity_Checker_MEP {
         string ClashFile = "";
         List<string> lst_ArchDupl = new List<string>();
         List<string> lst_StrDupl = new List<string>();
+
         /// <summary>
         /// 전체/지정된 테스트의 간섭검토 결과를 CSV파일로 export
         /// </summary>
@@ -319,7 +322,7 @@ namespace Integrity_Checker_MEP {
                     oEachTest.testType = test.TestType;
 
                     // 테스트 타입이 Duplicate
-                    if (test.TestType == ClashTestType.Duplicate) {
+                    if (test.TestType == ClashTestType.Duplicate) { // guid가 다른 똑같이 생긴 부재가 겹쳐있는 경우 판별용
                         foreach (var c in test.Children) {
                             ClashResult nwissue = (ClashResult)c;
                             if (Math.Round(nwissue.Distance, 3) == 0) {
@@ -756,13 +759,14 @@ namespace Integrity_Checker_MEP {
                         #region str-mep가 아닌 간섭에서 distance가 0이하 ~ -0.01m초과인 간섭 제외
                         double dis = tests_array[i].ClashResults[j].distance;
                         if (temp[1].Contains("Str")) {
+                            // str-str 간섭
                             if (temp[4].Contains("Str")) {
                                 if(Math.Round(dis,3) <= 0 && dis > -10) {
                                     if (dis == 0) {
                                         StringBuilder _sb = new StringBuilder();
                                         _sb.Append(temp[2]).Append(temp[5]);
                                         //fp.UpdateLog($"    {tests_array[i].ClashResults[j].DisplayName} {_sb.ToString()}");
-                                        if (lst_StrDupl.Contains(_sb.ToString())) {
+                                        if (lst_StrDupl.Contains(_sb.ToString())) { // Duplicate에 존재 시 제거하지 않음
                                             temp[7] = "Hard";
                                         }
                                         else {
@@ -786,7 +790,7 @@ namespace Integrity_Checker_MEP {
                                         StringBuilder _sb = new StringBuilder();
                                         _sb.Append(temp[2]).Append(temp[5]);
                                         //fp.UpdateLog($"    {tests_array[i].ClashResults[j].DisplayName} {_sb.ToString()}");
-                                        if (lst_ArchDupl.Contains(_sb.ToString())) {
+                                        if (lst_ArchDupl.Contains(_sb.ToString())) {// Duplicate에 존재 시 제거하지 않음
                                             temp[7] = "Hard";
                                         }
                                         else {
@@ -1010,9 +1014,9 @@ namespace Integrity_Checker_MEP {
             form_log.UpdateLog("층간 높이 측정 시작");
             // 현재 문서 가져오기
             Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
-            // 모델 안에 있는 모든 오브젝트의 수
+            // 모델 안에 있는 모든 오브젝트 집합
             ModelItemCollection itemCollection = new ModelItemCollection();
-            // 불러와진 모델(파일)의 수
+            // 불러와진 모델(파일) 집합
             DocumentModels models = doc.Models;
 
             //모델이 없음
@@ -1051,8 +1055,9 @@ namespace Integrity_Checker_MEP {
 
             //모든 부재를 돌면서 도면층으로 딕셔너리 구성
             form_log.UpdateLog("    딕셔너리 생성 시작");
+            ModelItem item = null;
             for (int i = 0; i < itemCollection.Count; i++) {
-                ModelItem item = itemCollection[i];
+                item = itemCollection[i];
 
                 //guid, ifcclass, ifcname, ifcspatialcontainer
                 try {
@@ -1070,7 +1075,9 @@ namespace Integrity_Checker_MEP {
                         temp[2] = Getinfo(item, "항목", "도면층");
                     }
                     //기본값은 0
-                    if (!string.IsNullOrEmpty(temp[2]) && !heights.ContainsKey(temp[2])) { heights.Add(temp[2], 0f); }
+                    if (!string.IsNullOrEmpty(temp[2]) && !heights.ContainsKey(temp[2])) {
+                        heights.Add(temp[2], 0f); 
+                    }
 
                     props.Add(temp);
                 }
