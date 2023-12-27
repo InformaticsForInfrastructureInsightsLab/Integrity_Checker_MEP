@@ -17,12 +17,12 @@ namespace Integrity_Checker_MEP {
         public bool show_fromparent = false; //부재의 GUID가 부모의 GUID를 가져온 것인지 표시(접두사 fromparent_ 추가)
         public bool export_Result = true; //결과 파일 추출
         public bool export_AllinOne = true; //모든 결과를 한 파일로 통합하여 추출
-        public bool export_UselessClash = true; //불필요한 간섭 결과를 나열한 파일 추출
-        public bool export_SameIfcSystem = true; //동일한 IfcSystem을 가지는 MEP부재를 나열한 파일 추출
+        public bool export_UselessClash = false; //불필요한 간섭 결과를 나열한 파일 추출
+        public bool export_SameIfcSystem = false; //동일한 IfcSystem을 가지는 MEP부재를 나열한 파일 추출
         public bool export_Properties = true; //Properties파일 추출
         public bool cut_Properties = false; //Properties파일 분할
-        public bool Make_ZipFile = false; //압축파일 만들기
-        public bool Send_toServer = false; //서버로 보내기
+        public bool Make_ZipFile = true; //압축파일 만들기
+        public bool Send_toServer = true; //서버로 보내기
         public bool Save_log = false; //로그 저장
 
         public bool start = false; //시작버튼 클릭 여부

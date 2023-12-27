@@ -4,6 +4,7 @@ using Autodesk.Navisworks.Api.DocumentParts;
 using Autodesk.Navisworks.Api.Plugins;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -66,7 +67,7 @@ class IfcSystemData {
 
 namespace Integrity_Checker_MEP {
     public class ClashChecker {
-        bool show_Setting = false;
+        bool show_Setting = true;
         
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
         From_Log form_log; // 로그 출력 폼
@@ -1044,8 +1045,24 @@ namespace Integrity_Checker_MEP {
             #region 불필요 오브젝트 제거
             int useless = 0;
             for (int i = 0; i < itemCollection.Count; i++) {
+                string type = Getinfo(itemCollection[i], "항목", "유형");
                 //ifc파일에만 존재하는 IfcDistributionPort제거(레빗의 화살표 모양)
-                if (Getinfo(itemCollection[i], "항목", "유형").Equals("IfcDistributionPort")) {
+                if (type.Equals("IfcDistributionPort")) {
+                    useless++;
+                    itemCollection.Remove(itemCollection[i]);
+                    continue;
+                }
+                if (type.Equals("IfcDistributionSystem")) {
+                    useless++;
+                    itemCollection.Remove(itemCollection[i]);
+                    continue;
+                }
+                if (type.Equals("IfcValve")) {
+                    useless++;
+                    itemCollection.Remove(itemCollection[i]);
+                    continue;
+                }
+                if (type.Equals("IfcPipeFitting")) {
                     useless++;
                     itemCollection.Remove(itemCollection[i]);
                     continue;
@@ -1087,7 +1104,7 @@ namespace Integrity_Checker_MEP {
                 }
             }
             form_log.UpdateLog("    딕셔너리 생성 완료");
-
+            
             //각 도면층 별 최대값 찾기
             Dictionary<string, double> newHeights = new Dictionary<string, double>();
             form_log.UpdateLog("    층간 최대값 찾기 시작");
@@ -1098,16 +1115,13 @@ namespace Integrity_Checker_MEP {
                     for (int i = 0; i < itemCollection.Count; i++) {
                         if (!string.IsNullOrEmpty(Getinfo(itemCollection[i], "요소", "IfcSpatialContainer")) && string.Compare(Getinfo(itemCollection[i], "요소", "IfcSpatialContainer"), level) == 0) {
                             if (!string.IsNullOrEmpty(Getinfo(itemCollection[i], "요소", "IfcSpatialContainer")) && string.Compare(Getinfo(itemCollection[i], "요소", "IfcClass"), "IfcWall") == 0) {
-                                string s_height = Getinfo(itemCollection[i], "Constraints", "Unconnected Height");
                                 try {
-                                    string[] hs = s_height.Split(':'); //값이 숫자만 나오지 않고 이름이랑 같이 나옴
-                                    double h = double.Parse(hs[1]); // : 뒤에 있는 실수값만 가져오기
+                                    double h = double.Parse(Getinfo(itemCollection[i], "Constraints", "Unconnected Height").Split(':')[1]); // : 뒤에 있는 실수값만 가져오기
 
                                     double offset = 0;
-                                    if (!string.IsNullOrEmpty(Getinfo(itemCollection[i], "Constraints", "Base Offset"))) {
-                                        string s_offset = Getinfo(itemCollection[i], "Constraints", "Base Offset");
-                                        string[] os = s_offset.Split(':');
-                                        offset = double.Parse(os[1]);
+                                    string s_offset = Getinfo(itemCollection[i], "Constraints", "Base Offset");
+                                    if (!string.IsNullOrEmpty(s_offset)) {
+                                        offset = double.Parse(s_offset.Split(':')[1]);
                                     }
                                     // 절댓값(높이 + 보정값)
                                     height_walls.Add(Math.Abs(h + offset));
