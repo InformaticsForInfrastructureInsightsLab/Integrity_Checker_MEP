@@ -627,7 +627,7 @@ namespace ClashTest2
             string fileName = $"Screenshot {guid1} - {guid2}.jpg";
             Autodesk.Navisworks.Api.View currentView = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView;
             Bitmap bmp = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView.GenerateImage(ImageGenerationStyle.ScenePlusOverlay, currentView.Width, currentView.Height);
-            bmp.Save(path+fileName);
+            bmp.Save(path + fileName);
         }
 
         /// <summary>
@@ -680,7 +680,7 @@ namespace ClashTest2
         public void FocusClash(ModelItem item1, ModelItem item2) {
             try {
                 Viewpoint vpoint = doc.CurrentViewpoint.CreateCopy();
-
+                vpoint.Rotation = new Rotation3D(0.424708200277859, 0.175919896606164, 0.339851142979997, 0.820473238570283);
                 ModelItemCollection modelItemCollection = new ModelItemCollection();
                 modelItemCollection.Add(item1);
                 modelItemCollection.Add(item2);
