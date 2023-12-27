@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("MAJOR", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("MEDIUM", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("MINOR", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("MAJOR", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("MEDIUM", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("MINOR", System.Windows.Forms.HorizontalAlignment.Left);
             this.btn_Load = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ID_GUID1 = new System.Windows.Forms.Label();
@@ -50,6 +50,7 @@
             this.rdo_trans = new System.Windows.Forms.RadioButton();
             this.rdo_none = new System.Windows.Forms.RadioButton();
             this.lst_Results = new ListviewTest.CollapsibleListView();
+            this.btn_Screenshot = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_Load
@@ -260,16 +261,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lst_Results.FullRowSelect = true;
             this.lst_Results.GridLines = true;
-            listViewGroup4.Header = "MAJOR";
-            listViewGroup4.Name = "listViewGroup1";
-            listViewGroup5.Header = "MEDIUM";
-            listViewGroup5.Name = "listViewGroup2";
-            listViewGroup6.Header = "MINOR";
-            listViewGroup6.Name = "listViewGroup3";
+            listViewGroup1.Header = "MAJOR";
+            listViewGroup1.Name = "listViewGroup1";
+            listViewGroup2.Header = "MEDIUM";
+            listViewGroup2.Name = "listViewGroup2";
+            listViewGroup3.Header = "MINOR";
+            listViewGroup3.Name = "listViewGroup3";
             this.lst_Results.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup4,
-            listViewGroup5,
-            listViewGroup6});
+            listViewGroup1,
+            listViewGroup2,
+            listViewGroup3});
             this.lst_Results.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lst_Results.HideSelection = false;
             this.lst_Results.Location = new System.Drawing.Point(12, 12);
@@ -280,11 +281,22 @@
             this.lst_Results.View = System.Windows.Forms.View.Details;
             this.lst_Results.SelectedIndexChanged += new System.EventHandler(this.lst_Results_SelectedIndexChanged);
             // 
+            // btn_Screenshot
+            // 
+            this.btn_Screenshot.Location = new System.Drawing.Point(591, 426);
+            this.btn_Screenshot.Name = "btn_Screenshot";
+            this.btn_Screenshot.Size = new System.Drawing.Size(94, 23);
+            this.btn_Screenshot.TabIndex = 22;
+            this.btn_Screenshot.Text = "Screenshot";
+            this.btn_Screenshot.UseVisualStyleBackColor = true;
+            this.btn_Screenshot.Click += new System.EventHandler(this.btn_Screenshot_Click);
+            // 
             // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(697, 466);
+            this.Controls.Add(this.btn_Screenshot);
             this.Controls.Add(this.rdo_none);
             this.Controls.Add(this.rdo_trans);
             this.Controls.Add(this.rdo_hide);
@@ -331,6 +343,7 @@
         private System.Windows.Forms.RadioButton rdo_hide;
         private System.Windows.Forms.RadioButton rdo_trans;
         private System.Windows.Forms.RadioButton rdo_none;
+        private System.Windows.Forms.Button btn_Screenshot;
     }
 }
 

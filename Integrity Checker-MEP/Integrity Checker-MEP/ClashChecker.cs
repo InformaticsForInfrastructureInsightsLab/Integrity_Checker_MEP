@@ -67,7 +67,7 @@ class IfcSystemData {
 
 namespace Integrity_Checker_MEP {
     public class ClashChecker {
-        bool show_Setting = true;
+        bool show_Setting = false;
         
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
         From_Log form_log; // 로그 출력 폼
@@ -843,7 +843,7 @@ namespace Integrity_Checker_MEP {
                 }
                 #region All_in_One 파일로 내보내기
                 if (form_setting.export_AllinOne) {
-                    form_log.UpdateLog("AllinOne 파일 출력 시작");
+                    form_log.UpdateLog("파일 출력 시작 : All in One");
                     string filepath = @"C:/objectinfo";
                     DirectoryInfo dir = new DirectoryInfo(filepath);
                     if (!dir.Exists) {
@@ -1351,7 +1351,7 @@ namespace Integrity_Checker_MEP {
             outStream.Close();
             List_uselessClashes.Clear();
             List_uselessReasons.Clear();
-            form_log.UpdateLog("파일 출력 시작 : UselessClashes");
+            form_log.UpdateLog("파일 출력 완료 : UselessClashes");
         }
 
         void ShowMessage(string content) {

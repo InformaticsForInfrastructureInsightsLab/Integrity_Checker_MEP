@@ -618,6 +618,19 @@ namespace ClashTest2
         }
 
         /// <summary>
+        /// 스크린샷 저장 c:\objectinfo\Screenshot [guid1] - [guid2].jpg
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Screenshot_Click(object sender, EventArgs e) {
+            string path = @"C:\objectinfo\";
+            string fileName = $"Screenshot {guid1} - {guid2}.jpg";
+            Autodesk.Navisworks.Api.View currentView = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView;
+            Bitmap bmp = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView.GenerateImage(ImageGenerationStyle.ScenePlusOverlay, currentView.Width, currentView.Height);
+            bmp.Save(path+fileName);
+        }
+
+        /// <summary>
         /// 간섭 선택 시 나머지 부재들에 대한 옵션(없음/투명화/숨기기)
         /// </summary>
         /// <param name="sender"></param>
