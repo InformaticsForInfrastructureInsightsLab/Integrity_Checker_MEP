@@ -222,6 +222,7 @@
             // 
             // rdo_hide
             // 
+            this.rdo_hide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_hide.AutoSize = true;
             this.rdo_hide.Location = new System.Drawing.Point(591, 150);
             this.rdo_hide.Name = "rdo_hide";
@@ -233,6 +234,7 @@
             // 
             // rdo_trans
             // 
+            this.rdo_trans.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_trans.AutoSize = true;
             this.rdo_trans.Location = new System.Drawing.Point(591, 173);
             this.rdo_trans.Name = "rdo_trans";
@@ -244,6 +246,7 @@
             // 
             // rdo_none
             // 
+            this.rdo_none.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_none.AutoSize = true;
             this.rdo_none.Checked = true;
             this.rdo_none.Location = new System.Drawing.Point(591, 128);
@@ -283,6 +286,7 @@
             // 
             // btn_Screenshot
             // 
+            this.btn_Screenshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_Screenshot.Location = new System.Drawing.Point(591, 426);
             this.btn_Screenshot.Name = "btn_Screenshot";
             this.btn_Screenshot.Size = new System.Drawing.Size(94, 23);

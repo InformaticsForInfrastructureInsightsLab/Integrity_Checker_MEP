@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Net.NetworkInformation;
 using Autodesk.Navisworks.Api;
 using Color = Autodesk.Navisworks.Api.Color;
+using ListviewTest;
 
 namespace ClashTest2
 {
@@ -246,7 +247,7 @@ namespace ClashTest2
 
         private void lst_Results_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lst_Results.SelectedIndices.Count > 0)
+            if (lst_Results.SelectedItems.Count == 1)
             {
                 if (lst_Results.SelectedItems[0].SubItems.Count > 1) {
                     ID_GUID1.Text = "Guid1: " + lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text + "  Guid2: " + lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
