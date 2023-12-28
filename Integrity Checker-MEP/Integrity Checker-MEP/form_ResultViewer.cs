@@ -645,6 +645,16 @@ namespace ClashTest2
             Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CopyFrom(vp);
         }
 
+        private void Make_ClippingBox() {
+            //단면처리 사용
+            //단면처리 모드 - 상자
+            //시점 변경
+            //시점 방향이 아닌 방향으로 상자 scale조정
+            //모델 투명화 끄기
+            //모델에 초점 맞추기
+            //스크린샷
+        }
+
         /// <summary>
         /// 간섭 선택 시 나머지 부재들에 대한 옵션(없음/투명화/숨기기)
         /// </summary>
