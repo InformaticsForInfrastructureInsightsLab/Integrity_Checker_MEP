@@ -632,6 +632,20 @@ namespace ClashTest2
         }
 
         /// <summary>
+        /// 현재 카메라의 사영 방식을 투시<->직교 전환
+        /// </summary>
+        private void Change_ViewpointProjection() {
+            Viewpoint vp = Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CreateCopy();
+            if(vp.Projection == ViewpointProjection.Orthographic) {
+                vp.Projection = ViewpointProjection.Perspective;
+            }
+            else {
+                vp.Projection = ViewpointProjection.Orthographic;
+            }
+            Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CopyFrom(vp);
+        }
+
+        /// <summary>
         /// 간섭 선택 시 나머지 부재들에 대한 옵션(없음/투명화/숨기기)
         /// </summary>
         /// <param name="sender"></param>
