@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("MAJOR", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("MEDIUM", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("MINOR", System.Windows.Forms.HorizontalAlignment.Left);
             this.btn_Load = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ID_GUID1 = new System.Windows.Forms.Label();
@@ -49,14 +46,31 @@
             this.rdo_hide = new System.Windows.Forms.RadioButton();
             this.rdo_trans = new System.Windows.Forms.RadioButton();
             this.rdo_none = new System.Windows.Forms.RadioButton();
-            this.lst_Results = new ListviewTest.CollapsibleListView();
             this.btn_Screenshot = new System.Windows.Forms.Button();
+            this.fastObjectListView1 = new BrightIdeasSoftware.FastObjectListView();
+            this.ClashTypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.HardClashTypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.SoftClashTypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.SeverityCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem1disciplineCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem1GUIDCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem1TypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem2disciplineCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem2GUIDCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem2TypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClashDistCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClearanceCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClashPointCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClashVolumeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.TopologyCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.OffsetCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListView1)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_Load
             // 
             this.btn_Load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Load.Location = new System.Drawing.Point(591, 41);
+            this.btn_Load.Location = new System.Drawing.Point(643, 41);
             this.btn_Load.Name = "btn_Load";
             this.btn_Load.Size = new System.Drawing.Size(94, 23);
             this.btn_Load.TabIndex = 1;
@@ -76,7 +90,7 @@
             // 
             this.ID_GUID1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.ID_GUID1.AutoSize = true;
-            this.ID_GUID1.Location = new System.Drawing.Point(12, 444);
+            this.ID_GUID1.Location = new System.Drawing.Point(12, 531);
             this.ID_GUID1.Name = "ID_GUID1";
             this.ID_GUID1.Size = new System.Drawing.Size(257, 12);
             this.ID_GUID1.TabIndex = 4;
@@ -87,7 +101,7 @@
             this.tog_Hard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tog_Hard.Appearance = System.Windows.Forms.Appearance.Button;
             this.tog_Hard.Enabled = false;
-            this.tog_Hard.Location = new System.Drawing.Point(591, 70);
+            this.tog_Hard.Location = new System.Drawing.Point(643, 70);
             this.tog_Hard.Name = "tog_Hard";
             this.tog_Hard.Size = new System.Drawing.Size(47, 22);
             this.tog_Hard.TabIndex = 6;
@@ -101,7 +115,7 @@
             this.tog_Soft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tog_Soft.Appearance = System.Windows.Forms.Appearance.Button;
             this.tog_Soft.Enabled = false;
-            this.tog_Soft.Location = new System.Drawing.Point(638, 70);
+            this.tog_Soft.Location = new System.Drawing.Point(690, 70);
             this.tog_Soft.Name = "tog_Soft";
             this.tog_Soft.Size = new System.Drawing.Size(47, 22);
             this.tog_Soft.TabIndex = 7;
@@ -113,7 +127,7 @@
             // btn_Download
             // 
             this.btn_Download.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Download.Location = new System.Drawing.Point(591, 12);
+            this.btn_Download.Location = new System.Drawing.Point(643, 12);
             this.btn_Download.Name = "btn_Download";
             this.btn_Download.Size = new System.Drawing.Size(94, 23);
             this.btn_Download.TabIndex = 8;
@@ -124,7 +138,7 @@
             // btn_SelectHeader
             // 
             this.btn_SelectHeader.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_SelectHeader.Location = new System.Drawing.Point(591, 98);
+            this.btn_SelectHeader.Location = new System.Drawing.Point(643, 98);
             this.btn_SelectHeader.Name = "btn_SelectHeader";
             this.btn_SelectHeader.Size = new System.Drawing.Size(94, 23);
             this.btn_SelectHeader.TabIndex = 9;
@@ -135,7 +149,7 @@
             // btn_Item1
             // 
             this.btn_Item1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btn_Item1.Location = new System.Drawing.Point(12, 420);
+            this.btn_Item1.Location = new System.Drawing.Point(12, 507);
             this.btn_Item1.Name = "btn_Item1";
             this.btn_Item1.Size = new System.Drawing.Size(75, 23);
             this.btn_Item1.TabIndex = 10;
@@ -146,7 +160,7 @@
             // btn_item2
             // 
             this.btn_item2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btn_item2.Location = new System.Drawing.Point(93, 420);
+            this.btn_item2.Location = new System.Drawing.Point(93, 507);
             this.btn_item2.Name = "btn_item2";
             this.btn_item2.Size = new System.Drawing.Size(75, 23);
             this.btn_item2.TabIndex = 11;
@@ -158,7 +172,7 @@
             // 
             this.majorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.majorHard.AutoSize = true;
-            this.majorHard.Location = new System.Drawing.Point(589, 302);
+            this.majorHard.Location = new System.Drawing.Point(641, 389);
             this.majorHard.Name = "majorHard";
             this.majorHard.Size = new System.Drawing.Size(89, 12);
             this.majorHard.TabIndex = 13;
@@ -169,7 +183,7 @@
             // 
             this.majorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.majorSoft.AutoSize = true;
-            this.majorSoft.Location = new System.Drawing.Point(589, 322);
+            this.majorSoft.Location = new System.Drawing.Point(641, 409);
             this.majorSoft.Name = "majorSoft";
             this.majorSoft.Size = new System.Drawing.Size(89, 12);
             this.majorSoft.TabIndex = 14;
@@ -180,7 +194,7 @@
             // 
             this.mediumHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mediumHard.AutoSize = true;
-            this.mediumHard.Location = new System.Drawing.Point(589, 342);
+            this.mediumHard.Location = new System.Drawing.Point(641, 429);
             this.mediumHard.Name = "mediumHard";
             this.mediumHard.Size = new System.Drawing.Size(96, 12);
             this.mediumHard.TabIndex = 15;
@@ -191,7 +205,7 @@
             // 
             this.mediumSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mediumSoft.AutoSize = true;
-            this.mediumSoft.Location = new System.Drawing.Point(589, 362);
+            this.mediumSoft.Location = new System.Drawing.Point(641, 449);
             this.mediumSoft.Name = "mediumSoft";
             this.mediumSoft.Size = new System.Drawing.Size(96, 12);
             this.mediumSoft.TabIndex = 16;
@@ -202,7 +216,7 @@
             // 
             this.minorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.minorHard.AutoSize = true;
-            this.minorHard.Location = new System.Drawing.Point(589, 382);
+            this.minorHard.Location = new System.Drawing.Point(641, 469);
             this.minorHard.Name = "minorHard";
             this.minorHard.Size = new System.Drawing.Size(87, 12);
             this.minorHard.TabIndex = 17;
@@ -213,7 +227,7 @@
             // 
             this.minorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.minorSoft.AutoSize = true;
-            this.minorSoft.Location = new System.Drawing.Point(589, 402);
+            this.minorSoft.Location = new System.Drawing.Point(641, 489);
             this.minorSoft.Name = "minorSoft";
             this.minorSoft.Size = new System.Drawing.Size(87, 12);
             this.minorSoft.TabIndex = 18;
@@ -224,7 +238,7 @@
             // 
             this.rdo_hide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_hide.AutoSize = true;
-            this.rdo_hide.Location = new System.Drawing.Point(591, 150);
+            this.rdo_hide.Location = new System.Drawing.Point(643, 150);
             this.rdo_hide.Name = "rdo_hide";
             this.rdo_hide.Size = new System.Drawing.Size(103, 16);
             this.rdo_hide.TabIndex = 19;
@@ -236,7 +250,7 @@
             // 
             this.rdo_trans.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_trans.AutoSize = true;
-            this.rdo_trans.Location = new System.Drawing.Point(591, 173);
+            this.rdo_trans.Location = new System.Drawing.Point(643, 173);
             this.rdo_trans.Name = "rdo_trans";
             this.rdo_trans.Size = new System.Drawing.Size(103, 16);
             this.rdo_trans.TabIndex = 20;
@@ -249,7 +263,7 @@
             this.rdo_none.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_none.AutoSize = true;
             this.rdo_none.Checked = true;
-            this.rdo_none.Location = new System.Drawing.Point(591, 128);
+            this.rdo_none.Location = new System.Drawing.Point(643, 128);
             this.rdo_none.Name = "rdo_none";
             this.rdo_none.Size = new System.Drawing.Size(87, 16);
             this.rdo_none.TabIndex = 21;
@@ -257,37 +271,10 @@
             this.rdo_none.Text = "숨기기 없음";
             this.rdo_none.UseVisualStyleBackColor = true;
             // 
-            // lst_Results
-            // 
-            this.lst_Results.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lst_Results.FullRowSelect = true;
-            this.lst_Results.GridLines = true;
-            listViewGroup1.Header = "MAJOR";
-            listViewGroup1.Name = "listViewGroup1";
-            listViewGroup2.Header = "MEDIUM";
-            listViewGroup2.Name = "listViewGroup2";
-            listViewGroup3.Header = "MINOR";
-            listViewGroup3.Name = "listViewGroup3";
-            this.lst_Results.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2,
-            listViewGroup3});
-            this.lst_Results.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lst_Results.HideSelection = false;
-            this.lst_Results.Location = new System.Drawing.Point(12, 12);
-            this.lst_Results.Name = "lst_Results";
-            this.lst_Results.Size = new System.Drawing.Size(560, 402);
-            this.lst_Results.TabIndex = 5;
-            this.lst_Results.UseCompatibleStateImageBehavior = false;
-            this.lst_Results.View = System.Windows.Forms.View.Details;
-            this.lst_Results.SelectedIndexChanged += new System.EventHandler(this.lst_Results_SelectedIndexChanged);
-            // 
             // btn_Screenshot
             // 
             this.btn_Screenshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Screenshot.Location = new System.Drawing.Point(591, 426);
+            this.btn_Screenshot.Location = new System.Drawing.Point(643, 513);
             this.btn_Screenshot.Name = "btn_Screenshot";
             this.btn_Screenshot.Size = new System.Drawing.Size(94, 23);
             this.btn_Screenshot.TabIndex = 22;
@@ -295,11 +282,160 @@
             this.btn_Screenshot.UseVisualStyleBackColor = true;
             this.btn_Screenshot.Click += new System.EventHandler(this.btn_Screenshot_Click);
             // 
+            // fastObjectListView1
+            // 
+            this.fastObjectListView1.AllColumns.Add(this.ClashTypeCol);
+            this.fastObjectListView1.AllColumns.Add(this.HardClashTypeCol);
+            this.fastObjectListView1.AllColumns.Add(this.SoftClashTypeCol);
+            this.fastObjectListView1.AllColumns.Add(this.SeverityCol);
+            this.fastObjectListView1.AllColumns.Add(this.Elem1disciplineCol);
+            this.fastObjectListView1.AllColumns.Add(this.Elem1GUIDCol);
+            this.fastObjectListView1.AllColumns.Add(this.Elem1TypeCol);
+            this.fastObjectListView1.AllColumns.Add(this.Elem2disciplineCol);
+            this.fastObjectListView1.AllColumns.Add(this.Elem2GUIDCol);
+            this.fastObjectListView1.AllColumns.Add(this.Elem2TypeCol);
+            this.fastObjectListView1.AllColumns.Add(this.ClashDistCol);
+            this.fastObjectListView1.AllColumns.Add(this.ClearanceCol);
+            this.fastObjectListView1.AllColumns.Add(this.ClashPointCol);
+            this.fastObjectListView1.AllColumns.Add(this.ClashVolumeCol);
+            this.fastObjectListView1.AllColumns.Add(this.TopologyCol);
+            this.fastObjectListView1.AllColumns.Add(this.OffsetCol);
+            this.fastObjectListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fastObjectListView1.CellEditUseWholeCell = false;
+            this.fastObjectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ClashTypeCol,
+            this.HardClashTypeCol,
+            this.SoftClashTypeCol,
+            this.SeverityCol,
+            this.Elem1disciplineCol,
+            this.Elem1GUIDCol,
+            this.Elem1TypeCol,
+            this.Elem2disciplineCol,
+            this.Elem2GUIDCol,
+            this.Elem2TypeCol,
+            this.ClashDistCol,
+            this.ClearanceCol,
+            this.ClashPointCol,
+            this.ClashVolumeCol,
+            this.TopologyCol,
+            this.OffsetCol});
+            this.fastObjectListView1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.fastObjectListView1.FullRowSelect = true;
+            this.fastObjectListView1.HideSelection = false;
+            this.fastObjectListView1.Location = new System.Drawing.Point(12, 12);
+            this.fastObjectListView1.MultiSelect = false;
+            this.fastObjectListView1.Name = "fastObjectListView1";
+            this.fastObjectListView1.ShowGroups = false;
+            this.fastObjectListView1.ShowItemCountOnGroups = true;
+            this.fastObjectListView1.Size = new System.Drawing.Size(612, 489);
+            this.fastObjectListView1.TabIndex = 23;
+            this.fastObjectListView1.UseCompatibleStateImageBehavior = false;
+            this.fastObjectListView1.View = System.Windows.Forms.View.Details;
+            this.fastObjectListView1.VirtualMode = true;
+            this.fastObjectListView1.SelectionChanged += new System.EventHandler(this.fastObjectListView1_SelectionChanged);
+            // 
+            // ClashTypeCol
+            // 
+            this.ClashTypeCol.AspectName = "ClashType";
+            this.ClashTypeCol.Text = "Clash type";
+            this.ClashTypeCol.Width = 81;
+            // 
+            // HardClashTypeCol
+            // 
+            this.HardClashTypeCol.AspectName = "HardClashType";
+            this.HardClashTypeCol.Text = "Hardclash type";
+            this.HardClashTypeCol.Width = 100;
+            // 
+            // SoftClashTypeCol
+            // 
+            this.SoftClashTypeCol.AspectName = "SoftClashType";
+            this.SoftClashTypeCol.Text = "Softclash type";
+            this.SoftClashTypeCol.Width = 93;
+            // 
+            // SeverityCol
+            // 
+            this.SeverityCol.AspectName = "Severity";
+            this.SeverityCol.Text = "Severity";
+            // 
+            // Elem1disciplineCol
+            // 
+            this.Elem1disciplineCol.AspectName = "Element1discipline";
+            this.Elem1disciplineCol.Text = "Element1 discipline";
+            this.Elem1disciplineCol.Width = 127;
+            // 
+            // Elem1GUIDCol
+            // 
+            this.Elem1GUIDCol.AspectName = "Element1GUID";
+            this.Elem1GUIDCol.Text = "Element1 GUID";
+            this.Elem1GUIDCol.Width = 101;
+            // 
+            // Elem1TypeCol
+            // 
+            this.Elem1TypeCol.AspectName = "Element1Type";
+            this.Elem1TypeCol.Text = "Element1 Type";
+            this.Elem1TypeCol.Width = 103;
+            // 
+            // Elem2disciplineCol
+            // 
+            this.Elem2disciplineCol.AspectName = "Element2discipline";
+            this.Elem2disciplineCol.Text = "Element2 discipline";
+            this.Elem2disciplineCol.Width = 123;
+            // 
+            // Elem2GUIDCol
+            // 
+            this.Elem2GUIDCol.AspectName = "Element2GUID";
+            this.Elem2GUIDCol.Text = "Element2 GUID";
+            this.Elem2GUIDCol.Width = 98;
+            // 
+            // Elem2TypeCol
+            // 
+            this.Elem2TypeCol.AspectName = "Element2Type";
+            this.Elem2TypeCol.Text = "Element2 type";
+            this.Elem2TypeCol.Width = 98;
+            // 
+            // ClashDistCol
+            // 
+            this.ClashDistCol.AspectName = "ClashDistance";
+            this.ClashDistCol.Text = "Clash distance";
+            this.ClashDistCol.Width = 98;
+            // 
+            // ClearanceCol
+            // 
+            this.ClearanceCol.AspectName = "Clearance";
+            this.ClearanceCol.Text = "Clearance";
+            this.ClearanceCol.Width = 76;
+            // 
+            // ClashPointCol
+            // 
+            this.ClashPointCol.AspectName = "ClashPoint";
+            this.ClashPointCol.Text = "Clash point";
+            this.ClashPointCol.Width = 82;
+            // 
+            // ClashVolumeCol
+            // 
+            this.ClashVolumeCol.AspectName = "ClashVolume";
+            this.ClashVolumeCol.Text = "Clash volume";
+            this.ClashVolumeCol.Width = 95;
+            // 
+            // TopologyCol
+            // 
+            this.TopologyCol.AspectName = "Topology";
+            this.TopologyCol.Text = "Topology";
+            this.TopologyCol.Width = 68;
+            // 
+            // OffsetCol
+            // 
+            this.OffsetCol.AspectName = "Offset";
+            this.OffsetCol.Text = "Offset";
+            // 
             // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(697, 466);
+            this.ClientSize = new System.Drawing.Size(749, 553);
+            this.Controls.Add(this.fastObjectListView1);
             this.Controls.Add(this.btn_Screenshot);
             this.Controls.Add(this.rdo_none);
             this.Controls.Add(this.rdo_trans);
@@ -316,12 +452,12 @@
             this.Controls.Add(this.btn_Download);
             this.Controls.Add(this.tog_Soft);
             this.Controls.Add(this.tog_Hard);
-            this.Controls.Add(this.lst_Results);
             this.Controls.Add(this.ID_GUID1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_Load);
             this.Name = "form_ResultViewer";
             this.Text = "Integrity Checker-MEP Response";
+            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -331,7 +467,6 @@
         private System.Windows.Forms.Button btn_Load;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label ID_GUID1;
-        private ListviewTest.CollapsibleListView lst_Results;
         private System.Windows.Forms.CheckBox tog_Hard;
         private System.Windows.Forms.CheckBox tog_Soft;
         private System.Windows.Forms.Button btn_Download;
@@ -348,6 +483,23 @@
         private System.Windows.Forms.RadioButton rdo_trans;
         private System.Windows.Forms.RadioButton rdo_none;
         private System.Windows.Forms.Button btn_Screenshot;
+        private BrightIdeasSoftware.FastObjectListView fastObjectListView1;
+        private BrightIdeasSoftware.OLVColumn ClashTypeCol;
+        private BrightIdeasSoftware.OLVColumn HardClashTypeCol;
+        private BrightIdeasSoftware.OLVColumn SoftClashTypeCol;
+        private BrightIdeasSoftware.OLVColumn SeverityCol;
+        private BrightIdeasSoftware.OLVColumn Elem1disciplineCol;
+        private BrightIdeasSoftware.OLVColumn Elem1GUIDCol;
+        private BrightIdeasSoftware.OLVColumn Elem1TypeCol;
+        private BrightIdeasSoftware.OLVColumn Elem2disciplineCol;
+        private BrightIdeasSoftware.OLVColumn Elem2GUIDCol;
+        private BrightIdeasSoftware.OLVColumn Elem2TypeCol;
+        private BrightIdeasSoftware.OLVColumn ClashDistCol;
+        private BrightIdeasSoftware.OLVColumn ClearanceCol;
+        private BrightIdeasSoftware.OLVColumn ClashPointCol;
+        private BrightIdeasSoftware.OLVColumn ClashVolumeCol;
+        private BrightIdeasSoftware.OLVColumn TopologyCol;
+        private BrightIdeasSoftware.OLVColumn OffsetCol;
     }
 }
 

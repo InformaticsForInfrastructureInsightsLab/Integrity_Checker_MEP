@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>D:\Navisworks\Navisworks Manage 2023\Plugins\IntegrityChecker-MEP\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\Plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,19 +33,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AdWindows">
-      <HintPath>D:\Navisworks\Navisworks Manage 2023\AdWindows.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\AdWindows.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Autodesk.Navisworks.Api">
-      <HintPath>D:\Navisworks\Navisworks Manage 2023\Autodesk.Navisworks.Api.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\Autodesk.Navisworks.Api.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Autodesk.Navisworks.Clash">
-      <HintPath>D:\Navisworks\Navisworks Manage 2023\Autodesk.Navisworks.Clash.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\Autodesk.Navisworks.Clash.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="navisworks.gui.roamer">
-      <HintPath>D:\Navisworks\Navisworks Manage 2023\navisworks.gui.roamer.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\navisworks.gui.roamer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore">
@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClashChecker.cs" />
+    <Compile Include="ClashData.cs" />
     <Compile Include="form_ResultViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,13 +172,19 @@
       <DependentUpon>From_Log.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Downloads\ObjectListView-2.9.1\ObjectListView\ObjectListView\ObjectListView2012.csproj">
+      <Project>{18feda0c-d147-4286-b39a-01204808106a}</Project>
+      <Name>ObjectListView2012</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetDir)." "D:\Navisworks\Navisworks Manage 2023\Plugins\$(TargetName)\"
-xcopy /Y "$(ProjectDir)Integrity_Checker_MEP.xaml" "D:\Navisworks\Navisworks Manage 2023\Plugins\$(TargetName)\"
-mkdir "D:\Navisworks\Navisworks Manage 2023\Plugins\$(TargetName)\en-US"
-xcopy /Y "$(ProjectDir)Integrity_Checker_MEP.xaml" "D:\Navisworks\Navisworks Manage 2023\Plugins\$(TargetName)\en-US"
-mkdir "D:\Navisworks\Navisworks Manage 2023\Plugins\$(TargetName)\Images"
-xcopy /Y "$(ProjectDir)Images" "D:\Navisworks\Navisworks Manage 2023\Plugins\$(TargetName)\Images"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(TargetDir)." "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\"
+xcopy /Y "$(ProjectDir)Integrity_Checker_MEP.xaml" "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\"
+mkdir "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\en-US"
+xcopy /Y "$(ProjectDir)Integrity_Checker_MEP.xaml" "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\en-US"
+mkdir "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\Images"
+xcopy /Y "$(ProjectDir)Images" "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\Images"</PostBuildEvent>
   </PropertyGroup>
 </Project>

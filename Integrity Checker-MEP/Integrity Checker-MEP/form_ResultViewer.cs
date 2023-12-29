@@ -15,6 +15,7 @@ using System.Net.NetworkInformation;
 using Autodesk.Navisworks.Api;
 using Color = Autodesk.Navisworks.Api.Color;
 using ListviewTest;
+using Integrity_Checker_MEP;
 
 namespace ClashTest2
 {
@@ -51,6 +52,11 @@ namespace ClashTest2
         public List<ListViewItem> itemType1 = new List<ListViewItem>();
         public List<ListViewItem> itemType2 = new List<ListViewItem>();
 
+        List<ClashData> dataList = new List<ClashData>();
+        List<ClashData> dataHardList = new List<ClashData>();
+        List<ClashData> dataSoftList = new List<ClashData>();
+        List<ClashData> dataNullList = new List<ClashData>();
+
         // enum used for the header of columns in ListView
         // When header is changed, change the enum
         enum Header
@@ -84,14 +90,96 @@ namespace ClashTest2
 
         public form_ResultViewer()
         {
+            dataList = getData();
+            addDataToList();
             InitializeComponent();
+            fastObjectListView1.ShowGroups = true;
             doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+        }
+        List<ClashData> getData()
+        {
+            List<ClashData> clashDataList = new List<ClashData>();
+
+            string path = "C:\\objectinfo\\ResultFile.csv";
+            StreamReader file = new StreamReader(path);
+            string firstLine = file.ReadLine();
+
+            while (!file.EndOfStream)
+            {
+                string line = file.ReadLine();
+                string pattern = @",(?=(?:[^""]*""[^""]*"")*[^""]*$)";
+                string[] stringdata = Regex.Split(line, pattern);
+
+                for (int i = 0; i < stringdata.Length; i++)
+                {
+                    // Remove leading and trailing double quotes if present
+                    stringdata[i] = stringdata[i].Trim('"');
+                }
+                ClashData clashdata = new ClashData();
+                clashdata.ClashType = stringdata[((int)Header.ClashType)];
+                clashdata.HardClashType = stringdata[((int)Header.HardClashType)];
+                clashdata.SoftClashType = stringdata[((int)Header.SoftClashType)];
+                clashdata.Severity = stringdata[((int)Header.Severity)].ToUpper();
+                clashdata.Element1discipline = stringdata[((int)Header.Element1discipline)];
+                clashdata.Element1GUID = stringdata[((int)Header.Element1GUID)];
+                clashdata.Element1Type = stringdata[((int)Header.Element1Type)];
+                clashdata.Element2discipline = stringdata[((int)Header.Element2discipline)];
+                clashdata.Element2GUID = stringdata[((int)Header.Element2GUID)];
+                clashdata.Element2Type = stringdata[((int)Header.Element2Type)];
+                clashdata.ClashDistance = stringdata[((int)Header.ClashDistance)];
+                clashdata.Clearance = stringdata[((int)Header.Clearance)];
+                clashdata.ClashPoint = stringdata[((int)Header.ClashPoint)];
+                clashdata.ClashVolume = stringdata[((int)Header.ClashVolume)];
+                clashdata.Topology = stringdata[((int)Header.Topology)];
+                clashdata.Offset = stringdata[((int)Header.Offset)];
+                clashDataList.Add(clashdata);
+            }
+            return clashDataList;
+        }
+
+        void addDataToList()
+        {
+            foreach (ClashData clash in dataList)
+            {
+                if (clash.ClashType == "Hard")
+                {
+                    dataHardList.Add(clash);
+                    if(clash.Severity == "MAJOR")
+                    {
+                        major_hard++;
+                    }
+                    else if(clash.Severity == "MEDIUM")
+                    {
+                        medium_hard++;
+                    }
+                    else
+                    {
+                        minor_hard++;
+                    }
+                }
+                else if (clash.ClashType == "Soft")
+                {
+                    dataSoftList.Add(clash);
+                    if (clash.Severity == "MAJOR")
+                    {
+                        major_soft++;
+                    }
+                    else if (clash.Severity == "MEDIUM")
+                    {
+                        medium_soft++;
+                    }
+                    else
+                    {
+                        minor_soft++;
+                    }
+                }
+            }
         }
 
         private void click_btn_Load(object sender, EventArgs e)
         {
             // return when the list is not empty
-            if (lst_Results.Items.Count > 0)
+            if (fastObjectListView1.Items.Count > 0)
             {
                 return;
             }
@@ -107,13 +195,19 @@ namespace ClashTest2
             selectHeader.ShowDialog();
             if(selectHeader.isCanceled) return;
 
-            // 업데이트가 끝날때까지 UI 갱신 중지 -> 빠른 속도
-            lst_Results.BeginUpdate();
+
+            fastObjectListView1.AlwaysGroupByColumn = SeverityCol;
+            fastObjectListView1.SetObjects(dataList);
 
             tog_Hard.Checked = true;
             tog_Soft.Checked = true;
             tog_Hard.Enabled = true;
             tog_Soft.Enabled = true;
+
+
+            /*// 업데이트가 끝날때까지 UI 갱신 중지 -> 빠른 속도
+            lst_Results.BeginUpdate();
+
 
             // Add column header
             foreach(string item in header)
@@ -200,19 +294,19 @@ namespace ClashTest2
                     item2.Tag = "MINOR";
                 }
 
-            }
+            }*/
 
             // column 사이즈 재조정
             changeColumnHeader(headerBool);
 
             // groupHeader 조정
-            showGroupNum();
+            //showGroupNum();
 
             // 오른쪽에 각 Severity_Clashtype 표시
             showEachClashNuminfo();
 
             // 리스트뷰를 refresh해서 보여줌
-            lst_Results.EndUpdate();
+            //lst_Results.EndUpdate();
         }
 
         private async Task downloadFromServer()
@@ -245,7 +339,7 @@ namespace ClashTest2
             }
         }
 
-        private void lst_Results_SelectedIndexChanged(object sender, EventArgs e)
+        /*private void lst_Results_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lst_Results.SelectedItems.Count == 1)
             {
@@ -257,11 +351,35 @@ namespace ClashTest2
                 }
 
             }
+        }*/
+        void fastObjectListView1_SelectionChanged(object sender, EventArgs e)
+        {
+            ID_GUID1.Text = "Guid1: " + fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text + "  Guid2: " + fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
+            guid1 = fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text;
+            guid2 = fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
+            SelectClash(guid1, guid2);
         }
 
         private void tog_Hard_CheckedChanged(object sender, EventArgs e)
         {
-            // hard type unchecked
+            if (tog_Hard.Checked && tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataList);
+            }
+            else if (!tog_Hard.Checked && tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataSoftList);
+            }
+            else if (tog_Hard.Checked && !tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataHardList);
+            }
+            else if (!tog_Hard.Checked && !tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataNullList);
+            }
+
+            /*// hard type unchecked
             if (!tog_Hard.Checked)
             {
                lst_Results.BeginUpdate();
@@ -356,13 +474,30 @@ namespace ClashTest2
                 }
                 showGroupNum();
                 lst_Results.EndUpdate();
-            }
+            }*/
 
         }
 
         private void tog_Soft_CheckedChanged(object sender, EventArgs e)
         {
-            // soft type unchecked
+            if (tog_Hard.Checked && tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataList);
+            }
+            else if (!tog_Hard.Checked && tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataSoftList);
+            }
+            else if (tog_Hard.Checked && !tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataHardList);
+            }
+            else if (!tog_Hard.Checked && !tog_Soft.Checked)
+            {
+                fastObjectListView1.SetObjects(dataNullList);
+            }
+
+            /*// soft type unchecked
             if (!tog_Soft.Checked)
             {
                 lst_Results.BeginUpdate();
@@ -458,7 +593,7 @@ namespace ClashTest2
                 }
                 showGroupNum();
                 lst_Results.EndUpdate();
-            }
+            }*/
         }
 
         private async void click_btn_Download(object sender, EventArgs e)
@@ -469,7 +604,37 @@ namespace ClashTest2
         public void changeColumnHeader(bool[] changedHeaders)
         {
             headerBool = changedHeaders;
-            if (lst_Results.Columns.Count > 0)
+
+            if(fastObjectListView1.Columns.Count >0)
+            {
+                if (headerBool[0] == false)
+                {
+                    fastObjectListView1.Columns[0].Width = 0;
+                }
+                else
+                {
+                    fastObjectListView1.Columns[0].Width = 81;
+                }
+                HardClashTypeCol.IsVisible = headerBool[1];
+                SoftClashTypeCol.IsVisible = headerBool[2];
+                SeverityCol.IsVisible = headerBool[3];
+                Elem1disciplineCol.IsVisible = headerBool[4];
+                Elem1GUIDCol.IsVisible = headerBool[5];
+                Elem1TypeCol.IsVisible = headerBool[6];
+                Elem2disciplineCol.IsVisible = headerBool[7];
+                Elem2GUIDCol.IsVisible = headerBool[8];
+                Elem2TypeCol.IsVisible = headerBool[9];
+                ClashDistCol.IsVisible = headerBool[10];
+                ClearanceCol.IsVisible = headerBool[11];
+                ClashPointCol.IsVisible = headerBool[12];
+                ClashVolumeCol.IsVisible = headerBool[13];
+                TopologyCol.IsVisible = headerBool[14];
+                OffsetCol.IsVisible = headerBool[15];
+
+                fastObjectListView1.RebuildColumns();
+            }
+
+            /*if (lst_Results.Columns.Count > 0)
             {
                 for (int i = 0; i < headerBool.Length; i++)
                 {
@@ -482,10 +647,10 @@ namespace ClashTest2
                         lst_Results.Columns[i].Width = 0;
                     }
                 }
-            }
+            }*/
         }
 
-        private void showGroupNum() {
+        /*private void showGroupNum() {
             if (lst_Results.Groups[0].Items.Count > 0) {
                 if (lst_Results.Groups[0].Items[0].SubItems.Count > 1) {
                     lst_Results.Groups[0].Header = "MAJOR(" + lst_Results.Groups[0].Items.Count.ToString() + ")";
@@ -511,7 +676,7 @@ namespace ClashTest2
                     lst_Results.Groups[2].Header = "MINOR(0)";
                 }
             }
-        }
+        }*/
 
         private void showEachClashNuminfo() {
             majorHard.Visible = true;
@@ -540,7 +705,13 @@ namespace ClashTest2
 
         private void click_btn_Item1(object sender, EventArgs e)
         {
-            if (lst_Results.SelectedIndices.Count > 0)
+            if(fastObjectListView1.SelectedIndices.Count > 0)
+            {
+                doc.CurrentSelection.Clear();
+                SelectObjectWithGUID(fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
+            }
+
+            /*if (lst_Results.SelectedIndices.Count > 0)
             {
                 if (lst_Results.SelectedItems[0].SubItems.Count > 1)
                 {
@@ -548,18 +719,23 @@ namespace ClashTest2
                     doc.CurrentSelection.Clear();
                     SelectObjectWithGUID(lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
                 }
-            }
+            }*/
         }
 
         private void click_btn_Item2(object sender, EventArgs e)
         {
-            if (lst_Results.SelectedIndices.Count > 0)
+            if (fastObjectListView1.SelectedIndices.Count > 0)
+            {
+                doc.CurrentSelection.Clear();
+                SelectObjectWithGUID(fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
+            }
+/*            if (lst_Results.SelectedIndices.Count > 0)
             {
                 if (lst_Results.SelectedItems[0].SubItems.Count > 1) {
                     doc.CurrentSelection.Clear();
                     SelectObjectWithGUID(lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
                 }
-            }
+            }*/
         }
 
         public Document doc;
@@ -630,6 +806,12 @@ namespace ClashTest2
             Bitmap bmp = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView.GenerateImage(ImageGenerationStyle.ScenePlusOverlay, currentView.Width, currentView.Height);
             bmp.Save(path + fileName);
         }
+
+        private void lst_Results_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
 
         /// <summary>
         /// 간섭 선택 시 나머지 부재들에 대한 옵션(없음/투명화/숨기기)
