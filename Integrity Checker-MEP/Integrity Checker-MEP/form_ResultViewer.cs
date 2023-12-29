@@ -22,7 +22,7 @@ namespace ClashTest2
     public partial class form_ResultViewer : Form
     {
         // Struct which holds all the data
-        public struct Data
+       /* public struct Data
         {
             public string ClashType;
             public string HardClashType;
@@ -40,17 +40,17 @@ namespace ClashTest2
             public string ClashVolume;
             public string Topology;
             public string Offset;
-        }
+        }*/
         // List containing data structs
         // 1 is hard type, 2 is soft type
         // Can be used when handling the data itself
-        public List<Data> hardTypeList = new List<Data>();
-        public List<Data> softTypeList = new List<Data>();
+        /*public List<Data> hardTypeList = new List<Data>();
+        public List<Data> softTypeList = new List<Data>();*/
 
         // List containing ListViewItem
         // Used when updating the Listview
-        public List<ListViewItem> itemType1 = new List<ListViewItem>();
-        public List<ListViewItem> itemType2 = new List<ListViewItem>();
+        /*public List<ListViewItem> itemType1 = new List<ListViewItem>();
+        public List<ListViewItem> itemType2 = new List<ListViewItem>();*/
 
         List<ClashData> dataList = new List<ClashData>();
         List<ClashData> dataHardList = new List<ClashData>();
@@ -354,9 +354,9 @@ namespace ClashTest2
         }*/
         void fastObjectListView1_SelectionChanged(object sender, EventArgs e)
         {
-            ID_GUID1.Text = "Guid1: " + fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text + "  Guid2: " + fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
-            guid1 = fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text;
-            guid2 = fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
+            guid1 = fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element1GUID).Text;
+            guid2 = fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element2GUID).Text;
+            ID_GUID1.Text = "Guid1: " + guid1 + "  Guid2: " + guid2;
             SelectClash(guid1, guid2);
         }
 
@@ -708,7 +708,7 @@ namespace ClashTest2
             if(fastObjectListView1.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
+                SelectObjectWithGUID(fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element1GUID).Text);
             }
 
             /*if (lst_Results.SelectedIndices.Count > 0)
@@ -727,7 +727,7 @@ namespace ClashTest2
             if (fastObjectListView1.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(fastObjectListView1.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
+                SelectObjectWithGUID(fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element2GUID).Text);
             }
 /*            if (lst_Results.SelectedIndices.Count > 0)
             {
@@ -807,10 +807,6 @@ namespace ClashTest2
             bmp.Save(path + fileName);
         }
 
-        private void lst_Results_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
 
         /// <summary>
