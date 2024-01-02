@@ -46,7 +46,11 @@
     </Reference>
     <Reference Include="navisworks.gui.roamer">
       <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\navisworks.gui.roamer.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ObjectListView, Version=2.9.1.29041, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Downloads\ObjectListView-2.9.1\ObjectListView\ObjectListView\bin\Debug\ObjectListView.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <Private>True</Private>
@@ -70,7 +74,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms">
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xaml">
       <Private>True</Private>

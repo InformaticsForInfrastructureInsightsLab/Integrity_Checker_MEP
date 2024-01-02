@@ -21,44 +21,14 @@ namespace ClashTest2
 {
     public partial class form_ResultViewer : Form
     {
-        // Struct which holds all the data
-       /* public struct Data
-        {
-            public string ClashType;
-            public string HardClashType;
-            public string SoftClashType;
-            public string Severity;
-            public string Element1discipline;
-            public string Element1GUID;
-            public string Element1Type;
-            public string Element2discipline;
-            public string Element2GUID;
-            public string Element2Type;
-            public string ClashDistance;
-            public string Clearance;
-            public string ClashPoint;
-            public string ClashVolume;
-            public string Topology;
-            public string Offset;
-        }*/
-        // List containing data structs
-        // 1 is hard type, 2 is soft type
-        // Can be used when handling the data itself
-        /*public List<Data> hardTypeList = new List<Data>();
-        public List<Data> softTypeList = new List<Data>();*/
-
-        // List containing ListViewItem
-        // Used when updating the Listview
-        /*public List<ListViewItem> itemType1 = new List<ListViewItem>();
-        public List<ListViewItem> itemType2 = new List<ListViewItem>();*/
-
+        // List for data
         List<ClashData> dataList = new List<ClashData>();
         List<ClashData> dataHardList = new List<ClashData>();
         List<ClashData> dataSoftList = new List<ClashData>();
         List<ClashData> dataNullList = new List<ClashData>();
 
         // enum used for the header of columns in ListView
-        // When header is changed, change the enum
+        // When header is changed, change the enum and add from designer
         enum Header
         {
             ClashType = 0,
@@ -79,15 +49,21 @@ namespace ClashTest2
             Offset = 15,
         }
 
+        // bool for checked column header
         private bool[] headerBool;
 
+        // number of each result
         private int major_hard = 0, major_soft = 0;
         private int medium_hard = 0, medium_soft = 0;
         private int minor_hard = 0, minor_soft = 0;
 
+        // string for 2 selected guid
         private string guid1;
         private string guid2;
 
+        /// <summary>
+        /// Initialize form
+        /// </summary>
         public form_ResultViewer()
         {
             dataList = getData();
@@ -96,10 +72,17 @@ namespace ClashTest2
             fastObjectListView1.ShowGroups = true;
             doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
         }
+
+        /// <summary>
+        /// Gets data from C:\\objectinfo\\ResultFile.csv
+        /// 
+        /// </summary>
+        /// <returns></returns>
         List<ClashData> getData()
         {
             List<ClashData> clashDataList = new List<ClashData>();
 
+            // file exception handling 구현 필요
             string path = "C:\\objectinfo\\ResultFile.csv";
             StreamReader file = new StreamReader(path);
             string firstLine = file.ReadLine();
@@ -137,6 +120,10 @@ namespace ClashTest2
             return clashDataList;
         }
 
+        /// <summary>
+        /// Add data to each hard/soft list
+        /// Increase count
+        /// </summary>
         void addDataToList()
         {
             foreach (ClashData clash in dataList)
@@ -176,6 +163,13 @@ namespace ClashTest2
             }
         }
 
+        /// <summary>
+        /// when button "Load" is clicked
+        /// load data to listview from list
+        /// use fastobjectlistview <see href="https://objectlistview.sourceforge.net/cs/index.html"/>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void click_btn_Load(object sender, EventArgs e)
         {
             // return when the list is not empty
@@ -195,8 +189,9 @@ namespace ClashTest2
             selectHeader.ShowDialog();
             if(selectHeader.isCanceled) return;
 
-
+            // Only group by severity -> if canceled can be grouped by other headers
             fastObjectListView1.AlwaysGroupByColumn = SeverityCol;
+            // MVC pattern -> check objectListView 
             fastObjectListView1.SetObjects(dataList);
 
             tog_Hard.Checked = true;
@@ -204,111 +199,18 @@ namespace ClashTest2
             tog_Hard.Enabled = true;
             tog_Soft.Enabled = true;
 
-
-            /*// 업데이트가 끝날때까지 UI 갱신 중지 -> 빠른 속도
-            lst_Results.BeginUpdate();
-
-
-            // Add column header
-            foreach(string item in header)
-            {
-                lst_Results.Columns.Add(item);
-            }
-            while (!file.EndOfStream)
-            {
-                string line = file.ReadLine();
-                string pattern = @",(?=(?:[^""]*""[^""]*"")*[^""]*$)";
-                string[] data = Regex.Split(line, pattern);
-
-                for (int i = 0; i < data.Length; i++)
-                {
-                    // Remove leading and trailing double quotes if present
-                    data[i] = data[i].Trim('"');
-                }
-
-                Data structData = new Data();
-                structData.ClashType = data[((int)Header.ClashType)];
-                structData.HardClashType = data[((int)Header.HardClashType)];
-                structData.SoftClashType = data[((int)Header.SoftClashType)];
-                structData.Severity = data[((int)Header.Severity)].ToUpper();
-                structData.Element1discipline = data[((int)Header.Element1discipline)];
-                structData.Element1GUID = data[((int)Header.Element1GUID)];
-                structData.Element1Type = data[((int)Header.Element1Type)];
-                structData.Element2discipline = data[((int)Header.Element2discipline)];
-                structData.Element2GUID = data[((int)Header.Element2GUID)];
-                structData.Element2Type = data[((int)Header.Element2Type)];
-                structData.ClashDistance = data[((int)Header.ClashDistance)];
-                structData.Clearance = data[((int)Header.Clearance)];
-                structData.ClashPoint = data[((int)Header.ClashPoint)];
-                structData.ClashVolume = data[((int)Header.ClashVolume)];
-                structData.Topology = data[((int)Header.Topology)];
-                structData.Offset = data[((int)Header.Offset)];
-
-                ListViewItem item2 = new ListViewItem(data[0]);
-                for (int i = 1; i< data.Length; i++)
-                {
-                    item2.SubItems.Add(data[i]);
-                }
-                if (structData.ClashType == "Hard")
-                {
-                    hardTypeList.Add(structData);
-                    itemType1.Add(item2);
-                }
-                else if (structData.ClashType == "Soft")
-                {
-                    softTypeList.Add(structData);
-                    itemType2.Add(item2);
-                }
-                
-                lst_Results.Items.Add(item2);
-
-                if (structData.Severity == "MAJOR")
-                {
-                    if(structData.ClashType == "Hard") {
-                        major_hard++;
-                    }
-                    else { major_soft++; }
-
-                    lst_Results.Groups[0].Items.Add(item2);
-                    item2.Tag = "MAJOR";
-                }
-                else if (structData.Severity == "MEDIUM")
-                {
-                    if(structData.ClashType == "Hard") {
-                        medium_hard++;
-                    }
-                    else { medium_soft++; }
-
-                    lst_Results.Groups[1].Items.Add(item2);
-                    item2.Tag = "MEDIUM";
-
-                }
-                else if (structData.Severity == "MINOR")
-                {
-                    if (structData.ClashType == "Hard") {
-                        minor_hard++;
-                    }
-                    else { minor_soft++; }
-
-                    lst_Results.Groups[2].Items.Add(item2);
-                    item2.Tag = "MINOR";
-                }
-
-            }*/
-
-            // column 사이즈 재조정
+            // resize column header
             changeColumnHeader(headerBool);
 
-            // groupHeader 조정
-            //showGroupNum();
-
-            // 오른쪽에 각 Severity_Clashtype 표시
+            // Show Severity_Clashtype
             showEachClashNuminfo();
 
-            // 리스트뷰를 refresh해서 보여줌
-            //lst_Results.EndUpdate();
         }
 
+        /// <summary>
+        /// Download ResultFile.csv from server
+        /// </summary>
+        /// <returns></returns>
         private async Task downloadFromServer()
         {
             string serverUrl = "http://117.17.196.92:6060/result"; // 서버 주소를 적절히 변경하세요
@@ -339,27 +241,33 @@ namespace ClashTest2
             }
         }
 
-        /*private void lst_Results_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (lst_Results.SelectedItems.Count == 1)
-            {
-                if (lst_Results.SelectedItems[0].SubItems.Count > 1) {
-                    ID_GUID1.Text = "Guid1: " + lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text + "  Guid2: " + lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
-                    guid1 = lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text;
-                    guid2 = lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text;
-                    SelectClash(guid1, guid2);
-                }
-
-            }
-        }*/
+        /// <summary>
+        /// When selected row is changed in the listview
+        /// Get item's guid1 and guid2
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void fastObjectListView1_SelectionChanged(object sender, EventArgs e)
         {
             guid1 = fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element1GUID).Text;
             guid2 = fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element2GUID).Text;
-            ID_GUID1.Text = "Guid1: " + guid1 + "  Guid2: " + guid2;
+            showGUID();
             SelectClash(guid1, guid2);
         }
 
+        /// <summary>
+        /// Shows GUID under the listview
+        /// </summary>
+        private void showGUID()
+        {
+            ID_GUID1.Text = "Guid1: " + guid1 + "  Guid2: " + guid2;
+        }
+
+        /// <summary>
+        /// When Hard button checked is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tog_Hard_CheckedChanged(object sender, EventArgs e)
         {
             if (tog_Hard.Checked && tog_Soft.Checked)
@@ -379,105 +287,13 @@ namespace ClashTest2
                 fastObjectListView1.SetObjects(dataNullList);
             }
 
-            /*// hard type unchecked
-            if (!tog_Hard.Checked)
-            {
-               lst_Results.BeginUpdate();
-               foreach (ListViewItem item in lst_Results.Items)
-               {
-                    item.Remove();
-               }
-               // only soft type checked
-               if (tog_Soft.Checked)
-               {
-                    foreach (ListViewItem item in itemType2)
-                    {
-                        lst_Results.Items.Add(item);
-                        if (item.Tag.ToString() == "MAJOR")
-                        {
-                            lst_Results.Groups[0].Items.Add(item);
-                        }
-                        else if (item.Tag.ToString() == "MEDIUM")
-                        {
-                            lst_Results.Groups[1].Items.Add(item);
-
-                        }
-                        else if (item.Tag.ToString() == "MINOR")
-                        {
-                            lst_Results.Groups[2].Items.Add(item);
-
-                        }
-                    }
-                    lst_Results.Columns[(int)Header.HardClashType].Width = 0;
-                    lst_Results.Columns[(int)Header.ClashDistance].Width = 0;
-                    lst_Results.Columns[(int)Header.ClashPoint].Width = 0;
-                    lst_Results.Columns[(int)Header.ClashVolume].Width = 0;
-
-                }
-
-                foreach (ListViewGroup group in lst_Results.Groups)
-               {
-                    if(group.Items.Count == 0)
-                    {
-                        ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        lst_Results.Items.Add(emptyItem);
-                        group.Items.Add(emptyItem);
-                    }
-               }
-                showGroupNum();
-                lst_Results.EndUpdate();
-            }
-            // hard type checked
-            else if (tog_Hard.Checked)
-            {
-                if(lst_Results.Items.Count == 0)
-                {
-                    return;
-                }
-                lst_Results.BeginUpdate();
-                foreach (ListViewItem item in lst_Results.Items)
-                {
-                    if(item.SubItems.Count <= 1)
-                    {
-                        item.Remove();
-                    }
-                }
-                foreach (ListViewItem item in itemType1)
-                {
-                    lst_Results.Items.Add(item);
-                    if (item.Tag.ToString() == "MAJOR")
-                    {
-                        lst_Results.Groups[0].Items.Add(item);
-                    }
-                    else if (item.Tag.ToString() == "MEDIUM")
-                    {
-                        lst_Results.Groups[1].Items.Add(item);
-
-                    }
-                    else if (item.Tag.ToString() == "MINOR")
-                    {
-                        lst_Results.Groups[2].Items.Add(item);
-
-                    }
-                }
-                foreach (ListViewGroup group in lst_Results.Groups) {
-                    if (group.Items.Count == 0) {
-                        ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        lst_Results.Items.Add(emptyItem);
-                        group.Items.Add(emptyItem);
-                    }
-                }
-                changeColumnHeader(headerBool);
-                if (!tog_Soft.Checked) {
-                    lst_Results.Columns[(int)Header.SoftClashType].Width = 0;
-                    lst_Results.Columns[(int)Header.Clearance].Width = 0;
-                }
-                showGroupNum();
-                lst_Results.EndUpdate();
-            }*/
-
         }
 
+        /// <summary>
+        /// When Soft button is checked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tog_Soft_CheckedChanged(object sender, EventArgs e)
         {
             if (tog_Hard.Checked && tog_Soft.Checked)
@@ -497,187 +313,64 @@ namespace ClashTest2
                 fastObjectListView1.SetObjects(dataNullList);
             }
 
-            /*// soft type unchecked
-            if (!tog_Soft.Checked)
-            {
-                lst_Results.BeginUpdate();
-                // Remove both soft/hard
-                foreach (ListViewItem item in lst_Results.Items)
-                {
-                    item.Remove();
-                }
-                // Only hard checked
-                if(tog_Hard.Checked)
-                {
-                    foreach (ListViewItem item in itemType1)
-                    {
-                        lst_Results.Items.Add(item);
-                        if (item.Tag.ToString() == "MAJOR")
-                        {
-                            lst_Results.Groups[0].Items.Add(item);
-                        }
-                        else if (item.Tag.ToString() == "MEDIUM")
-                        {
-                            lst_Results.Groups[1].Items.Add(item);
-
-                        }
-                        else if (item.Tag.ToString() == "MINOR")
-                        {
-                            lst_Results.Groups[2].Items.Add(item);
-
-                        }
-                    }
-                   lst_Results.Columns[(int)Header.SoftClashType].Width = 0;
-                   lst_Results.Columns[(int)Header.Clearance].Width = 0;
-                }
-                
-                foreach (ListViewGroup group in lst_Results.Groups)
-                {
-                    if (group.Items.Count == 0)
-                    {
-                        ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        lst_Results.Items.Add(emptyItem);
-                        group.Items.Add(emptyItem);
-                    }
-                }
-                showGroupNum();
-                lst_Results.EndUpdate();
-            }
-            // soft type checked
-            else if (tog_Soft.Checked)
-            {
-                if (lst_Results.Items.Count == 0)
-                {
-                    return;
-                }
-                lst_Results.BeginUpdate();
-                //only soft type checked
-                foreach (ListViewItem item in lst_Results.Items)
-                {
-                    if (item.SubItems.Count <= 1)
-                    {
-                        item.Remove();
-                    }
-                }
-                foreach (ListViewItem item in itemType2)
-                {
-                    lst_Results.Items.Add(item);
-                    if (item.Tag.ToString() == "MAJOR")
-                    {
-                        lst_Results.Groups[0].Items.Add(item);
-                    }
-                    else if (item.Tag.ToString() == "MEDIUM")
-                    {
-                        lst_Results.Groups[1].Items.Add(item);
-
-                    }
-                    else if (item.Tag.ToString() == "MINOR")
-                    {
-                        lst_Results.Groups[2].Items.Add(item);
-
-                    }
-                }
-                foreach (ListViewGroup group in lst_Results.Groups) {
-                    if (group.Items.Count == 0) {
-                        ListViewItem emptyItem = new ListViewItem(string.Empty);
-                        lst_Results.Items.Add(emptyItem);
-                        group.Items.Add(emptyItem);
-                    }
-                }
-                changeColumnHeader(headerBool);
-                if (!tog_Hard.Checked) {
-                    lst_Results.Columns[(int)Header.HardClashType].Width = 0;
-                    lst_Results.Columns[(int)Header.ClashDistance].Width = 0;
-                    lst_Results.Columns[(int)Header.ClashPoint].Width = 0;
-                    lst_Results.Columns[(int)Header.ClashVolume].Width = 0;
-                }
-                showGroupNum();
-                lst_Results.EndUpdate();
-            }*/
         }
 
+        /// <summary>
+        /// When Download button is clicked
+        /// Download from server
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void click_btn_Download(object sender, EventArgs e)
         {
             await downloadFromServer();
         }
 
+        /// <summary>
+        /// Change column header width or hide from list
+        /// Primary column cannot be hidden in ObjectListView
+        /// </summary>
+        /// <param name="changedHeaders">Initial header bool values or changed bool values from form_SelectRow</param>
         public void changeColumnHeader(bool[] changedHeaders)
         {
             headerBool = changedHeaders;
 
             if(fastObjectListView1.Columns.Count >0)
             {
+                // Primary column cannot be hidden -> width = 0 instead of changing IsVisible
+                // Change accordingly
                 if (headerBool[0] == false)
                 {
-                    fastObjectListView1.Columns[0].Width = 0;
+                    fastObjectListView1.Columns[(int)Header.ClashType].Width = 0;
                 }
                 else
                 {
-                    fastObjectListView1.Columns[0].Width = 81;
+                    fastObjectListView1.Columns[(int)Header.ClashType].Width = 81;
                 }
-                HardClashTypeCol.IsVisible = headerBool[1];
-                SoftClashTypeCol.IsVisible = headerBool[2];
-                SeverityCol.IsVisible = headerBool[3];
-                Elem1disciplineCol.IsVisible = headerBool[4];
-                Elem1GUIDCol.IsVisible = headerBool[5];
-                Elem1TypeCol.IsVisible = headerBool[6];
-                Elem2disciplineCol.IsVisible = headerBool[7];
-                Elem2GUIDCol.IsVisible = headerBool[8];
-                Elem2TypeCol.IsVisible = headerBool[9];
-                ClashDistCol.IsVisible = headerBool[10];
-                ClearanceCol.IsVisible = headerBool[11];
-                ClashPointCol.IsVisible = headerBool[12];
-                ClashVolumeCol.IsVisible = headerBool[13];
-                TopologyCol.IsVisible = headerBool[14];
-                OffsetCol.IsVisible = headerBool[15];
+                HardClashTypeCol.IsVisible = headerBool[(int)Header.HardClashType];
+                SoftClashTypeCol.IsVisible = headerBool[(int)Header.SoftClashType];
+                SeverityCol.IsVisible = headerBool[(int)Header.Severity];
+                Elem1disciplineCol.IsVisible = headerBool[(int)Header.Element1discipline];
+                Elem1GUIDCol.IsVisible = headerBool[(int)Header.Element1GUID];
+                Elem1TypeCol.IsVisible = headerBool[(int)Header.Element1Type];
+                Elem2disciplineCol.IsVisible = headerBool[(int)Header.Element2discipline];
+                Elem2GUIDCol.IsVisible = headerBool[(int)Header.Element2GUID];
+                Elem2TypeCol.IsVisible = headerBool[(int)Header.Element2Type];
+                ClashDistCol.IsVisible = headerBool[(int)Header.ClashDistance];
+                ClearanceCol.IsVisible = headerBool[(int)Header.Clearance];
+                ClashPointCol.IsVisible = headerBool[(int)Header.ClashPoint];
+                ClashVolumeCol.IsVisible = headerBool[(int)Header.ClashVolume];
+                TopologyCol.IsVisible = headerBool[(int)Header.Topology];
+                OffsetCol.IsVisible = headerBool[(int)Header.Offset];
 
                 fastObjectListView1.RebuildColumns();
             }
-
-            /*if (lst_Results.Columns.Count > 0)
-            {
-                for (int i = 0; i < headerBool.Length; i++)
-                {
-                    if (headerBool[i] == true)
-                    {
-                        lst_Results.Columns[i].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
-                    }
-                    else
-                    {
-                        lst_Results.Columns[i].Width = 0;
-                    }
-                }
-            }*/
         }
 
-        /*private void showGroupNum() {
-            if (lst_Results.Groups[0].Items.Count > 0) {
-                if (lst_Results.Groups[0].Items[0].SubItems.Count > 1) {
-                    lst_Results.Groups[0].Header = "MAJOR(" + lst_Results.Groups[0].Items.Count.ToString() + ")";
-                }
-                else {
-                    lst_Results.Groups[0].Header = "MAJOR(0)";
-                }
-            }
-            
-            if(lst_Results.Groups[1].Items.Count > 0) {
-                if (lst_Results.Groups[1].Items[0].SubItems.Count > 1) {
-                    lst_Results.Groups[1].Header = "MEDIUM(" + lst_Results.Groups[1].Items.Count.ToString() + ")";
-                }
-                else {
-                    lst_Results.Groups[1].Header = "MEDIUM(0)";
-                }
-            }
-            if (lst_Results.Groups[2].Items.Count > 0) {
-                if (lst_Results.Groups[2].Items[0].SubItems.Count > 1) {
-                    lst_Results.Groups[2].Header = "MINOR(" + lst_Results.Groups[2].Items.Count.ToString() + ")";
-                }
-                else {
-                    lst_Results.Groups[2].Header = "MINOR(0)";
-                }
-            }
-        }*/
-
+        /// <summary>
+        /// Show label for each Severity_ClashType
+        /// Show numbers of each Severity_ClashType
+        /// </summary>
         private void showEachClashNuminfo() {
             majorHard.Visible = true;
             majorSoft.Visible = true;
@@ -695,6 +388,12 @@ namespace ClashTest2
             
         }
 
+        /// <summary>
+        /// When SelectHeader button clicked
+        /// Load SelectRow Form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void click_btn_SelectHeader(object sender, EventArgs e)
         {
             SelectHeader selectHeader = new SelectHeader();
@@ -703,6 +402,12 @@ namespace ClashTest2
             selectHeader.ShowDialog();
         }
 
+        /// <summary>
+        /// When Item1 button clicked
+        /// Select Item1
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void click_btn_Item1(object sender, EventArgs e)
         {
             if(fastObjectListView1.SelectedIndices.Count > 0)
@@ -711,17 +416,14 @@ namespace ClashTest2
                 SelectObjectWithGUID(fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element1GUID).Text);
             }
 
-            /*if (lst_Results.SelectedIndices.Count > 0)
-            {
-                if (lst_Results.SelectedItems[0].SubItems.Count > 1)
-                {
-                    //MessageBoxEx.Show(this, collapsibleListView1.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
-                    doc.CurrentSelection.Clear();
-                    SelectObjectWithGUID(lst_Results.SelectedItems[0].SubItems[(int)Header.Element1GUID].Text);
-                }
-            }*/
         }
 
+        /// <summary>
+        /// When Item2 button clicked
+        /// Select Item2
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void click_btn_Item2(object sender, EventArgs e)
         {
             if (fastObjectListView1.SelectedIndices.Count > 0)
@@ -729,14 +431,8 @@ namespace ClashTest2
                 doc.CurrentSelection.Clear();
                 SelectObjectWithGUID(fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element2GUID).Text);
             }
-/*            if (lst_Results.SelectedIndices.Count > 0)
-            {
-                if (lst_Results.SelectedItems[0].SubItems.Count > 1) {
-                    doc.CurrentSelection.Clear();
-                    SelectObjectWithGUID(lst_Results.SelectedItems[0].SubItems[(int)Header.Element2GUID].Text);
-                }
-            }*/
         }
+
 
         public Document doc;
         Color[] colors = { Color.Green, Color.Red }; //부재에 칠할 색
