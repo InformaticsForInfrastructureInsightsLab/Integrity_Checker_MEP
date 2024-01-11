@@ -44,6 +44,13 @@
       <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\Autodesk.Navisworks.Clash.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\Autodesk.Navisworks.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="navisworks.gui.roamer">
       <HintPath>..\..\..\..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\navisworks.gui.roamer.dll</HintPath>
       <Private>False</Private>
@@ -143,6 +150,7 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageCreator.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="MessageBoxEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

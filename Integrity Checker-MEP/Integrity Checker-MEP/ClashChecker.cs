@@ -71,6 +71,7 @@ namespace Integrity_Checker_MEP {
         
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
         From_Log form_log; // 로그 출력 폼
+        ImageCreator imgCreator;
 
         public int Execute(params string[] parameters) {
             try {
@@ -101,6 +102,7 @@ namespace Integrity_Checker_MEP {
                 if (form_setting.Save_log) {
                     SaveLog(); // 로그를 파일로 저장
                 }
+                //SaveImage();
                 form_log.UpdateLog("종료");
             }
             catch (Exception ex) {
@@ -108,6 +110,15 @@ namespace Integrity_Checker_MEP {
                 //ShowMessage(ex.ToString());
             }
             return 0;
+        }
+
+        void SaveImage()
+        {
+            imgCreator = new ImageCreator();
+            form_log.UpdateLog("이미지 추출 작업 시작");
+            imgCreator.CreateAndFillImages(@"C:/objectinfo/ResultImage");
+            form_log.UpdateLog("이미지 추출 작업 종료");
+
         }
 
         //로그 저장
@@ -604,6 +615,8 @@ namespace Integrity_Checker_MEP {
                         return;
                     }
                 }
+
+
                 #endregion
 
                 #region 충돌 보고서 내보내기
@@ -1289,7 +1302,7 @@ namespace Integrity_Checker_MEP {
         void SendtoServer(string filepath) {
             form_log.UpdateLog("서버로 전송 시작");
             try {
-                string serverIP = "http://117.17.196.51:6060/upload";
+                string serverIP = "http://117.17.196.92:6060/upload";
                 WebClient webClient = new WebClient();
                 byte[] re = webClient.UploadFile(serverIP, filepath);
                 string response = webClient.Encoding.GetString(re);

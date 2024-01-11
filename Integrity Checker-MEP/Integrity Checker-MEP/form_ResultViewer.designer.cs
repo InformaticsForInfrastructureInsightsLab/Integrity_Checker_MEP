@@ -47,7 +47,7 @@
             this.rdo_trans = new System.Windows.Forms.RadioButton();
             this.rdo_none = new System.Windows.Forms.RadioButton();
             this.btn_Screenshot = new System.Windows.Forms.Button();
-            this.fastObjectListView1 = new BrightIdeasSoftware.FastObjectListView();
+            this.folv = new BrightIdeasSoftware.FastObjectListView();
             this.ClashTypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.HardClashTypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.SoftClashTypeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -64,7 +64,8 @@
             this.ClashVolumeCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.TopologyCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.OffsetCol = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListView1)).BeginInit();
+            this.button1 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.folv)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_Load
@@ -282,29 +283,29 @@
             this.btn_Screenshot.UseVisualStyleBackColor = true;
             this.btn_Screenshot.Click += new System.EventHandler(this.btn_Screenshot_Click);
             // 
-            // fastObjectListView1
+            // folv
             // 
-            this.fastObjectListView1.AllColumns.Add(this.ClashTypeCol);
-            this.fastObjectListView1.AllColumns.Add(this.HardClashTypeCol);
-            this.fastObjectListView1.AllColumns.Add(this.SoftClashTypeCol);
-            this.fastObjectListView1.AllColumns.Add(this.SeverityCol);
-            this.fastObjectListView1.AllColumns.Add(this.Elem1disciplineCol);
-            this.fastObjectListView1.AllColumns.Add(this.Elem1GUIDCol);
-            this.fastObjectListView1.AllColumns.Add(this.Elem1TypeCol);
-            this.fastObjectListView1.AllColumns.Add(this.Elem2disciplineCol);
-            this.fastObjectListView1.AllColumns.Add(this.Elem2GUIDCol);
-            this.fastObjectListView1.AllColumns.Add(this.Elem2TypeCol);
-            this.fastObjectListView1.AllColumns.Add(this.ClashDistCol);
-            this.fastObjectListView1.AllColumns.Add(this.ClearanceCol);
-            this.fastObjectListView1.AllColumns.Add(this.ClashPointCol);
-            this.fastObjectListView1.AllColumns.Add(this.ClashVolumeCol);
-            this.fastObjectListView1.AllColumns.Add(this.TopologyCol);
-            this.fastObjectListView1.AllColumns.Add(this.OffsetCol);
-            this.fastObjectListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.folv.AllColumns.Add(this.ClashTypeCol);
+            this.folv.AllColumns.Add(this.HardClashTypeCol);
+            this.folv.AllColumns.Add(this.SoftClashTypeCol);
+            this.folv.AllColumns.Add(this.SeverityCol);
+            this.folv.AllColumns.Add(this.Elem1disciplineCol);
+            this.folv.AllColumns.Add(this.Elem1GUIDCol);
+            this.folv.AllColumns.Add(this.Elem1TypeCol);
+            this.folv.AllColumns.Add(this.Elem2disciplineCol);
+            this.folv.AllColumns.Add(this.Elem2GUIDCol);
+            this.folv.AllColumns.Add(this.Elem2TypeCol);
+            this.folv.AllColumns.Add(this.ClashDistCol);
+            this.folv.AllColumns.Add(this.ClearanceCol);
+            this.folv.AllColumns.Add(this.ClashPointCol);
+            this.folv.AllColumns.Add(this.ClashVolumeCol);
+            this.folv.AllColumns.Add(this.TopologyCol);
+            this.folv.AllColumns.Add(this.OffsetCol);
+            this.folv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.fastObjectListView1.CellEditUseWholeCell = false;
-            this.fastObjectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.folv.CellEditUseWholeCell = false;
+            this.folv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ClashTypeCol,
             this.HardClashTypeCol,
             this.SoftClashTypeCol,
@@ -321,20 +322,20 @@
             this.ClashVolumeCol,
             this.TopologyCol,
             this.OffsetCol});
-            this.fastObjectListView1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.fastObjectListView1.FullRowSelect = true;
-            this.fastObjectListView1.HideSelection = false;
-            this.fastObjectListView1.Location = new System.Drawing.Point(12, 12);
-            this.fastObjectListView1.MultiSelect = false;
-            this.fastObjectListView1.Name = "fastObjectListView1";
-            this.fastObjectListView1.ShowGroups = false;
-            this.fastObjectListView1.ShowItemCountOnGroups = true;
-            this.fastObjectListView1.Size = new System.Drawing.Size(612, 489);
-            this.fastObjectListView1.TabIndex = 23;
-            this.fastObjectListView1.UseCompatibleStateImageBehavior = false;
-            this.fastObjectListView1.View = System.Windows.Forms.View.Details;
-            this.fastObjectListView1.VirtualMode = true;
-            this.fastObjectListView1.SelectionChanged += new System.EventHandler(this.fastObjectListView1_SelectionChanged);
+            this.folv.Cursor = System.Windows.Forms.Cursors.Default;
+            this.folv.FullRowSelect = true;
+            this.folv.HideSelection = false;
+            this.folv.Location = new System.Drawing.Point(12, 12);
+            this.folv.MultiSelect = false;
+            this.folv.Name = "folv";
+            this.folv.ShowGroups = false;
+            this.folv.ShowItemCountOnGroups = true;
+            this.folv.Size = new System.Drawing.Size(612, 489);
+            this.folv.TabIndex = 23;
+            this.folv.UseCompatibleStateImageBehavior = false;
+            this.folv.View = System.Windows.Forms.View.Details;
+            this.folv.VirtualMode = true;
+            this.folv.SelectionChanged += new System.EventHandler(this.folv_SelectionChanged);
             // 
             // ClashTypeCol
             // 
@@ -430,12 +431,23 @@
             this.OffsetCol.AspectName = "Offset";
             this.OffsetCol.Text = "Offset";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(643, 207);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 23);
+            this.button1.TabIndex = 24;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(749, 553);
-            this.Controls.Add(this.fastObjectListView1);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.folv);
             this.Controls.Add(this.btn_Screenshot);
             this.Controls.Add(this.rdo_none);
             this.Controls.Add(this.rdo_trans);
@@ -457,7 +469,7 @@
             this.Controls.Add(this.btn_Load);
             this.Name = "form_ResultViewer";
             this.Text = "Integrity Checker-MEP Response";
-            ((System.ComponentModel.ISupportInitialize)(this.fastObjectListView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.folv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -483,7 +495,7 @@
         private System.Windows.Forms.RadioButton rdo_trans;
         private System.Windows.Forms.RadioButton rdo_none;
         private System.Windows.Forms.Button btn_Screenshot;
-        private BrightIdeasSoftware.FastObjectListView fastObjectListView1;
+        private BrightIdeasSoftware.FastObjectListView folv;
         private BrightIdeasSoftware.OLVColumn ClashTypeCol;
         private BrightIdeasSoftware.OLVColumn HardClashTypeCol;
         private BrightIdeasSoftware.OLVColumn SoftClashTypeCol;
@@ -500,6 +512,7 @@
         private BrightIdeasSoftware.OLVColumn ClashVolumeCol;
         private BrightIdeasSoftware.OLVColumn TopologyCol;
         private BrightIdeasSoftware.OLVColumn OffsetCol;
+        private System.Windows.Forms.Button button1;
     }
 }
 

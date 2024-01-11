@@ -16,11 +16,17 @@ using Autodesk.Navisworks.Api;
 using Color = Autodesk.Navisworks.Api.Color;
 using ListviewTest;
 using Integrity_Checker_MEP;
+using ComApi = Autodesk.Navisworks.Api.Interop.ComApi;
+using ComApiBridge = Autodesk.Navisworks.Api.ComApi.ComApiBridge;
+using Autodesk.Navisworks.Api.ComApi;
+using Autodesk.Navisworks.Api.Interop;
+using Autodesk.Navisworks.Api.Interop.ComApi;
 
 namespace ClashTest2
 {
     public partial class form_ResultViewer : Form
     {
+
         // List for data
         List<ClashData> dataList = new List<ClashData>();
         List<ClashData> dataHardList = new List<ClashData>();
@@ -61,63 +67,81 @@ namespace ClashTest2
         private string guid1;
         private string guid2;
 
+        #region Form
+
         /// <summary>
         /// Initialize form
         /// </summary>
         public form_ResultViewer()
         {
-            dataList = getData();
-            addDataToList();
+
+
             InitializeComponent();
-            fastObjectListView1.ShowGroups = true;
+
+            /*dataList = getData();
+            addDataToList();*/
+
+
+            folv.ShowGroups = true;
             doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
         }
 
         /// <summary>
         /// Gets data from C:\\objectinfo\\ResultFile.csv
-        /// 
         /// </summary>
         /// <returns></returns>
         List<ClashData> getData()
         {
             List<ClashData> clashDataList = new List<ClashData>();
 
-            // file exception handling 구현 필요
-            string path = "C:\\objectinfo\\ResultFile.csv";
-            StreamReader file = new StreamReader(path);
-            string firstLine = file.ReadLine();
-
-            while (!file.EndOfStream)
+            try
             {
-                string line = file.ReadLine();
-                string pattern = @",(?=(?:[^""]*""[^""]*"")*[^""]*$)";
-                string[] stringdata = Regex.Split(line, pattern);
+                string path = "C:\\objectinfo\\ResultFile.csv";
+                StreamReader file = new StreamReader(path);
+                string firstLine = file.ReadLine();
 
-                for (int i = 0; i < stringdata.Length; i++)
+                while (!file.EndOfStream)
                 {
-                    // Remove leading and trailing double quotes if present
-                    stringdata[i] = stringdata[i].Trim('"');
+                    string line = file.ReadLine();
+                    string pattern = @",(?=(?:[^""]*""[^""]*"")*[^""]*$)";
+                    string[] stringdata = Regex.Split(line, pattern);
+
+                    for (int i = 0; i < stringdata.Length; i++)
+                    {
+                        // Remove leading and trailing double quotes if present
+                        stringdata[i] = stringdata[i].Trim('"');
+                    }
+                    ClashData clashdata = new ClashData();
+                    clashdata.ClashType = stringdata[((int)Header.ClashType)];
+                    clashdata.HardClashType = stringdata[((int)Header.HardClashType)];
+                    clashdata.SoftClashType = stringdata[((int)Header.SoftClashType)];
+                    clashdata.Severity = stringdata[((int)Header.Severity)].ToUpper();
+                    clashdata.Element1discipline = stringdata[((int)Header.Element1discipline)];
+                    clashdata.Element1GUID = stringdata[((int)Header.Element1GUID)];
+                    clashdata.Element1Type = stringdata[((int)Header.Element1Type)];
+                    clashdata.Element2discipline = stringdata[((int)Header.Element2discipline)];
+                    clashdata.Element2GUID = stringdata[((int)Header.Element2GUID)];
+                    clashdata.Element2Type = stringdata[((int)Header.Element2Type)];
+                    clashdata.ClashDistance = stringdata[((int)Header.ClashDistance)];
+                    clashdata.Clearance = stringdata[((int)Header.Clearance)];
+                    clashdata.ClashPoint = stringdata[((int)Header.ClashPoint)];
+                    clashdata.ClashVolume = stringdata[((int)Header.ClashVolume)];
+                    clashdata.Topology = stringdata[((int)Header.Topology)];
+                    clashdata.Offset = stringdata[((int)Header.Offset)];
+                    clashDataList.Add(clashdata);
                 }
-                ClashData clashdata = new ClashData();
-                clashdata.ClashType = stringdata[((int)Header.ClashType)];
-                clashdata.HardClashType = stringdata[((int)Header.HardClashType)];
-                clashdata.SoftClashType = stringdata[((int)Header.SoftClashType)];
-                clashdata.Severity = stringdata[((int)Header.Severity)].ToUpper();
-                clashdata.Element1discipline = stringdata[((int)Header.Element1discipline)];
-                clashdata.Element1GUID = stringdata[((int)Header.Element1GUID)];
-                clashdata.Element1Type = stringdata[((int)Header.Element1Type)];
-                clashdata.Element2discipline = stringdata[((int)Header.Element2discipline)];
-                clashdata.Element2GUID = stringdata[((int)Header.Element2GUID)];
-                clashdata.Element2Type = stringdata[((int)Header.Element2Type)];
-                clashdata.ClashDistance = stringdata[((int)Header.ClashDistance)];
-                clashdata.Clearance = stringdata[((int)Header.Clearance)];
-                clashdata.ClashPoint = stringdata[((int)Header.ClashPoint)];
-                clashdata.ClashVolume = stringdata[((int)Header.ClashVolume)];
-                clashdata.Topology = stringdata[((int)Header.Topology)];
-                clashdata.Offset = stringdata[((int)Header.Offset)];
-                clashDataList.Add(clashdata);
+                return clashDataList;
             }
-            return clashDataList;
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show("File not found: " + ex.Message);
+                return null;
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                MessageBox.Show("Directory not found: " + ex.Message);
+                return null;
+            }
         }
 
         /// <summary>
@@ -126,38 +150,41 @@ namespace ClashTest2
         /// </summary>
         void addDataToList()
         {
-            foreach (ClashData clash in dataList)
+            if (dataList != null)
             {
-                if (clash.ClashType == "Hard")
+                foreach (ClashData clash in dataList)
                 {
-                    dataHardList.Add(clash);
-                    if(clash.Severity == "MAJOR")
+                    if (clash.ClashType == "Hard")
                     {
-                        major_hard++;
+                        dataHardList.Add(clash);
+                        if (clash.Severity == "MAJOR")
+                        {
+                            major_hard++;
+                        }
+                        else if (clash.Severity == "MEDIUM")
+                        {
+                            medium_hard++;
+                        }
+                        else
+                        {
+                            minor_hard++;
+                        }
                     }
-                    else if(clash.Severity == "MEDIUM")
+                    else if (clash.ClashType == "Soft")
                     {
-                        medium_hard++;
-                    }
-                    else
-                    {
-                        minor_hard++;
-                    }
-                }
-                else if (clash.ClashType == "Soft")
-                {
-                    dataSoftList.Add(clash);
-                    if (clash.Severity == "MAJOR")
-                    {
-                        major_soft++;
-                    }
-                    else if (clash.Severity == "MEDIUM")
-                    {
-                        medium_soft++;
-                    }
-                    else
-                    {
-                        minor_soft++;
+                        dataSoftList.Add(clash);
+                        if (clash.Severity == "MAJOR")
+                        {
+                            major_soft++;
+                        }
+                        else if (clash.Severity == "MEDIUM")
+                        {
+                            medium_soft++;
+                        }
+                        else
+                        {
+                            minor_soft++;
+                        }
                     }
                 }
             }
@@ -166,45 +193,57 @@ namespace ClashTest2
         /// <summary>
         /// when button "Load" is clicked
         /// load data to listview from list
-        /// use fastobjectlistview <see href="https://objectlistview.sourceforge.net/cs/index.html"/>
+        /// use FastObjectListView <see href="https://objectlistview.sourceforge.net/cs/index.html"/>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void click_btn_Load(object sender, EventArgs e)
         {
             // return when the list is not empty
-            if (fastObjectListView1.Items.Count > 0)
+            if (folv.Items.Count > 0)
             {
                 return;
             }
+            try
+            {
+                string path = "C:\\objectinfo\\ResultFile.csv";
+                StreamReader file = new StreamReader(path);
+                string firstLine = file.ReadLine();
+                string[] header = firstLine.Split(',');
 
-            string path = "C:\\objectinfo\\ResultFile.csv";
-            StreamReader file = new StreamReader(path);
-            string firstLine = file.ReadLine();
-            string[] header = firstLine.Split(',');
+                SelectHeader selectHeader = new SelectHeader();
+                selectHeader.initializeHeaderBool(header.Length);
+                selectHeader.StartPosition = FormStartPosition.CenterParent;
+                selectHeader.ShowDialog();
+                if (selectHeader.isCanceled) return;
 
-            SelectHeader selectHeader = new SelectHeader();
-            selectHeader.initializeHeaderBool(header.Length);
-            selectHeader.StartPosition = FormStartPosition.CenterParent;
-            selectHeader.ShowDialog();
-            if(selectHeader.isCanceled) return;
+                dataList = getData();
+                addDataToList();
 
-            // Only group by severity -> if canceled can be grouped by other headers
-            fastObjectListView1.AlwaysGroupByColumn = SeverityCol;
-            // MVC pattern -> check objectListView 
-            fastObjectListView1.SetObjects(dataList);
+                // Only group by severity -> if canceled can be grouped by other headers
+                folv.AlwaysGroupByColumn = SeverityCol;
+                // MVC pattern -> check objectListView 
+                folv.SetObjects(dataList);
 
-            tog_Hard.Checked = true;
-            tog_Soft.Checked = true;
-            tog_Hard.Enabled = true;
-            tog_Soft.Enabled = true;
+                tog_Hard.Checked = true;
+                tog_Soft.Checked = true;
+                tog_Hard.Enabled = true;
+                tog_Soft.Enabled = true;
 
-            // resize column header
-            changeColumnHeader(headerBool);
+                // resize column header
+                changeColumnHeader(headerBool);
 
-            // Show Severity_Clashtype
-            showEachClashNuminfo();
-
+                // Show Severity_Clashtype
+                showEachClashNuminfo();
+            }
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show("File not found: " + ex.Message);
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                MessageBox.Show("Directory not found: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -247,10 +286,10 @@ namespace ClashTest2
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void fastObjectListView1_SelectionChanged(object sender, EventArgs e)
+        void folv_SelectionChanged(object sender, EventArgs e)
         {
-            guid1 = fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element1GUID).Text;
-            guid2 = fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element2GUID).Text;
+            guid1 = folv.SelectedItem.GetSubItem((int)Header.Element1GUID).Text;
+            guid2 = folv.SelectedItem.GetSubItem((int)Header.Element2GUID).Text;
             showGUID();
             SelectClash(guid1, guid2);
         }
@@ -272,19 +311,19 @@ namespace ClashTest2
         {
             if (tog_Hard.Checked && tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataList);
+                folv.SetObjects(dataList);
             }
             else if (!tog_Hard.Checked && tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataSoftList);
+                folv.SetObjects(dataSoftList);
             }
             else if (tog_Hard.Checked && !tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataHardList);
+                folv.SetObjects(dataHardList);
             }
             else if (!tog_Hard.Checked && !tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataNullList);
+                folv.SetObjects(dataNullList);
             }
 
         }
@@ -298,19 +337,19 @@ namespace ClashTest2
         {
             if (tog_Hard.Checked && tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataList);
+                folv.SetObjects(dataList);
             }
             else if (!tog_Hard.Checked && tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataSoftList);
+                folv.SetObjects(dataSoftList);
             }
             else if (tog_Hard.Checked && !tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataHardList);
+                folv.SetObjects(dataHardList);
             }
             else if (!tog_Hard.Checked && !tog_Soft.Checked)
             {
-                fastObjectListView1.SetObjects(dataNullList);
+                folv.SetObjects(dataNullList);
             }
 
         }
@@ -335,17 +374,17 @@ namespace ClashTest2
         {
             headerBool = changedHeaders;
 
-            if(fastObjectListView1.Columns.Count >0)
+            if(folv.Columns.Count >0)
             {
                 // Primary column cannot be hidden -> width = 0 instead of changing IsVisible
                 // Change accordingly
                 if (headerBool[0] == false)
                 {
-                    fastObjectListView1.Columns[(int)Header.ClashType].Width = 0;
+                    folv.Columns[(int)Header.ClashType].Width = 0;
                 }
                 else
                 {
-                    fastObjectListView1.Columns[(int)Header.ClashType].Width = 81;
+                    folv.Columns[(int)Header.ClashType].Width = 81;
                 }
                 HardClashTypeCol.IsVisible = headerBool[(int)Header.HardClashType];
                 SoftClashTypeCol.IsVisible = headerBool[(int)Header.SoftClashType];
@@ -363,7 +402,7 @@ namespace ClashTest2
                 TopologyCol.IsVisible = headerBool[(int)Header.Topology];
                 OffsetCol.IsVisible = headerBool[(int)Header.Offset];
 
-                fastObjectListView1.RebuildColumns();
+                folv.RebuildColumns();
             }
         }
 
@@ -410,10 +449,10 @@ namespace ClashTest2
         /// <param name="e"></param>
         private void click_btn_Item1(object sender, EventArgs e)
         {
-            if(fastObjectListView1.SelectedIndices.Count > 0)
+            if(folv.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element1GUID).Text);
+                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element1GUID).Text);
             }
 
         }
@@ -426,13 +465,15 @@ namespace ClashTest2
         /// <param name="e"></param>
         private void click_btn_Item2(object sender, EventArgs e)
         {
-            if (fastObjectListView1.SelectedIndices.Count > 0)
+            if (folv.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(fastObjectListView1.SelectedItem.GetSubItem((int)Header.Element2GUID).Text);
+                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element2GUID).Text);
             }
         }
+        #endregion
 
+        #region Navisworks
 
         public Document doc;
         Color[] colors = { Color.Green, Color.Red }; //부재에 칠할 색
@@ -446,6 +487,11 @@ namespace ClashTest2
         /// <param name="_guid1"></param>
         /// <param name="_guid2"></param>
         public void SelectClash(string _guid1, string _guid2) {
+            // 추후 모델이 없을 때 load가 되지 않도록 수정하기 
+            if (doc.Models.Count < 1)
+            {
+                return;
+            }
             //모든 부재의 색, 숨김 초기화
             doc.Models.ResetAllTemporaryMaterials();
             doc.Models.ResetAllHiddenToModelState();
@@ -501,6 +547,7 @@ namespace ClashTest2
             Autodesk.Navisworks.Api.View currentView = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView;
             Bitmap bmp = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView.GenerateImage(ImageGenerationStyle.ScenePlusOverlay, currentView.Width, currentView.Height);
             bmp.Save(path + fileName);
+            
         }
 
 
@@ -527,6 +574,139 @@ namespace ClashTest2
             //모델 투명화 끄기
             //모델에 초점 맞추기
             //스크린샷
+        }
+
+        /*
+        public static void SetPlaneSectioningItem(Point3D CenterPoint3D, double meter, bool Linked = false, bool Enabled = true, Viewpoint currView = null)
+        {
+            try
+            {
+                ComApi.InwOpState10 state;
+                state = ComApiBridge.State;
+
+
+
+                ComApi.InwLUnitVec3f sectionPlaneNormal = (ComApi.InwLUnitVec3f)state.ObjectFactory(Autodesk.Navisworks.Api.Interop.ComApi.nwEObjectType.eObjectType_nwLUnitVec3f, null, null);
+
+                ComApi.InwLPlane3f sectionPlane = (ComApi.InwLPlane3f)state.ObjectFactory(Autodesk.Navisworks.Api.Interop.ComApi.nwEObjectType.eObjectType_nwLPlane3f, null, null);
+                ComApi.InwClippingPlaneColl2 clipColl = (ComApi.InwClippingPlaneColl2)state.CurrentView.ClippingPlanes();
+                clipColl.CreatePlane(1);
+                clipColl.CreatePlane(2);
+                clipColl.CreatePlane(3);
+                clipColl.CreatePlane(4);
+                clipColl.CreatePlane(5);
+                clipColl.CreatePlane(6);
+
+                // 6개의 분면을 모두 생성. (직(정)육면체를 만들기 위해서 한면만 가리려면 한개만 생성해도 됨
+                clipColl.Linked = Linked;
+
+                //단면평면 연결 설정 여부
+
+
+
+                ComApi.InwOaClipPlane cliPlane = (ComApi.InwOaClipPlane)state.CurrentView.ClippingPlanes()[1];
+
+                //생성한 1번 분면을 가져온다.
+                cliPlane.Alignment = ComApi.nwEClipPlaneAlignment.eAlignment_FRONT;
+
+                //정렬을 TOP으로 설정
+                sectionPlaneNormal.SetValue(0, 1, 0);
+
+                //노말벡터 설정 ( y방향으로 1을 설정하면 TOP을 의미함) 
+
+                //※노말벡터 = 한 표면에서 수직으로 향하는 벡터
+                sectionPlane.SetValue(sectionPlaneNormal, CenterPoint3D.Y - meter);
+
+                //Y방향으로 일정 거리만큼 InwLPlane3f 생성 
+                cliPlane.Plane = sectionPlane;
+
+                //생성한 1번 분면의 plane을 방금 생성하고 설정한 sectionPlane으로 설정
+                cliPlane.Enabled = Enabled;
+
+                //1번 분면의 존재여부
+
+                //아래는 반복 과정을 의미함.
+
+
+
+
+                cliPlane = (ComApi.InwOaClipPlane)state.CurrentView.ClippingPlanes()[2];
+                cliPlane.Alignment = ComApi.nwEClipPlaneAlignment.eAlignment_BACK;
+                sectionPlaneNormal.SetValue(0, -1, 0);
+                sectionPlane.SetValue(sectionPlaneNormal, -CenterPoint3D.Y - meter);
+                cliPlane.Plane = sectionPlane;
+                cliPlane.Enabled = Enabled;
+
+
+
+                cliPlane = (ComApi.InwOaClipPlane)state.CurrentView.ClippingPlanes()[3];
+                cliPlane.Alignment = ComApi.nwEClipPlaneAlignment.eAlignment_TOP;
+                sectionPlaneNormal.SetValue(0, 0, -1);
+                sectionPlane.SetValue(sectionPlaneNormal, -CenterPoint3D.Z - meter);
+                cliPlane.Plane = sectionPlane;
+                cliPlane.Enabled = Enabled;
+
+
+
+                cliPlane = (ComApi.InwOaClipPlane)state.CurrentView.ClippingPlanes()[4];
+                cliPlane.Alignment = ComApi.nwEClipPlaneAlignment.eAlignment_BOTTOM;
+                sectionPlaneNormal.SetValue(0, 0, 1);
+                sectionPlane.SetValue(sectionPlaneNormal, CenterPoint3D.Z - meter);
+                cliPlane.Plane = sectionPlane;
+                cliPlane.Enabled = Enabled;
+
+
+
+                cliPlane = (ComApi.InwOaClipPlane)state.CurrentView.ClippingPlanes()[5];
+                cliPlane.Alignment = ComApi.nwEClipPlaneAlignment.eAlignment_LEFT;
+                sectionPlaneNormal.SetValue(1, 0, 0);
+                sectionPlane.SetValue(sectionPlaneNormal, CenterPoint3D.X - meter);
+                cliPlane.Plane = sectionPlane;
+                cliPlane.Enabled = Enabled;
+
+
+
+                cliPlane = (ComApi.InwOaClipPlane)state.CurrentView.ClippingPlanes()[6];
+                cliPlane.Alignment = ComApi.nwEClipPlaneAlignment.eAlignment_RIGHT;
+                sectionPlaneNormal.SetValue(-1, 0, 0);
+                sectionPlane.SetValue(sectionPlaneNormal, -CenterPoint3D.X - meter);
+                cliPlane.Plane = sectionPlane;
+                cliPlane.Enabled = Enabled; 
+            }
+            catch { }
+        }
+
+        */
+        public void SetPlaneSectioningItem(Point3D CenterPoint3D, double meter, bool Enabled = true, Viewpoint currView = null)
+        {
+
+
+
+            currView.InternalClipPlanes.SetMode(Autodesk.Navisworks.Api.Interop.LcOaClipPlaneSetMode.eMODE_BOX);
+
+            //InternalClipPlanes는 숨겨진 프로퍼티이다. 모드를 박스 모드로 바꿔준다.
+            Point3D minPoint = new Point3D(CenterPoint3D.X - meter, CenterPoint3D.Y - meter, CenterPoint3D.Z - meter);
+            Point3D maxPoint = new Point3D(CenterPoint3D.X + meter, CenterPoint3D.Y + meter, CenterPoint3D.Z + meter);
+            currView.InternalClipPlanes.SetBox(new BoundingBox3D(minPoint, maxPoint));
+
+            //중심점으로부터 거리만큼 박스를 만들어준다. 현재 여기서는 일정 크기만큼 박싱을 해주지만 본인이 원하는 지점의 위치에서 원하는 박스를 만들어서 사용하면 됨.
+            currView.InternalClipPlanes.SetEnabled(Enabled);
+
+            //존재여부설정
+
+            Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CopyFrom(currView);
+
+            //현재 뷰포인트에 카피시켜준다.
+
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string stringPos = folv.SelectedItem.GetSubItem((int)Header.ClashPoint).Text;
+            MessageBox.Show(stringPos);
+            string[] coordinates = stringPos.Split(',');
+            Point3D centerPos = new Point3D(float.Parse(coordinates[0]), float.Parse(coordinates[1]), float.Parse(coordinates[2]));
+            Viewpoint currView = doc.CurrentViewpoint.CreateCopy();
+            SetPlaneSectioningItem(centerPos, 50, true,currView);
         }
 
         /// <summary>
@@ -593,6 +773,7 @@ namespace ClashTest2
             }
 
         }
+        #endregion
 
     }
 }
