@@ -8,26 +8,44 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autodesk.Navisworks.Api.Interop;
+using System.Security.Claims;
 
 namespace Integrity_Checker_MEP
 {
     public class ImageCreator
     {
+        Dictionary<string, List<string>> clashResultName = new Dictionary<string,List<string>>();
 
-        private int width = 500;
+        private int width = 1000;
         private int height = 500;
+
+        public void getResultName(Dictionary<string, List<string>> names)
+        {
+            clashResultName = names;
+        }
+
 
         public void CreateAndFillImages(string directoryPath)
         {
             Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
             DocumentClash documentClash = doc.GetClash();
             DocumentClashTests oDCT = documentClash.TestsData;
-            string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
+            //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
+            //string[] clashtypes = {"Arch-Str_Clearance"};
+
             //hide all
             HideAllItems(doc);
             foreach (ClashTest test in oDCT.Tests)
             {
-                if (clashtypes.Contains(test.DisplayName)){
+                //for debugging
+                //if (clashtypes.Contains(test.DisplayName) && clashResultName.ContainsKey(test.DisplayName)){
+                if (clashResultName.ContainsKey(test.DisplayName))
+                {
+
+                    List<string> resultNames = new List<string>();
+                    resultNames = clashResultName[test.DisplayName];
+
                     List<ClashResult> outedResults = new List<ClashResult>();
                     RecurseFillResults(test, ref outedResults);
                     if (outedResults != null && outedResults.Count > 0 && !string.IsNullOrEmpty(directoryPath) && Directory.Exists(directoryPath))
@@ -35,7 +53,10 @@ namespace Integrity_Checker_MEP
 
                         foreach (ClashResult r in outedResults)
                         {
-                            CreateAndFillImage(doc, r, directoryPath, test.DisplayName);
+                            if (resultNames.Contains(r.DisplayName))
+                            {
+                                CreateAndFillImage(doc, r, directoryPath, test.DisplayName);
+                            }
                         }
                     }
                 }
@@ -74,11 +95,15 @@ namespace Integrity_Checker_MEP
                     // Select the 2 clashing elements
                     doc.CurrentSelection.Clear();
                     doc.CurrentSelection.CopyFrom(items);
-                    doc.ActiveView.FocusOnCurrentSelection();
-                    doc.CurrentSelection.Clear();
+                    //doc.ActiveView.FocusOnCurrentSelection();
+
+                    //doc.CurrentSelection.Clear();
 
                     // Adjust the camera, lighting, and paint the clashing elements in Red and Green respectively
                     Viewpoint copy = viewpoint.CreateCopy();
+                    copy.ZoomBox(items.BoundingBox());
+                    doc.CurrentSelection.Clear();
+                    copy.Projection = ViewpointProjection.Orthographic;
                     copy.Lighting = 0;
 
                     doc.Models.ResetAllPermanentMaterials();
@@ -92,18 +117,57 @@ namespace Integrity_Checker_MEP
 
                     if (!NativeHandle.ReferenceEquals(items.ElementAtOrDefault(1), null))
                         doc.Models.OverridePermanentColor(new ModelItem[1] { items.ElementAtOrDefault(1) }, GREEN);
+                    
 
-                    doc.ActiveView.LookFromFrontRightTop();
 
-                    doc.ActiveView.RequestDelayedRedraw((ViewRedrawRequests)3);
+                    string testsimpleNamePath = Path.Combine(directoryPath, "단순이미지", $"{testName}");
+                    string testsideNamePath = Path.Combine(directoryPath, "다각도이미지", $"{testName}");
 
-                    // Save the Clash image
-                    using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene,width, height))
+
+                    DirectoryInfo diSimple = new DirectoryInfo(testsimpleNamePath);
+
+                    if (!diSimple.Exists)
                     {
-                        string clashResultImageName = Path.Combine(directoryPath, $"{testName}_{clResult.DisplayName}.png");
-
-                        clashImage.Save(clashResultImageName, ImageFormat.Png);
+                        diSimple.Create();
                     }
+
+                    DirectoryInfo diSide = new DirectoryInfo(testsideNamePath);
+
+                    if (!diSide.Exists)
+                    {
+                        diSide.Create();
+                    }
+
+                    //doc.ActiveView.LookFromFrontRightTop();
+                    for (int i = 0; i< 7; i++)
+                    {
+                        ((LcOwViewer)doc.ActiveView.Viewer).LookFrom((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)i);
+                       
+
+                        doc.ActiveView.RequestDelayedRedraw((ViewRedrawRequests)3);
+
+                        // Save the Clash image
+                        using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
+                        {
+                            string clashResultImageName;
+                            if((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)i == LcOaPartitionViewDirection.eFRONT_RIGHT_TOP)
+                            {
+                                clashResultImageName = Path.Combine(testsimpleNamePath, $"{testName}_{clResult.DisplayName}.png");
+
+                            }
+                            else
+                            {
+                                clashResultImageName = Path.Combine(testsideNamePath, $"{testName}_{clResult.DisplayName}_{i+1}.png");
+                            }
+
+                            clashImage.Save(clashResultImageName, ImageFormat.Png);
+                        }
+                    }
+                    
+
+
+
+
                     //Hide clashelements
                     doc.Models.SetHidden(modelItemsToShow, true);
                 }
@@ -181,4 +245,5 @@ namespace Integrity_Checker_MEP
             }
         }
     }
+    
 }

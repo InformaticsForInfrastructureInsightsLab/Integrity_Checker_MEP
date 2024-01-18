@@ -71,7 +71,7 @@ namespace Integrity_Checker_MEP {
         
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
         From_Log form_log; // 로그 출력 폼
-        ImageCreator imgCreator;
+        ImageCreator imgCreator; // 스크린샷 저장 클래스
 
         public int Execute(params string[] parameters) {
             try {
@@ -82,6 +82,9 @@ namespace Integrity_Checker_MEP {
 
                 form_log = new From_Log();
                 form_log.Show();
+
+                imgCreator = new ImageCreator();
+
 
                 if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
 
@@ -97,12 +100,21 @@ namespace Integrity_Checker_MEP {
                     MakeZipFile(ClashFile, InfoFile); // 압축파일 만들기
                 }
                 if (form_setting.Send_toServer) {
-                    SendtoServer("C:/objectinfo/compressed.zip"); // 서버로 압축파일 전송
+                    try
+                    {
+                        SendtoServer("C:/objectinfo/compressed.zip"); // 서버로 압축파일 전송
+
+                    }
+                    catch (Exception e)
+                    {
+                        form_log.UpdateLog("서버 전송 실패");
+                        form_log.UpdateLog(e.ToString());
+                    }
                 }
                 if (form_setting.Save_log) {
                     SaveLog(); // 로그를 파일로 저장
                 }
-                //SaveImage();
+                SaveImage();
                 form_log.UpdateLog("종료");
             }
             catch (Exception ex) {
@@ -114,9 +126,26 @@ namespace Integrity_Checker_MEP {
 
         void SaveImage()
         {
-            imgCreator = new ImageCreator();
             form_log.UpdateLog("이미지 추출 작업 시작");
-            imgCreator.CreateAndFillImages(@"C:/objectinfo/ResultImage");
+            string resultImagePath = @"C:/objectinfo/ResultImage";
+            if (!Directory.Exists(resultImagePath))
+            {
+                Directory.CreateDirectory(resultImagePath);
+            }
+
+            string simpleImagePath = Path.Combine(resultImagePath, "단순이미지");
+            string sideImagePath = Path.Combine(resultImagePath, "다각도이미지");
+
+            if (!Directory.Exists(simpleImagePath))
+            {
+                Directory.CreateDirectory(simpleImagePath);
+            }
+            if (!Directory.Exists(sideImagePath))
+            {
+                Directory.CreateDirectory(sideImagePath);
+            }
+
+            imgCreator.CreateAndFillImages(resultImagePath);
             form_log.UpdateLog("이미지 추출 작업 종료");
 
         }
@@ -254,6 +283,7 @@ namespace Integrity_Checker_MEP {
                 ct = new ClashTest();
                 ct.Tolerance = toler * toleroffset;//모델 단위 보정 적용 공차
                 ct.DisplayName = ClashtestName;
+                ct.CustomTestName = ClashtestName;
                 ct.TestType = type;
                 ct.MergeComposites = true;
 
@@ -324,6 +354,7 @@ namespace Integrity_Checker_MEP {
                 DocumentClash documentClash = document.GetClash();
                 DocumentClashTests oDCT = documentClash.TestsData;
                 List<ClashTestCls> tests_array = new List<ClashTestCls>();
+                Dictionary<string, List<string>> tests_dict = new Dictionary<string, List<string>>();
 
                 #region 각 테스트 별 충돌 오브젝트 정보 가져오기
                 for (int i = 0; i < oDCT.Tests.Count; i++) {
@@ -616,6 +647,7 @@ namespace Integrity_Checker_MEP {
                     }
                 }
 
+               
 
                 #endregion
 
@@ -645,6 +677,9 @@ namespace Integrity_Checker_MEP {
                 for (int i = 0; i < tests_array.Count; i++) {
                     form_log.UpdateLog($"    결과 쓰기 시작 : {tests_array[i].DisplayName}");
                     var csvData = new List<string[]>();
+                   
+                    List<string> test_name = new List<string>();
+
                     HashSet<string> MultiObjects = new HashSet<string>();
                     HashSet<string> MultiObjects_Cur = new HashSet<string>();
                     for (int j = 0; j < tests_array[i].ClashResults.Length; j++) {
@@ -838,9 +873,10 @@ namespace Integrity_Checker_MEP {
 
                         //모든 조건을 만족하는 간섭항목을 리스트에 추가
                         csvData.Add(temp);
+                        test_name.Add(temp[0]);
                         #endregion
                     }
-
+                    tests_dict.Add(tests_array[i].DisplayName, test_name);
                     if (form_setting.export_AllinOne) {
                         sb.Append(SaveCSVFile(tests_array[i].DisplayName, csvData)); //개별 파일로 저장 후, 해당 내용을 All_in_One에 추가
                     }
@@ -849,6 +885,7 @@ namespace Integrity_Checker_MEP {
                     }
                     form_log.UpdateLog($"    결과 쓰기 종료 : {tests_array[i].DisplayName}");
                 }
+                imgCreator.getResultName(tests_dict);
                 form_log.UpdateLog("결과 파일 생성 완료");
                 #endregion
                 if (form_setting.export_UselessClash) {
