@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Schema;
 using wf = System.Windows.Forms;
@@ -62,6 +63,41 @@ class IfcSystemData {
         this.ifc1 = ifc1;
         this.ifc2 = ifc2;
         this.ns = ns;
+    }
+}
+
+public class ExtendedWebClient : WebClient
+{
+    public int Timeout { get; set; }
+    public new bool AllowWriteStreamBuffering { get; set; }
+
+    protected override WebRequest GetWebRequest(Uri address)
+    {
+        try
+        {
+            var request = base.GetWebRequest(address);
+            if (request != null)
+            {
+                request.Timeout = Timeout;
+                var httpRequest = request as HttpWebRequest;
+                if (httpRequest != null)
+                {
+                    httpRequest.KeepAlive = false;
+                    httpRequest.AllowWriteStreamBuffering = AllowWriteStreamBuffering;
+                }
+            }
+
+            return request;
+        }
+        catch (Exception e) {
+            Console.WriteLine($"An exception occurred: {e.Message}");
+            throw;
+        }
+    }
+
+    public ExtendedWebClient()
+    {
+        Timeout = 100000;
     }
 }
 
@@ -1339,9 +1375,12 @@ namespace Integrity_Checker_MEP {
         void SendtoServer(string filepath) {
             form_log.UpdateLog("서버로 전송 시작");
             try {
-                string serverIP = "http://117.17.196.92:6060/upload";
-                WebClient webClient = new WebClient();
-                byte[] re = webClient.UploadFile(serverIP, filepath);
+                string serverIP = "http://117.17.196.92:3116/upload";
+                ExtendedWebClient webClient = new ExtendedWebClient();
+                //webClient.Timeout = Timeout.Infinite;
+                webClient.AllowWriteStreamBuffering = false;
+                
+                byte[] re = webClient.UploadFile(serverIP,filepath);
                 string response = webClient.Encoding.GetString(re);
                 ShowMessage(response);
             }
@@ -1349,6 +1388,7 @@ namespace Integrity_Checker_MEP {
                 form_log.UpdateLog(e.ToString());
                 //ShowMessage(e.ToString());
             }
+            
             form_log.UpdateLog("서버로 전송 완료");
         }
 
