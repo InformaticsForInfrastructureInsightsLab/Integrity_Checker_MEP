@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Security.AccessControl;
 using System.Security.Policy;
 using System.Text;
 using System.Threading;
@@ -150,7 +151,10 @@ namespace Integrity_Checker_MEP {
                 if (form_setting.Save_log) {
                     SaveLog(); // 로그를 파일로 저장
                 }
-                SaveImage();
+                if(form_setting.Save_image)
+                {
+                    SaveImage(); // 이미지 추출
+                }
                 form_log.UpdateLog("종료");
             }
             catch (Exception ex) {
@@ -166,6 +170,7 @@ namespace Integrity_Checker_MEP {
             string resultImagePath = @"C:/objectinfo/ResultImage";
             if (!Directory.Exists(resultImagePath))
             {
+                
                 Directory.CreateDirectory(resultImagePath);
             }
 
@@ -174,10 +179,12 @@ namespace Integrity_Checker_MEP {
 
             if (!Directory.Exists(simpleImagePath))
             {
+                
                 Directory.CreateDirectory(simpleImagePath);
             }
             if (!Directory.Exists(sideImagePath))
             {
+                
                 Directory.CreateDirectory(sideImagePath);
             }
 
@@ -691,7 +698,7 @@ namespace Integrity_Checker_MEP {
                 #region 헤더부분
                 StringBuilder sb = new StringBuilder(); //All_in_One에 들어갈 내용들
                 string[] header = new string[12];
-                header[0] = "No.,";
+                header[0] = "No,";
                 header[1] = "NameSpace1,";
                 header[2] = "Guid1,";
                 header[3] = "IfcClass1,";
@@ -1067,7 +1074,7 @@ namespace Integrity_Checker_MEP {
                 sb.Append("no same ifcsystem");
             }
             else {
-                sb.AppendLine($"NO., Item1, Item2, Distance, System1, System2");
+                sb.AppendLine($"NO, Item1, Item2, Distance, System1, System2");
                 for (int i = 0; i < List_sameIfcSystem.Count; i++) {
                     sb.AppendLine($"{List_sameIfcSystem[i].result.DisplayName},{getElementID(List_sameIfcSystem[i].result.Item1)},{getElementID(List_sameIfcSystem[i].result.Item2)},{(List_sameIfcSystem[i].result.Distance * offset).ToString("F3")},{List_sameIfcSystem[i].ifc1},{List_sameIfcSystem[i].ifc2}");
                 }
@@ -1381,6 +1388,7 @@ namespace Integrity_Checker_MEP {
                 webClient.AllowWriteStreamBuffering = false;
                 
                 byte[] re = webClient.UploadFile(serverIP,filepath);
+                
                 string response = webClient.Encoding.GetString(re);
                 ShowMessage(response);
             }

@@ -33,6 +33,7 @@
             this.btn_start = new System.Windows.Forms.Button();
             this.btn_cancel = new System.Windows.Forms.Button();
             this.cb_savelog = new System.Windows.Forms.CheckBox();
+            this.cb_saveimage = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cb_parent
@@ -137,8 +138,8 @@
             // btn_start
             // 
             this.btn_start.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btn_start.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btn_start.Location = new System.Drawing.Point(11, 201);
+            this.btn_start.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_start.Location = new System.Drawing.Point(11, 219);
             this.btn_start.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btn_start.Name = "btn_start";
             this.btn_start.Size = new System.Drawing.Size(143, 38);
@@ -150,7 +151,7 @@
             // btn_cancel
             // 
             this.btn_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_cancel.Location = new System.Drawing.Point(160, 201);
+            this.btn_cancel.Location = new System.Drawing.Point(160, 219);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(62, 38);
             this.btn_cancel.TabIndex = 9;
@@ -169,14 +170,26 @@
             this.cb_savelog.UseVisualStyleBackColor = true;
             this.cb_savelog.CheckedChanged += new System.EventHandler(this.cb_savelog_CheckedChanged);
             // 
+            // cb_saveimage
+            // 
+            this.cb_saveimage.AutoSize = true;
+            this.cb_saveimage.Location = new System.Drawing.Point(58, 199);
+            this.cb_saveimage.Name = "cb_saveimage";
+            this.cb_saveimage.Size = new System.Drawing.Size(88, 16);
+            this.cb_saveimage.TabIndex = 11;
+            this.cb_saveimage.Text = "이미지 저장";
+            this.cb_saveimage.UseVisualStyleBackColor = true;
+            this.cb_saveimage.CheckedChanged += new System.EventHandler(this.cb_saveimage_CheckedChanged);
+            // 
             // Form_Setting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(234, 251);
+            this.ClientSize = new System.Drawing.Size(234, 269);
             this.ControlBox = false;
+            this.Controls.Add(this.cb_saveimage);
             this.Controls.Add(this.cb_savelog);
             this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.btn_start);
@@ -187,7 +200,7 @@
             this.Controls.Add(this.cb_allInOne);
             this.Controls.Add(this.cb_exportResult);
             this.Controls.Add(this.cb_parent);
-            this.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "Form_Setting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -209,5 +222,6 @@
         private System.Windows.Forms.Button btn_start;
         private System.Windows.Forms.Button btn_cancel;
         private System.Windows.Forms.CheckBox cb_savelog;
+        private System.Windows.Forms.CheckBox cb_saveimage;
     }
 }

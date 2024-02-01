@@ -9,7 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Navisworks.Api.Interop;
+using Autodesk.Navisworks.Api.Interop.ComApi;
+using Autodesk.Navisworks.Api.ComApi;
 using System.Security.Claims;
+using System.Windows.Forms;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace Integrity_Checker_MEP
 {
@@ -32,15 +37,17 @@ namespace Integrity_Checker_MEP
             DocumentClash documentClash = doc.GetClash();
             DocumentClashTests oDCT = documentClash.TestsData;
             //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
-            //string[] clashtypes = {"Arch-Str_Clearance"};
-
+            //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
+            string[] clashtypes = { "Str-MECH_Clearance" };
+            
             //hide all
             HideAllItems(doc);
+
             foreach (ClashTest test in oDCT.Tests)
             {
                 //for debugging
-                //if (clashtypes.Contains(test.DisplayName) && clashResultName.ContainsKey(test.DisplayName)){
-                if (clashResultName.ContainsKey(test.DisplayName))
+                if (clashtypes.Contains(test.DisplayName) && clashResultName.ContainsKey(test.DisplayName))
+                //if (clashResultName.ContainsKey(test.DisplayName))
                 {
 
                     List<string> resultNames = new List<string>();
@@ -70,6 +77,7 @@ namespace Integrity_Checker_MEP
         {
             if (clResult != null)
             {
+                
                 Viewpoint viewpoint = doc.CurrentViewpoint.Value;
                 // Get the 2 clashing elements from the ClashResult
                 ModelItem item1 = clResult.Item1;
@@ -77,9 +85,15 @@ namespace Integrity_Checker_MEP
                 if (item1 != null && item2 != null)
                 {
                     ModelItemCollection items = new ModelItemCollection();
+                    ModelItemCollection invertItems = new ModelItemCollection();
                     items.Add(item1);
                     items.Add(item2);
+                    invertItems.Add(item1);
+                    invertItems.Add(item2);
+                    invertItems.Invert(doc);
                     doc.CurrentSelection.Clear();
+                    doc.ActiveView.RequestDelayedRedraw((ViewRedrawRequests)3);
+
 
                     //Show clash items
                     ModelItemCollection modelItemsToShow = new ModelItemCollection();
@@ -91,23 +105,51 @@ namespace Integrity_Checker_MEP
                         if (item.Descendants != null)
                             modelItemsToShow.AddRange(item.Descendants);
                     }
+                    
+
                     doc.Models.SetHidden(modelItemsToShow, false);
                     // Select the 2 clashing elements
                     doc.CurrentSelection.Clear();
                     doc.CurrentSelection.CopyFrom(items);
-                    //doc.ActiveView.FocusOnCurrentSelection();
-
-                    //doc.CurrentSelection.Clear();
 
                     // Adjust the camera, lighting, and paint the clashing elements in Red and Green respectively
                     Viewpoint copy = viewpoint.CreateCopy();
-                    copy.ZoomBox(items.BoundingBox());
-                    doc.CurrentSelection.Clear();
                     copy.Projection = ViewpointProjection.Orthographic;
+                    copy.AlignDirection(new Vector3D(0, 0, -1));
+                    copy.Rotation = new Rotation3D(0, 0, 0, 1);
+                    copy.ZoomBox(items.BoundingBox());
+
+
+                    doc.CurrentSelection.Clear();
                     copy.Lighting = 0;
 
-                    doc.Models.ResetAllPermanentMaterials();
+
                     doc.CurrentViewpoint.CopyFrom(copy);
+
+
+                    // Set Selection box
+                    /*var viewPointValue = doc.CurrentViewpoint.Value;
+                    var planes = viewPointValue.InternalClipPlanes;
+                    planes.SetMode(LcOaClipPlaneSetMode.eMODE_BOX);
+                    planes.SetBox(items.BoundingBox());
+                    planes.SetEnabled(true);*/
+
+
+                    // Make other items transparent
+                    /*ModelItemCollection itemsToTransparant = new ModelItemCollection();
+
+                    foreach(ModelItem item in invertItems)
+                    {
+                        if (items.BoundingBox().Intersects(item.BoundingBox()))
+                        {
+                            itemsToTransparant.Add(item);
+                        }
+                    }
+                    doc.Models.SetHidden(itemsToTransparant, false);
+                    doc.Models.OverrideTemporaryTransparency(itemsToTransparant, 100);*/
+
+                    //doc.Models.SetHidden(invertItems, false);
+                    //doc.Models.OverridePermanentTransparency(invertItems, 100);
 
                     Autodesk.Navisworks.Api.Color RED = Autodesk.Navisworks.Api.Color.Red;
                     Autodesk.Navisworks.Api.Color GREEN = Autodesk.Navisworks.Api.Color.Green;
@@ -129,6 +171,17 @@ namespace Integrity_Checker_MEP
                     if (!diSimple.Exists)
                     {
                         diSimple.Create();
+                        var directorySecurity = diSimple.GetAccessControl();
+                        var currentUserIdentity = WindowsIdentity.GetCurrent();
+                        var fileSystemRule = new FileSystemAccessRule(currentUserIdentity.Name,
+                                                                      FileSystemRights.Read,
+                                                                      InheritanceFlags.ObjectInherit |
+                                                                      InheritanceFlags.ContainerInherit,
+                                                                      PropagationFlags.None,
+                                                                      AccessControlType.Allow);
+
+                        directorySecurity.AddAccessRule(fileSystemRule);
+                        diSimple.SetAccessControl(directorySecurity);
                     }
 
                     DirectoryInfo diSide = new DirectoryInfo(testsideNamePath);
@@ -136,14 +189,33 @@ namespace Integrity_Checker_MEP
                     if (!diSide.Exists)
                     {
                         diSide.Create();
+                        var directorySecurity = diSide.GetAccessControl();
+                        var currentUserIdentity = WindowsIdentity.GetCurrent();
+                        var fileSystemRule = new FileSystemAccessRule(currentUserIdentity.Name,
+                                                                      FileSystemRights.Read,
+                                                                      InheritanceFlags.ObjectInherit |
+                                                                      InheritanceFlags.ContainerInherit,
+                                                                      PropagationFlags.None,
+                                                                      AccessControlType.Allow);
+
+                        directorySecurity.AddAccessRule(fileSystemRule);
+                        diSide.SetAccessControl(directorySecurity);
                     }
+                    doc.SetPlainBackground(Autodesk.Navisworks.Api.Color.White);
+                    
 
-                    //doc.ActiveView.LookFromFrontRightTop();
-                    for (int i = 0; i< 7; i++)
+                    //((LcOwViewer)doc.ActiveView.Viewer).LookFrom((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)2);
+                    using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                     {
+                        clashImage.Save(Path.Combine(testsimpleNamePath, $"{clResult.DisplayName.Substring(2)}.png"), ImageFormat.Png);
+                    }
+                    /*for (int i = 0; i< 7; i++)
+                    {
+                        //0~6 앞 뒤 위 아래 왼쪽 오른쪽
                         ((LcOwViewer)doc.ActiveView.Viewer).LookFrom((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)i);
-                       
-
+                        
+                        
+                        doc.SetPlainBackground(Autodesk.Navisworks.Api.Color.White);
                         doc.ActiveView.RequestDelayedRedraw((ViewRedrawRequests)3);
 
                         // Save the Clash image
@@ -152,24 +224,26 @@ namespace Integrity_Checker_MEP
                             string clashResultImageName;
                             if((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)i == LcOaPartitionViewDirection.eFRONT_RIGHT_TOP)
                             {
-                                clashResultImageName = Path.Combine(testsimpleNamePath, $"{testName}_{clResult.DisplayName}.png");
+                                clashResultImageName = Path.Combine(testsimpleNamePath, $"{clResult.DisplayName.Substring(2)}.png");
 
                             }
                             else
                             {
-                                clashResultImageName = Path.Combine(testsideNamePath, $"{testName}_{clResult.DisplayName}_{i+1}.png");
+                                clashResultImageName = Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png");
                             }
 
                             clashImage.Save(clashResultImageName, ImageFormat.Png);
                         }
-                    }
-                    
+                    }*/
 
 
+                    doc.Models.ResetAllPermanentMaterials();
 
 
-                    //Hide clashelements
+                    //Hide all
                     doc.Models.SetHidden(modelItemsToShow, true);
+                    //doc.Models.SetHidden(invertItems, true);
+                    //doc.Models.SetHidden(itemsToTransparant, true);
                 }
             }
         }

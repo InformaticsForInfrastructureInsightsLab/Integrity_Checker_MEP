@@ -24,6 +24,7 @@ namespace Integrity_Checker_MEP {
         public bool Make_ZipFile = true; //압축파일 만들기
         public bool Send_toServer = true; //서버로 보내기
         public bool Save_log = false; //로그 저장
+        public bool Save_image = false; //이미지 추출
 
         public bool start = false; //시작버튼 클릭 여부
 
@@ -81,6 +82,12 @@ namespace Integrity_Checker_MEP {
         private void cb_savelog_CheckedChanged(object sender, EventArgs e) {
             if (cb_savelog.Checked) Save_log = true;
             else Save_log = false;
+        }
+
+        private void cb_saveimage_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cb_saveimage.Checked) Save_image = true;
+            else Save_image = false;
         }
     }
 }
