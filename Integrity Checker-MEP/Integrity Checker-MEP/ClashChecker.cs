@@ -107,22 +107,36 @@ namespace Integrity_Checker_MEP {
         bool show_Setting = false;
         
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
+        form_ImageOption form_imageOption; // 이미지 출력 옵션
         From_Log form_log; // 로그 출력 폼
         ImageCreator imgCreator; // 스크린샷 저장 클래스
 
         public int Execute(params string[] parameters) {
             try {
                 form_setting = new Form_Setting();
+                imgCreator = new ImageCreator();
+
                 form_setting.ShowDialog();
 
+                
                 if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
+
+                if (form_setting.Save_image)
+                {
+                    form_imageOption = new form_ImageOption();
+                    form_imageOption.ShowDialog();
+
+                    if (!form_imageOption.start) return 0;
+
+                    imgCreator.setBackground = form_imageOption.background;
+                    imgCreator.isTransparant = form_imageOption.transparant;
+                }
 
                 form_log = new From_Log();
                 form_log.Show();
 
-                imgCreator = new ImageCreator();
 
-
+                
                 if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
 
                 if (form_setting.export_Result) {
@@ -164,6 +178,9 @@ namespace Integrity_Checker_MEP {
             return 0;
         }
 
+        /// <summary>
+        /// 이미지를 C:/objectinfo/ResultImage 경로에 저장하는 함수
+        /// </summary>
         void SaveImage()
         {
             form_log.UpdateLog("이미지 추출 작업 시작");
@@ -174,14 +191,14 @@ namespace Integrity_Checker_MEP {
                 Directory.CreateDirectory(resultImagePath);
             }
 
-            string simpleImagePath = Path.Combine(resultImagePath, "단순이미지");
+            //string simpleImagePath = Path.Combine(resultImagePath, "단순이미지");
             string sideImagePath = Path.Combine(resultImagePath, "다각도이미지");
 
-            if (!Directory.Exists(simpleImagePath))
+            /*if (!Directory.Exists(simpleImagePath))
             {
                 
                 Directory.CreateDirectory(simpleImagePath);
-            }
+            }*/
             if (!Directory.Exists(sideImagePath))
             {
                 
@@ -211,6 +228,10 @@ namespace Integrity_Checker_MEP {
         /// <param name="path"> 모델 파일 경로(폴더)</param>
         bool GetModelFromFolder(string path = @"C:\models\") {
             Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+            if(doc.Models.Count > 0)
+            {
+                return true;
+            }
             //경로에서 .ifc파일만 찾아 불러오기
             for (int i = 0; i < Directory.GetFiles(path).Length; i++) {
                 if (Directory.GetFiles(path)[i].Contains(".ifc")) {
@@ -660,7 +681,6 @@ namespace Integrity_Checker_MEP {
                         #endregion
 
                         #endregion
-
                         test_results_array.Add(oEachResult);
                     }
                     oEachTest.ClashResults = test_results_array.ToArray();
@@ -721,7 +741,7 @@ namespace Integrity_Checker_MEP {
                     form_log.UpdateLog($"    결과 쓰기 시작 : {tests_array[i].DisplayName}");
                     var csvData = new List<string[]>();
                    
-                    List<string> test_name = new List<string>();
+                    List<string> clashNumList = new List<string>();
 
                     HashSet<string> MultiObjects = new HashSet<string>();
                     HashSet<string> MultiObjects_Cur = new HashSet<string>();
@@ -916,10 +936,16 @@ namespace Integrity_Checker_MEP {
 
                         //모든 조건을 만족하는 간섭항목을 리스트에 추가
                         csvData.Add(temp);
-                        test_name.Add(temp[0]);
+                        //clashNumList.Add(temp[0]);
+                        // 디버깅용 hard만 이미지 출력
+                        if (temp[7] == "Hard")
+                            clashNumList.Add(temp[0]);
                         #endregion
                     }
-                    tests_dict.Add(tests_array[i].DisplayName, test_name);
+
+                    // dictionary에 Key: 테스트의 이름(ex) Arch-Arch), value: 간섭 항목의 이름을 담고있는 list 
+                    tests_dict.Add(tests_array[i].DisplayName, clashNumList);
+
                     if (form_setting.export_AllinOne) {
                         sb.Append(SaveCSVFile(tests_array[i].DisplayName, csvData)); //개별 파일로 저장 후, 해당 내용을 All_in_One에 추가
                     }
@@ -928,7 +954,11 @@ namespace Integrity_Checker_MEP {
                     }
                     form_log.UpdateLog($"    결과 쓰기 종료 : {tests_array[i].DisplayName}");
                 }
+
+                // imageCreator에 dictionary 전달
                 imgCreator.getResultName(tests_dict);
+
+
                 form_log.UpdateLog("결과 파일 생성 완료");
                 #endregion
                 if (form_setting.export_UselessClash) {

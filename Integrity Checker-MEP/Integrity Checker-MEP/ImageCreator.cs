@@ -15,61 +15,84 @@ using System.Security.Claims;
 using System.Windows.Forms;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Integrity_Checker_MEP
 {
     public class ImageCreator
     {
-        Dictionary<string, List<string>> clashResultName = new Dictionary<string,List<string>>();
+        // ClashChecker에서 받아오는 이미지 추출할 모든 테스트의 간섭을 담은 dictionary
+        Dictionary<string, List<string>> clashResultDict = new Dictionary<string,List<string>>();
 
-        private int width = 1000;
+        // 너비와 높이 수동 조정
+        private int width = 1100;
         private int height = 500;
 
+        // 벽 배경을 표시할 것인지 결정
+        // true: 표시, false: 표시 안함
+        public bool setBackground = true;
+
+        // 투명도 적용 할 것인지 결정
+        // true: 반투명(80%), false: 불투명
+        public bool isTransparant = true;
+
+
+        /// <summary>
+        /// ClashChecker 클래스에서 호출해서 이미지로 추출할 간섭을 clashResultDict에 저장하는 함수 
+        /// </summary>
+        /// <param name="names">Key: Name of Test(ex: Arch-Arch_Clearance), 
+        ///                     Value: List of Clash name(num) (ex: 간섭1)</param>
         public void getResultName(Dictionary<string, List<string>> names)
         {
-            clashResultName = names;
+            clashResultDict = names;
         }
 
 
         public void CreateAndFillImages(string directoryPath)
         {
-            Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
-            DocumentClash documentClash = doc.GetClash();
-            DocumentClashTests oDCT = documentClash.TestsData;
-            //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
-            //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
-            string[] clashtypes = { "Str-MECH_Clearance" };
-            
-            //hide all
-            HideAllItems(doc);
-
-            foreach (ClashTest test in oDCT.Tests)
+            try
             {
-                //for debugging
-                if (clashtypes.Contains(test.DisplayName) && clashResultName.ContainsKey(test.DisplayName))
-                //if (clashResultName.ContainsKey(test.DisplayName))
+                Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+                DocumentClash documentClash = doc.GetClash();
+                DocumentClashTests oDCT = documentClash.TestsData;
+
+                // 추출되기 원하는 test의 이름
+                //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance", "MECH-MECH_Clearance" };
+                //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
+                //string[] clashtypes = { "MECH-MECH_Clearance" };
+
+                // 현재 나비스에서 표시된 테스트를 순회하면서 추출할 것 인지 dictionary와 clashtypes 배열과 비교해서 이미지 추출
+                foreach (ClashTest test in oDCT.Tests)
                 {
-
-                    List<string> resultNames = new List<string>();
-                    resultNames = clashResultName[test.DisplayName];
-
-                    List<ClashResult> outedResults = new List<ClashResult>();
-                    RecurseFillResults(test, ref outedResults);
-                    if (outedResults != null && outedResults.Count > 0 && !string.IsNullOrEmpty(directoryPath) && Directory.Exists(directoryPath))
+                    //if (clashtypes.Contains(test.DisplayName) && clashResultDict.ContainsKey(test.DisplayName))
+                    if (clashResultDict.ContainsKey(test.DisplayName))
                     {
 
-                        foreach (ClashResult r in outedResults)
+                        List<string> resultNames = new List<string>();
+                        resultNames = clashResultDict[test.DisplayName];
+
+                        List<ClashResult> outedResults = new List<ClashResult>();
+                        RecurseFillResults(test, ref outedResults);
+                        if (outedResults != null && outedResults.Count > 0 && !string.IsNullOrEmpty(directoryPath) && Directory.Exists(directoryPath))
                         {
-                            if (resultNames.Contains(r.DisplayName))
+
+                            foreach (ClashResult r in outedResults)
                             {
-                                CreateAndFillImage(doc, r, directoryPath, test.DisplayName);
+                                if (resultNames.Contains(r.DisplayName))
+                                {
+                                    CreateAndFillImage(doc, r, directoryPath, test.DisplayName);
+                                }
                             }
                         }
                     }
                 }
+                //show all
+                doc.Models.ResetAllHidden();
             }
-            //show all
-            doc.Models.ResetAllHidden();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
 
@@ -77,98 +100,156 @@ namespace Integrity_Checker_MEP
         {
             if (clResult != null)
             {
-                
-                Viewpoint viewpoint = doc.CurrentViewpoint.Value;
+                doc.Models.ResetAllHidden();
                 // Get the 2 clashing elements from the ClashResult
                 ModelItem item1 = clResult.Item1;
                 ModelItem item2 = clResult.Item2;
+                string dPath;
+                if (testName.Equals("Arch-Arch_Clearance"))
+                {
+                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Arch-Arch_Clearance\";
+                    
+                }
+                else if(testName.Equals("Arch-MECH_Clearance"))
+                {
+                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Arch-MECH_Clearance";
+
+                }
+                else if (testName.Equals("Arch-Str_Clearance"))
+                {
+                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Arch-Str_Clearance";
+
+                }
+                else if (testName.Equals("Str-MECH_Clearance"))
+                {
+                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Str-MECH_Clearance";
+
+                }
+                else if (testName.Equals("Str-Str_Clearance"))
+                {
+                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Str-Str_Clearance";
+
+                }
+                else if (testName.Equals("MECH-MECH_Clearance"))
+                {
+                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\MECH-MECH_Clearance";
+
+                }
+                else
+                {
+                    dPath = @"C:\objectinfo\ResultImage";
+                }
+
+                // 이미지 수가 19992개 이상이면 추출 멈추기
+                if (Directory.Exists(dPath))
+                {
+                    try
+                    {
+                        string[] files = Directory.GetFiles(dPath);
+                        if (files.Length >= 19992)
+                        {
+                            return;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.ToString());
+                    }
+                }
+
                 if (item1 != null && item2 != null)
                 {
                     ModelItemCollection items = new ModelItemCollection();
-                    ModelItemCollection invertItems = new ModelItemCollection();
                     items.Add(item1);
                     items.Add(item2);
-                    invertItems.Add(item1);
-                    invertItems.Add(item2);
-                    invertItems.Invert(doc);
+
+                   // Check If wall, slab, pipesegment, ductsegment
+                   /* string item1class = Getinfo(item1, "요소", "IfcClass");
+                    string item2class = Getinfo(item2, "요소", "IfcClass");
+                    bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
+                        || item1class.Equals("IfcPipeSegment") || item1class.Equals("IfcDuctSegment")
+                        && item2class.Equals("IfcWall") || item2class.Equals("IfcSlab")
+                        || item2class.Equals("IfcPipeSegment") || item2class.Equals("IfcDuctSegment");
+
+                    if(!clashImageCondition)
+                    {
+                        return;
+                    }*/
+
                     doc.CurrentSelection.Clear();
+                    
                     doc.ActiveView.RequestDelayedRedraw((ViewRedrawRequests)3);
 
 
-                    //Show clash items
+                    // 이미지에 보일 item들, 안 보일 item들, 투명하게 보일 item들을 담는 객체 생성
                     ModelItemCollection modelItemsToShow = new ModelItemCollection();
+                    ModelItemCollection modelItemsToHide = new ModelItemCollection();
+                    ModelItemCollection modelItemToTransparant = new ModelItemCollection();
+
+
+                    // 간섭된 항목들은 보일 item에 추가
                     foreach (ModelItem item in items)
                     {
-                        if (item.AncestorsAndSelf != null)
-                            modelItemsToShow.AddRange(item.AncestorsAndSelf);
-
-                        if (item.Descendants != null)
-                            modelItemsToShow.AddRange(item.Descendants);
+                        if(item.DescendantsAndSelf != null)
+                            modelItemsToShow.AddRange(item.DescendantsAndSelf);
                     }
-                    
 
-                    doc.Models.SetHidden(modelItemsToShow, false);
-                    // Select the 2 clashing elements
-                    doc.CurrentSelection.Clear();
-                    doc.CurrentSelection.CopyFrom(items);
+                    // 첫번째 부재의 층 정보를 갖고 오기
+                    string levelInfo1 = Getinfo(item1, "요소", "IfcSpatialContainer");
+                    string levelInfo2 = Getinfo(item1, "Constraints", "Level");
 
-                    // Adjust the camera, lighting, and paint the clashing elements in Red and Green respectively
-                    Viewpoint copy = viewpoint.CreateCopy();
-                    copy.Projection = ViewpointProjection.Orthographic;
-                    copy.AlignDirection(new Vector3D(0, 0, -1));
-                    copy.Rotation = new Rotation3D(0, 0, 0, 1);
-                    copy.ZoomBox(items.BoundingBox());
-
-
-                    doc.CurrentSelection.Clear();
-                    copy.Lighting = 0;
-
-
-                    doc.CurrentViewpoint.CopyFrom(copy);
-
-
-                    // Set Selection box
-                    /*var viewPointValue = doc.CurrentViewpoint.Value;
-                    var planes = viewPointValue.InternalClipPlanes;
-                    planes.SetMode(LcOaClipPlaneSetMode.eMODE_BOX);
-                    planes.SetBox(items.BoundingBox());
-                    planes.SetEnabled(true);*/
-
-
-                    // Make other items transparent
-                    /*ModelItemCollection itemsToTransparant = new ModelItemCollection();
-
-                    foreach(ModelItem item in invertItems)
+                    // 배경 보이게 설정 했을시에 보일 item에 원하는 유형의 item 추가
+                    // IfcWall과 IfcCurtainWall 추가 (대소문자 맞추기)
+                    if(setBackground == true)
                     {
-                        if (items.BoundingBox().Intersects(item.BoundingBox()))
-                        {
-                            itemsToTransparant.Add(item);
-                        }
+                        AddToItemsToShow(doc, new string[] {levelInfo1, levelInfo2 }, modelItemsToShow, modelItemToTransparant, "IfcWall");
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 }, modelItemsToShow, modelItemToTransparant, "IfcCurtainWall");
                     }
-                    doc.Models.SetHidden(itemsToTransparant, false);
-                    doc.Models.OverrideTemporaryTransparency(itemsToTransparant, 100);*/
 
-                    //doc.Models.SetHidden(invertItems, false);
-                    //doc.Models.OverridePermanentTransparency(invertItems, 100);
+                    // 안 보일 item을 모두 숨기기
+                    modelItemsToHide.CopyFrom(modelItemsToShow);
+                    doc.CurrentSelection.CopyFrom(modelItemsToShow);
+                    modelItemsToHide.Invert(doc); // invert 함수는 현재 선택된 item들을 반전
+                    doc.Models.SetHidden(modelItemsToHide, true);
+
+
+                    doc.CurrentSelection.Clear();
+
+                    // 보이는 부재들 외의 배경을 흰색으로 통일 (주석 처리하면 나비스에서와 동일)
+                    doc.SetPlainBackground(Autodesk.Navisworks.Api.Color.White);
+
+                    // 간섭 부재에 색과 투명도 적용 
 
                     Autodesk.Navisworks.Api.Color RED = Autodesk.Navisworks.Api.Color.Red;
                     Autodesk.Navisworks.Api.Color GREEN = Autodesk.Navisworks.Api.Color.Green;
-
+                    
+                    // 첫번째 item은 RED, 두번째 item은 GREEN으로 색 적용
                     if (!NativeHandle.ReferenceEquals(items.ElementAtOrDefault(0), null))
                         doc.Models.OverridePermanentColor(new ModelItem[1] { items.ElementAtOrDefault(0) }, RED);
 
                     if (!NativeHandle.ReferenceEquals(items.ElementAtOrDefault(1), null))
                         doc.Models.OverridePermanentColor(new ModelItem[1] { items.ElementAtOrDefault(1) }, GREEN);
-                    
+
+                    // 간섭 부재 자체는 투명도 적용하지 않기
+                    modelItemToTransparant.Remove(items.ElementAtOrDefault(0));
+                    modelItemToTransparant.Remove(items.ElementAtOrDefault(1));
+
+                    // Adjust transparancy (false일 경우엔 투명도를 적용하지 않음)
+                    if(isTransparant == true)
+                    {
+                        doc.Models.OverridePermanentTransparency(modelItemToTransparant, 80);
+                    }
 
 
-                    string testsimpleNamePath = Path.Combine(directoryPath, "단순이미지", $"{testName}");
+                    // 폴더의 경로 설정 및 ReadOnly 해제
+
+                    //string testsimpleNamePath = Path.Combine(directoryPath, "단순이미지", $"{testName}");
                     string testsideNamePath = Path.Combine(directoryPath, "다각도이미지", $"{testName}");
 
 
-                    DirectoryInfo diSimple = new DirectoryInfo(testsimpleNamePath);
+                    //DirectoryInfo diSimple = new DirectoryInfo(testsimpleNamePath);
 
-                    if (!diSimple.Exists)
+                    /*if (!diSimple.Exists)
                     {
                         diSimple.Create();
                         var directorySecurity = diSimple.GetAccessControl();
@@ -182,7 +263,7 @@ namespace Integrity_Checker_MEP
 
                         directorySecurity.AddAccessRule(fileSystemRule);
                         diSimple.SetAccessControl(directorySecurity);
-                    }
+                    }*/
 
                     DirectoryInfo diSide = new DirectoryInfo(testsideNamePath);
 
@@ -201,68 +282,71 @@ namespace Integrity_Checker_MEP
                         directorySecurity.AddAccessRule(fileSystemRule);
                         diSide.SetAccessControl(directorySecurity);
                     }
-                    doc.SetPlainBackground(Autodesk.Navisworks.Api.Color.White);
-                    
 
-                    //((LcOwViewer)doc.ActiveView.Viewer).LookFrom((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)2);
+                    // 카메라 위치 조정 및 폴더에 이미지 저장
+                    for (int i = 0; i < 12; i++)
+                    {
+                        const double pi = 3.14159265358979;
+                        double newAngle = (i * 30) * (pi / 180);
+
+                        UnitVector3D newAxis = new UnitVector3D(0, 0, 1);
+
+                        Rotation3D newRotation = new Rotation3D(newAxis, newAngle);
+
+                        ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
+
+                        Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+
+                        // 원근법 무시하려면 주석 해제
+                        //copy.Projection = ViewpointProjection.Orthographic;
+
+                        BoundingBox3D box = items.BoundingBox();
+                        copy.PivotPoint = box.Center;
+
+                        Rotation3D res = new Rotation3D(newRotation.D * copy.Rotation.A + newRotation.A * copy.Rotation.D + newRotation.B * copy.Rotation.C - newRotation.C * copy.Rotation.B,
+                            newRotation.D * copy.Rotation.B + newRotation.B * copy.Rotation.D + newRotation.C * copy.Rotation.A - newRotation.A * copy.Rotation.C,
+                            newRotation.D * copy.Rotation.C + newRotation.C * copy.Rotation.D + newRotation.A * copy.Rotation.B - newRotation.B * copy.Rotation.A,
+                            newRotation.D * copy.Rotation.D - newRotation.A * copy.Rotation.A - newRotation.B * copy.Rotation.B - newRotation.C * copy.Rotation.C);
+
+                        copy.Rotation = res;
+
+                     
+                        
+                        copy.ZoomBox(items.BoundingBox());
+                        
+                        //@@
+                        doc.CurrentSelection.Clear();
+                        copy.Lighting = 0;
+
+
+                        doc.CurrentViewpoint.CopyFrom(copy);
+                        using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
+                        {
+                            clashImage.Save(Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png"), ImageFormat.Png);
+                        }
+
+                    }
+
+                    // 주석 해제하면 오른쪽 위에서 바라본 단순이미지도 추출
+                    /*((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
                     using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                     {
                         clashImage.Save(Path.Combine(testsimpleNamePath, $"{clResult.DisplayName.Substring(2)}.png"), ImageFormat.Png);
-                    }
-                    /*for (int i = 0; i< 7; i++)
-                    {
-                        //0~6 앞 뒤 위 아래 왼쪽 오른쪽
-                        ((LcOwViewer)doc.ActiveView.Viewer).LookFrom((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)i);
-                        
-                        
-                        doc.SetPlainBackground(Autodesk.Navisworks.Api.Color.White);
-                        doc.ActiveView.RequestDelayedRedraw((ViewRedrawRequests)3);
-
-                        // Save the Clash image
-                        using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
-                        {
-                            string clashResultImageName;
-                            if((Autodesk.Navisworks.Api.Interop.LcOaPartitionViewDirection)i == LcOaPartitionViewDirection.eFRONT_RIGHT_TOP)
-                            {
-                                clashResultImageName = Path.Combine(testsimpleNamePath, $"{clResult.DisplayName.Substring(2)}.png");
-
-                            }
-                            else
-                            {
-                                clashResultImageName = Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png");
-                            }
-
-                            clashImage.Save(clashResultImageName, ImageFormat.Png);
-                        }
                     }*/
 
 
+                    ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT);
+
+                    // 색 초기화
                     doc.Models.ResetAllPermanentMaterials();
 
 
                     //Hide all
                     doc.Models.SetHidden(modelItemsToShow, true);
-                    //doc.Models.SetHidden(invertItems, true);
-                    //doc.Models.SetHidden(itemsToTransparant, true);
-                }
-            }
-        }
 
-        private void HideAllItems(Document doc)
-        {
-            ModelItemCollection rootItems = new ModelItemCollection();
-            ModelItemCollection allitems = new ModelItemCollection();
-            foreach (var m in doc.Models)
-            {
-                if (m.RootItem != null)
-                {
-                    rootItems.Add(m.RootItem);
+                    // temp폴더의 파일 용량 삭제
+                    deleteTexture();
                 }
-            }
-            GetAllItems(rootItems, ref allitems);
-            if (allitems != null && allitems.Count > 0)
-            {
-                doc.Models.SetHidden(allitems, true);
             }
         }
 
@@ -318,6 +402,126 @@ namespace Integrity_Checker_MEP
                 }
             }
         }
+        string Getinfo(ModelItem item, string category, string property)
+        {
+            string info = "";
+            try
+            {
+                info = item.PropertyCategories.FindCategoryByDisplayName(category)?.Properties.FindPropertyByDisplayName(property)?.Value.ToDisplayString();
+            }
+            catch
+            {
+                info = item.PropertyCategories.FindCategoryByDisplayName(category)?.Properties.FindPropertyByDisplayName(property)?.Value.ToString();
+            }
+            if (string.IsNullOrEmpty(info))
+            {
+                try
+                {
+                    info = item.FindFirstObjectAncestor().PropertyCategories.FindCategoryByDisplayName(category)?.Properties.FindPropertyByDisplayName(property)?.Value.ToDisplayString();
+                }
+                catch
+                {
+                    info = item.FindFirstObjectAncestor().PropertyCategories.FindCategoryByDisplayName(category)?.Properties.FindPropertyByDisplayName(property)?.Value.ToString();
+                }
+            }
+
+            return info;
+        }
+
+        private void AddToItemsToShow(Document doc, string[] levelInfo, ModelItemCollection modelItemsToShow, ModelItemCollection modelItemToTransparant, string className)
+        {
+            if (levelInfo != null)
+            {
+                // 검색 객체 생성
+                Search search = new Search();
+                // 검색 범위 지정
+                search.Selection.SelectAll();
+                // 검색 조건 생성
+                SearchCondition classcondition = SearchCondition.HasPropertyByDisplayName("요소", "IfcClass").EqualValue(new VariantData(className));
+                SearchCondition levelcondition1 = SearchCondition.HasPropertyByDisplayName("요소", "IfcSpatialContainer").EqualValue(new VariantData(levelInfo[0]));
+                SearchCondition levelcondition2 = SearchCondition.HasPropertyByDisplayName("Constraints", "Base Constraint").EqualValue(new VariantData(levelInfo[1]));
+
+                // 검색 조건 적용
+                List<SearchCondition> oG1 = new List<SearchCondition>();
+                List<SearchCondition> oG2 = new List<SearchCondition>();
+                oG1.Add(levelcondition1);
+                oG1.Add(classcondition);
+                oG2.Add(levelcondition2);
+                oG2.Add(classcondition);
+                search.SearchConditions.AddGroup(oG1);
+                search.SearchConditions.AddGroup(oG2);
+
+                ModelItemCollection wallItems = search.FindAll(doc, false);
+                foreach (ModelItem item in wallItems)
+                {
+                    modelItemsToShow.Add(item);
+                    modelItemToTransparant.Add(item);
+                }
+            }
+        }
+
+        private void deleteTexture()
+        {
+            try
+            {
+                string tempFolderPath = Path.GetTempPath(); // Get temp folder directory
+                string ogsFolderPath = Path.Combine(tempFolderPath, "ogs");
+
+                // Get first folder directory from ogs folder
+                string[] ogsSubDirectories = Directory.GetDirectories(ogsFolderPath);
+                if (ogsSubDirectories.Length > 0)
+                {
+                    string firstSubDirectory = ogsSubDirectories[0];
+
+                    // Get first folder directory from subdirectory
+                    string[] foldersInFirstSubDirectory = Directory.GetDirectories(firstSubDirectory);
+                    if (foldersInFirstSubDirectory.Length > 0)
+                    {
+                        string firstFolderPath = foldersInFirstSubDirectory[0];
+
+                        // For Debugging (Check if directory is temp/ogs/(number)/(number)_TextureCache
+                        /*if (pathDebug)
+                        {
+                            MessageBox.Show(firstFolderPath);
+                            pathDebug = false;
+                        }*/
+
+                        // Get file size info
+                        DirectoryInfo directoryInfo = new DirectoryInfo(firstFolderPath);
+                        FileInfo[] files = directoryInfo.GetFiles();    
+                        long fileSizeInBytes = 0;
+                        foreach (FileInfo file in files)
+                        {
+                            fileSizeInBytes += file.Length;
+                        }
+    
+                        long fileSizeInGB = fileSizeInBytes / (1024 * 1024 * 1024); // 크기를 기가바이트로 변환
+
+                        // Delete TextureCache folder if size is more than 5GB
+                        if (fileSizeInGB > 5)
+                        {
+                            Directory.Delete(firstFolderPath, true);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No folder in subdirectory");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No folder in ogs folder");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+
+
+
     }
     
 }

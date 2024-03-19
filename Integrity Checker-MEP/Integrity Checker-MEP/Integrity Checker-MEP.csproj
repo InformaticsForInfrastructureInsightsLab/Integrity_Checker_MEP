@@ -107,6 +107,12 @@
   <ItemGroup>
     <Compile Include="ClashChecker.cs" />
     <Compile Include="ClashData.cs" />
+    <Compile Include="form_ImageOption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form_ImageOption.Designer.cs">
+      <DependentUpon>form_ImageOption.cs</DependentUpon>
+    </Compile>
     <Compile Include="form_ResultViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form_ImageOption.resx">
+      <DependentUpon>form_ImageOption.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form_ResultViewer.resx">
       <DependentUpon>form_ResultViewer.cs</DependentUpon>
