@@ -12,16 +12,16 @@
         <RibbonPanel x:Uid="RibbonPane1_1">
             <RibbonPanelSource x:Uid="RibbonPanelSource_RibbonPanel_1" Title="Sample Button">
 
-                <local:NWRibbonButton x:Uid="Button_1" Id="Button_One"
+                <local:NWRibbonButton x:Uid="Button_1" Id="Clash_Checker"
                             Size="Large"
                             ShowText="True"
-                            Text="ButtonOne"
+                            Text="Clash Checker"
                             Orientation="Vertical"/>
                 <RibbonSeparator x:Uid="RibbonSeparator_1"/>
-                <local:NWRibbonButton x:Uid="Button_2" Id="Button_Two"
+                <local:NWRibbonButton x:Uid="Button_2" Id="Result_Receiver"
                             Size="Large"
                             ShowText="True"
-                            Text="ButtonTwo"
+                            Text="Result Receiver"
                             Orientation="Vertical"/>
 
             </RibbonPanelSource>
@@ -29,17 +29,17 @@
 
         <RibbonPanel x:Uid="RibbonPanel_2">
             <RibbonPanelSource x:Uid="RibbonPanelSource_RibbonPanel_2" Title="Sample SplitButton">
-                <local:NWRibbonSplitButton x:Uid="SplitBtn1" Id="Split_Button_1" 
+                <local:NWRibbonSplitButton x:Uid="SplitBtn1" Id="Split_Button" 
                                           Size="Large" Orientation="Vertical">
-                    <local:NWRibbonButton x:Uid="Button_3" Id="Button_Three"
+                    <local:NWRibbonButton x:Uid="Button_3" Id="Clash_Checker_split"
                             Size="Large"
                             ShowText="True"
-                            Text="ButtonThree"
+                            Text="Clash_Checker"
                             Orientation="Vertical"/>
-                    <local:NWRibbonButton x:Uid="Button_2" Id="Button_Four"
+                    <local:NWRibbonButton x:Uid="Button_2" Id="Result_Receiver_split"
                             Size="Large"
                             ShowText="True"                        
-                            Text="ButtonFour"
+                            Text="Result_Receiver"
                             Orientation="Vertical"/>
                 </local:NWRibbonSplitButton>
             </RibbonPanelSource>
