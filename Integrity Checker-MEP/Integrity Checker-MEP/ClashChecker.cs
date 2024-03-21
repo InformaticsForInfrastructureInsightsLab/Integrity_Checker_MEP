@@ -418,6 +418,8 @@ namespace Integrity_Checker_MEP {
                 DocumentClash documentClash = document.GetClash();
                 DocumentClashTests oDCT = documentClash.TestsData;
                 List<ClashTestCls> tests_array = new List<ClashTestCls>();
+
+                // imgCreator 객체에 넘겨줄 dictionary
                 Dictionary<string, List<string>> tests_dict = new Dictionary<string, List<string>>();
 
                 #region 각 테스트 별 충돌 오브젝트 정보 가져오기
@@ -740,7 +742,8 @@ namespace Integrity_Checker_MEP {
                 for (int i = 0; i < tests_array.Count; i++) {
                     form_log.UpdateLog($"    결과 쓰기 시작 : {tests_array[i].DisplayName}");
                     var csvData = new List<string[]>();
-                   
+                    
+                    // 조건을 만족하는 test의 간섭 결과 이름(name)을 모아둔 리스트 ex)간섭1, 간섭2,..
                     List<string> clashNumList = new List<string>();
 
                     HashSet<string> MultiObjects = new HashSet<string>();
@@ -936,8 +939,8 @@ namespace Integrity_Checker_MEP {
 
                         //모든 조건을 만족하는 간섭항목을 리스트에 추가
                         csvData.Add(temp);
-                        //clashNumList.Add(temp[0]);
-                        // 디버깅용 hard만 이미지 출력
+
+                        // hard일때만 이미지로 추출할 리스트에 추가
                         if (temp[7] == "Hard")
                             clashNumList.Add(temp[0]);
                         #endregion

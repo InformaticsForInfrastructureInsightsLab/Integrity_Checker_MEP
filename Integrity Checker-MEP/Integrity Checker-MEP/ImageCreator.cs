@@ -104,6 +104,8 @@ namespace Integrity_Checker_MEP
                 // Get the 2 clashing elements from the ClashResult
                 ModelItem item1 = clResult.Item1;
                 ModelItem item2 = clResult.Item2;
+
+
                 string dPath;
                 if (testName.Equals("Arch-Arch_Clearance"))
                 {
@@ -162,19 +164,6 @@ namespace Integrity_Checker_MEP
                     ModelItemCollection items = new ModelItemCollection();
                     items.Add(item1);
                     items.Add(item2);
-
-                   // Check If wall, slab, pipesegment, ductsegment
-                   /* string item1class = Getinfo(item1, "요소", "IfcClass");
-                    string item2class = Getinfo(item2, "요소", "IfcClass");
-                    bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
-                        || item1class.Equals("IfcPipeSegment") || item1class.Equals("IfcDuctSegment")
-                        && item2class.Equals("IfcWall") || item2class.Equals("IfcSlab")
-                        || item2class.Equals("IfcPipeSegment") || item2class.Equals("IfcDuctSegment");
-
-                    if(!clashImageCondition)
-                    {
-                        return;
-                    }*/
 
                     doc.CurrentSelection.Clear();
                     
@@ -242,6 +231,8 @@ namespace Integrity_Checker_MEP
 
 
                     // 폴더의 경로 설정 및 ReadOnly 해제
+
+                    // 관측점 오른쪽 위에서 바라보는 나비스 기본 옵션 이미지 추출을 원하면 밑의 주석 해제
 
                     //string testsimpleNamePath = Path.Combine(directoryPath, "단순이미지", $"{testName}");
                     string testsideNamePath = Path.Combine(directoryPath, "다각도이미지", $"{testName}");
@@ -402,6 +393,14 @@ namespace Integrity_Checker_MEP
                 }
             }
         }
+
+        /// <summary>
+        /// 해당 객체의 특성 정보를 갖고오는 함수
+        /// </summary>
+        /// <param name="item"> 특성 정보를 가져올 부재 </param>
+        /// <param name="category"> 카테고리 정보 ex)요소 </param>
+        /// <param name="property"> 프로퍼티 정보 ex)IfcClass </param>
+        /// <returns> 프로퍼티 정보의 값 ex)IfcWall </returns>
         string Getinfo(ModelItem item, string category, string property)
         {
             string info = "";
@@ -451,6 +450,7 @@ namespace Integrity_Checker_MEP
                 search.SearchConditions.AddGroup(oG1);
                 search.SearchConditions.AddGroup(oG2);
 
+                // spatialcontainer에 적힌 level 또는 Constraints의 Base Constraint에 적힌 level로 같은 층의 wall/curtainwall 검색
                 ModelItemCollection wallItems = search.FindAll(doc, false);
                 foreach (ModelItem item in wallItems)
                 {
@@ -460,6 +460,9 @@ namespace Integrity_Checker_MEP
             }
         }
 
+        /// <summary>
+        /// 이미지 추출 진행동안 temp 파일에 용량이 너무 커져서 저장공간 부족 오류가 나타나는걸 방지하기 위해 코드상으로 temp파일의 texture를 삭제하는 함수
+        /// </summary>
         private void deleteTexture()
         {
             try
@@ -518,10 +521,6 @@ namespace Integrity_Checker_MEP
                 MessageBox.Show(ex.ToString());
             }
         }
-
-
-
-
     }
     
 }
