@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using Newtonsoft.Json;
 using wf = System.Windows.Forms;
 
 [Serializable]
@@ -130,6 +131,10 @@ namespace Integrity_Checker_MEP {
 
                     imgCreator.setBackground = form_imageOption.background;
                     imgCreator.isTransparant = form_imageOption.transparant;
+                    if (imgCreator.isTransparant)
+                    {
+                        imgCreator.transparancy = form_imageOption.transparancy;
+                    }
                 }
 
                 form_log = new From_Log();
@@ -184,12 +189,18 @@ namespace Integrity_Checker_MEP {
         void SaveImage()
         {
             form_log.UpdateLog("이미지 추출 작업 시작");
+
+
+            // 이미지가 저장될 폴더를 만들어 준다
             string resultImagePath = @"C:/objectinfo/ResultImage";
             if (!Directory.Exists(resultImagePath))
             {
                 
                 Directory.CreateDirectory(resultImagePath);
             }
+
+            // simple -> 단순 (오른쪽 위), side -> 다각도
+            // 단순이 필요하면 주석 제외
 
             //string simpleImagePath = Path.Combine(resultImagePath, "단순이미지");
             string sideImagePath = Path.Combine(resultImagePath, "다각도이미지");
@@ -205,6 +216,22 @@ namespace Integrity_Checker_MEP {
                 Directory.CreateDirectory(sideImagePath);
             }
 
+
+            // 이미지로 추출할 간섭 결과들을 갖고있는 json파일을 불러오고 imgCreator에 넘겨준다
+            try
+            {
+                Dictionary<string, List<string>> tests_dict = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(@"c:\objectinfo\tests_dict.json"));
+
+                // imageCreator에 dictionary 전달
+                imgCreator.getResultName(tests_dict);
+            }
+            catch(Exception ex)
+            {
+                form_log.UpdateLog(ex.ToString());
+            }
+
+
+            // 이미지가 저장될 위치를 imgCreator에 넘겨준다
             imgCreator.CreateAndFillImages(resultImagePath);
             form_log.UpdateLog("이미지 추출 작업 종료");
 
@@ -958,8 +985,10 @@ namespace Integrity_Checker_MEP {
                     form_log.UpdateLog($"    결과 쓰기 종료 : {tests_array[i].DisplayName}");
                 }
 
-                // imageCreator에 dictionary 전달
-                imgCreator.getResultName(tests_dict);
+                
+
+                string json = JsonConvert.SerializeObject(tests_dict, Formatting.Indented);
+                File.WriteAllText(@"c:\objectinfo\tests_dict.json", json);
 
 
                 form_log.UpdateLog("결과 파일 생성 완료");

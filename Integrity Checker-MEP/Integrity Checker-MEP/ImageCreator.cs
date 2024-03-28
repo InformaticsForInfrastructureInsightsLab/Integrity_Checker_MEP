@@ -29,12 +29,15 @@ namespace Integrity_Checker_MEP
         private int height = 500;
 
         // 벽 배경을 표시할 것인지 결정
-        // true: 표시, false: 표시 안함
+        // true: 표시, false: 표시 안함 -> form_imageOption에서 선택할 수 있게 바꿈
         public bool setBackground = true;
 
         // 투명도 적용 할 것인지 결정
-        // true: 반투명(80%), false: 불투명
+        // true: 반투명, false: 불투명
         public bool isTransparant = true;
+
+        // 투명도
+        public int transparancy;
 
 
         /// <summary>
@@ -47,16 +50,24 @@ namespace Integrity_Checker_MEP
             clashResultDict = names;
         }
 
-
+        /// <summary>
+        /// 현재 불러올 수 있는 나비스웍스 document를 불러오고 
+        /// 테스트와 dictionary를 비교하고 받아온 경로로 이미지를 추출하는 함수
+        /// </summary>
+        /// <param name="directoryPath"> 추출될 경로 -> "c:\objectinfo\resultImage" </param>
         public void CreateAndFillImages(string directoryPath)
         {
             try
             {
+                // 현재 나비스에 떠 있는 테스트 결과를 가져온다
                 Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
                 DocumentClash documentClash = doc.GetClash();
                 DocumentClashTests oDCT = documentClash.TestsData;
 
                 // 추출되기 원하는 test의 이름
+                // 만약 특정한 test만 추출되길 원한다면 주석 해제하고 직접 특정 테스트 이름을 추가한다
+                // 대소문자 주의
+
                 //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance", "MECH-MECH_Clearance" };
                 //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
                 //string[] clashtypes = { "MECH-MECH_Clearance" };
@@ -100,49 +111,14 @@ namespace Integrity_Checker_MEP
         {
             if (clResult != null)
             {
+                // item 숨김 초기화
                 doc.Models.ResetAllHidden();
                 // Get the 2 clashing elements from the ClashResult
                 ModelItem item1 = clResult.Item1;
                 ModelItem item2 = clResult.Item2;
 
-
-                string dPath;
-                if (testName.Equals("Arch-Arch_Clearance"))
-                {
-                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Arch-Arch_Clearance\";
-                    
-                }
-                else if(testName.Equals("Arch-MECH_Clearance"))
-                {
-                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Arch-MECH_Clearance";
-
-                }
-                else if (testName.Equals("Arch-Str_Clearance"))
-                {
-                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Arch-Str_Clearance";
-
-                }
-                else if (testName.Equals("Str-MECH_Clearance"))
-                {
-                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Str-MECH_Clearance";
-
-                }
-                else if (testName.Equals("Str-Str_Clearance"))
-                {
-                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\Str-Str_Clearance";
-
-                }
-                else if (testName.Equals("MECH-MECH_Clearance"))
-                {
-                    dPath = @"C:\objectinfo\ResultImage\다각도이미지\MECH-MECH_Clearance";
-
-                }
-                else
-                {
-                    dPath = @"C:\objectinfo\ResultImage";
-                }
-
-                // 이미지 수가 19992개 이상이면 추출 멈추기
+                // 디렉토리의 파일 수가 19992개 이상이면 추출 멈추기
+                string dPath = Path.Combine(@"C:\objectinfo\ResultImage\다각도이미지\", testName);
                 if (Directory.Exists(dPath))
                 {
                     try
@@ -164,6 +140,26 @@ namespace Integrity_Checker_MEP
                     ModelItemCollection items = new ModelItemCollection();
                     items.Add(item1);
                     items.Add(item2);
+
+                    // 추출하고 싶은 특정한 특성들만 추출하는 코드
+
+                     /*string item1class = Getinfo(item1, "요소", "IfcClass");
+                     string item2class = Getinfo(item2, "요소", "IfcClass");
+                    bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
+                        || item1class.Equals("IfcPipeSegment") || item1class.Equals("IfcDuctSegment")
+                        || item1class.Equals("IfcDuctFitting") || item1class.Equals("IfcPipeFitting")
+                        || item1class.Equals("IfcCableSegment") || item1class.Equals("IfcCableFitting")
+                        && item2class.Equals("IfcWall") || item2class.Equals("IfcSlab")
+                        || item2class.Equals("IfcPipeSegment") || item2class.Equals("IfcDuctSegment")
+                        || item2class.Equals("IfcDuctFitting") || item2class.Equals("IfcPipeFitting")
+                        || item2class.Equals("IfcCableSegment") || item2class.Equals("IfcCableFitting");
+
+                     if (!clashImageCondition)
+                     {
+                         return;
+                     }*/
+
+
 
                     doc.CurrentSelection.Clear();
                     
@@ -191,8 +187,10 @@ namespace Integrity_Checker_MEP
                     // IfcWall과 IfcCurtainWall 추가 (대소문자 맞추기)
                     if(setBackground == true)
                     {
-                        AddToItemsToShow(doc, new string[] {levelInfo1, levelInfo2 }, modelItemsToShow, modelItemToTransparant, "IfcWall");
-                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 }, modelItemsToShow, modelItemToTransparant, "IfcCurtainWall");
+                        AddToItemsToShow(doc, new string[] {levelInfo1, levelInfo2 }, 
+                            modelItemsToShow, modelItemToTransparant, "IfcWall");
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 }, 
+                            modelItemsToShow, modelItemToTransparant, "IfcCurtainWall");
                     }
 
                     // 안 보일 item을 모두 숨기기
@@ -226,7 +224,7 @@ namespace Integrity_Checker_MEP
                     // Adjust transparancy (false일 경우엔 투명도를 적용하지 않음)
                     if(isTransparant == true)
                     {
-                        doc.Models.OverridePermanentTransparency(modelItemToTransparant, 80);
+                        doc.Models.OverridePermanentTransparency(modelItemToTransparant, transparancy);
                     }
 
 
@@ -234,13 +232,13 @@ namespace Integrity_Checker_MEP
 
                     // 관측점 오른쪽 위에서 바라보는 나비스 기본 옵션 이미지 추출을 원하면 밑의 주석 해제
 
-                    //string testsimpleNamePath = Path.Combine(directoryPath, "단순이미지", $"{testName}");
+                    string testsimpleNamePath = Path.Combine(directoryPath, "단순이미지", $"{testName}");
                     string testsideNamePath = Path.Combine(directoryPath, "다각도이미지", $"{testName}");
 
 
-                    //DirectoryInfo diSimple = new DirectoryInfo(testsimpleNamePath);
+                    /*DirectoryInfo diSimple = new DirectoryInfo(testsimpleNamePath);
 
-                    /*if (!diSimple.Exists)
+                    if (!diSimple.Exists)
                     {
                         diSimple.Create();
                         var directorySecurity = diSimple.GetAccessControl();
@@ -281,11 +279,8 @@ namespace Integrity_Checker_MEP
                         double newAngle = (i * 30) * (pi / 180);
 
                         UnitVector3D newAxis = new UnitVector3D(0, 0, 1);
-
                         Rotation3D newRotation = new Rotation3D(newAxis, newAngle);
-
                         ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
-
                         Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
 
                         // 원근법 무시하려면 주석 해제
@@ -300,17 +295,15 @@ namespace Integrity_Checker_MEP
                             newRotation.D * copy.Rotation.D - newRotation.A * copy.Rotation.A - newRotation.B * copy.Rotation.B - newRotation.C * copy.Rotation.C);
 
                         copy.Rotation = res;
-
-                     
-                        
                         copy.ZoomBox(items.BoundingBox());
                         
                         //@@
                         doc.CurrentSelection.Clear();
                         copy.Lighting = 0;
 
-
                         doc.CurrentViewpoint.CopyFrom(copy);
+
+
                         using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                         {
                             clashImage.Save(Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png"), ImageFormat.Png);
@@ -320,6 +313,11 @@ namespace Integrity_Checker_MEP
 
                     // 주석 해제하면 오른쪽 위에서 바라본 단순이미지도 추출
                     /*((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
+                    Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+                    BoundingBox3D box = items.BoundingBox();
+                    copy.ZoomBox(box);
+                    doc.CurrentViewpoint.CopyFrom(copy);
+
                     using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                     {
                         clashImage.Save(Path.Combine(testsimpleNamePath, $"{clResult.DisplayName.Substring(2)}.png"), ImageFormat.Png);
@@ -427,6 +425,15 @@ namespace Integrity_Checker_MEP
             return info;
         }
 
+        /// <summary>
+        /// 배경으로 보일 특정 부재들을 추가한다
+        /// 이때 첫번째 부재의 층 정보를 가져와서 같은 층인 것들만 표시하도록 검색을 진행한다
+        /// </summary>
+        /// <param name="doc"> 현재 작업중인 나비스웍스 document </param>
+        /// <param name="levelInfo"> 층 정보를 담고있는 배열 </param>
+        /// <param name="modelItemsToShow"> 표시될 item을 담고있는 ModelItemCollection </param>
+        /// <param name="modelItemToTransparant"> 투명하게 표시될 item을 담고있는 ModelItemCollection <param>
+        /// <param name="className"> 표시할 IfcClass의 이름 </param>
         private void AddToItemsToShow(Document doc, string[] levelInfo, ModelItemCollection modelItemsToShow, ModelItemCollection modelItemToTransparant, string className)
         {
             if (levelInfo != null)

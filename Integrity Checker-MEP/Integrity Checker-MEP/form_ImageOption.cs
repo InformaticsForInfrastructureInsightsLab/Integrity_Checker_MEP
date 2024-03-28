@@ -19,6 +19,7 @@ namespace Integrity_Checker_MEP
         public bool background;
         public bool transparant;
         public bool start = false;
+        public int transparancy = 80;
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if(cb_Background.Checked)
@@ -36,10 +37,13 @@ namespace Integrity_Checker_MEP
             if (cb_Transparancy.Checked)
             {
                 transparant = true;
+                numericUpDown1.Enabled = true;
             }
             else
             {
                 transparant = false;
+                numericUpDown1.Enabled = false;
+
             }
         }
 
@@ -52,6 +56,11 @@ namespace Integrity_Checker_MEP
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            transparancy = (int)numericUpDown1.Value;
         }
     }
 }
