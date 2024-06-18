@@ -25,7 +25,7 @@ namespace Integrity_Checker_MEP
         Dictionary<string, List<string>> clashResultDict = new Dictionary<string,List<string>>();
 
         // 너비와 높이 수동 조정
-        private int width = 1100;
+        private int width = 500;
         private int height = 500;
 
         // 벽 배경을 표시할 것인지 결정
@@ -38,6 +38,12 @@ namespace Integrity_Checker_MEP
 
         // 투명도
         public int transparancy;
+
+        // 카메라 배율
+        public double setMagnification = 1500.0;
+        private form_ImageOption form_imageOption = new form_ImageOption();
+
+        //public Dictionary<Guid, List<ModelItem>> guidDictionary = new Dictionary<Guid, List<ModelItem>>();
 
 
         /// <summary>
@@ -70,13 +76,17 @@ namespace Integrity_Checker_MEP
 
                 //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance", "MECH-MECH_Clearance" };
                 //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
-                //string[] clashtypes = { "MECH-MECH_Clearance" };
+                string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance" };
+                //string[] clashtypes = { "Arch-MECH_Clearance", "Arch-Str_Clearance" };
+                //string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance"
+                //"Str-MECH_Clearance"
+                //};
 
                 // 현재 나비스에서 표시된 테스트를 순회하면서 추출할 것 인지 dictionary와 clashtypes 배열과 비교해서 이미지 추출
                 foreach (ClashTest test in oDCT.Tests)
                 {
-                    //if (clashtypes.Contains(test.DisplayName) && clashResultDict.ContainsKey(test.DisplayName))
-                    if (clashResultDict.ContainsKey(test.DisplayName))
+                    if (clashtypes.Contains(test.DisplayName) && clashResultDict.ContainsKey(test.DisplayName))
+                    //if (clashResultDict.ContainsKey(test.DisplayName))
                     {
 
                         List<string> resultNames = new List<string>();
@@ -86,7 +96,14 @@ namespace Integrity_Checker_MEP
                         RecurseFillResults(test, ref outedResults);
                         if (outedResults != null && outedResults.Count > 0 && !string.IsNullOrEmpty(directoryPath) && Directory.Exists(directoryPath))
                         {
-
+                            //foreach (ClashResult r in outedResults)
+                            //{
+                            //    if (!guidDictionary.ContainsKey(r.Item1.InstanceGuid))
+                            //    {
+                            //        guidDictionary[r.Item1.InstanceGuid] = new List<ModelItem>();
+                            //    }
+                            //    guidDictionary[r.Item1.InstanceGuid].Add(r.Item2);
+                            //}
                             foreach (ClashResult r in outedResults)
                             {
                                 if (resultNames.Contains(r.DisplayName))
@@ -117,14 +134,14 @@ namespace Integrity_Checker_MEP
                 ModelItem item1 = clResult.Item1;
                 ModelItem item2 = clResult.Item2;
 
-                // 디렉토리의 파일 수가 19992개 이상이면 추출 멈추기
+                // 디렉토리의 파일 수가 99999 이상이면 추출 멈추기
                 string dPath = Path.Combine(@"C:\objectinfo\ResultImage\다각도이미지\", testName);
                 if (Directory.Exists(dPath))
                 {
                     try
                     {
                         string[] files = Directory.GetFiles(dPath);
-                        if (files.Length >= 19992)
+                        if (files.Length >= 99999)
                         {
                             return;
                         }
@@ -135,29 +152,52 @@ namespace Integrity_Checker_MEP
                     }
                 }
 
-                if (item1 != null && item2 != null)
+                if (item1 != null)
                 {
                     ModelItemCollection items = new ModelItemCollection();
-                    items.Add(item1);
-                    items.Add(item2);
+                    items.Add(clResult.Item1);
+                    items.Add(clResult.Item2);
+
+                    //if (guidDictionary.ContainsKey(item1.InstanceGuid))
+                    //{
+                    //    foreach (ModelItem item in guidDictionary[item1.InstanceGuid])
+                    //    {
+                    //        items.Add(item);
+                    //    }
+                    //}
 
                     // 추출하고 싶은 특정한 특성들만 추출하는 코드
 
-                     /*string item1class = Getinfo(item1, "요소", "IfcClass");
-                     string item2class = Getinfo(item2, "요소", "IfcClass");
-                    bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
-                        || item1class.Equals("IfcPipeSegment") || item1class.Equals("IfcDuctSegment")
-                        || item1class.Equals("IfcDuctFitting") || item1class.Equals("IfcPipeFitting")
-                        || item1class.Equals("IfcCableSegment") || item1class.Equals("IfcCableFitting")
-                        && item2class.Equals("IfcWall") || item2class.Equals("IfcSlab")
-                        || item2class.Equals("IfcPipeSegment") || item2class.Equals("IfcDuctSegment")
-                        || item2class.Equals("IfcDuctFitting") || item2class.Equals("IfcPipeFitting")
-                        || item2class.Equals("IfcCableSegment") || item2class.Equals("IfcCableFitting");
+                    //string item1class = Getinfo(item1, "요소", "IfcClass");
+                    //string item2class = Getinfo(item2, "요소", "IfcClass");
+                    //bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
+                    //    || item1class.Equals("IfcPipeSegment") || item1class.Equals("IfcDuctSegment")
+                    //    || item1class.Equals("IfcDuctFitting") 
+                    //    || item1class.Equals("IfcCableSegment") || item1class.Equals("IfcCableFitting")
+                    //    && item2class.Equals("IfcWall") || item2class.Equals("IfcSlab")
+                    //    || item2class.Equals("IfcPipeSegment") || item2class.Equals("IfcDuctSegment")
+                    //    || item2class.Equals("IfcDuctFitting") 
+                    //    || item2class.Equals("IfcCableSegment") || item2class.Equals("IfcCableFitting");
 
-                     if (!clashImageCondition)
+                    string item1class = Getinfo(item1, "요소", "IfcClass");
+                    string item2class = Getinfo(item2, "요소", "IfcClass");
+                    //List<String> itemclass = new List<String>();
+
+                    //foreach (ModelItem item in guidDictionary[item1.InstanceGuid])
+                    //{
+                    //    itemclass.Add(Getinfo(item, "요소", "IfcClass"));
+                    //}
+                    //string item2class = Getinfo(item2, "요소", "IfcClass");
+                    bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
+                        && item2class.Equals("IfcPipeSegment") || item2class.Equals("IfcDuctSegment")
+                        //|| item2class.Equals("IfcDuctFitting")
+                        ;
+
+
+                    if (!clashImageCondition)
                      {
                          return;
-                     }*/
+                     }
 
 
 
@@ -179,18 +219,47 @@ namespace Integrity_Checker_MEP
                             modelItemsToShow.AddRange(item.DescendantsAndSelf);
                     }
 
-                    // 첫번째 부재의 층 정보를 갖고 오기
+                    // 두 번째 부재의 층 정보를 갖고 오기
                     string levelInfo1 = Getinfo(item1, "요소", "IfcSpatialContainer");
                     string levelInfo2 = Getinfo(item1, "Constraints", "Level");
-
+                    string systemInfo1 = Getinfo(item1, "요소", "IfcSystem");
+                    string systemInfo2 = Getinfo(item2, "요소", "IfcSystem");
+                    //List<string> systemInfo2 = new List<string>();
+                    //foreach (ModelItem item in guidDictionary[item1.InstanceGuid])
+                    //{
+                    //    systemInfo2.Add(Getinfo(item, "요소", "IfcSystem"));
+                    //}
                     // 배경 보이게 설정 했을시에 보일 item에 원하는 유형의 item 추가
                     // IfcWall과 IfcCurtainWall 추가 (대소문자 맞추기)
-                    if(setBackground == true)
+                    if (setBackground == true)
                     {
-                        AddToItemsToShow(doc, new string[] {levelInfo1, levelInfo2 }, 
-                            modelItemsToShow, modelItemToTransparant, "IfcWall");
-                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 }, 
-                            modelItemsToShow, modelItemToTransparant, "IfcCurtainWall");
+                        //AddToItemsToShow(doc, new string[] {levelInfo1, levelInfo2 }, 
+                        //   modelItemsToShow, modelItemToTransparant, "IfcPipeSegment");
+                        //AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 }, 
+                        //    modelItemsToShow, modelItemToTransparant, "IfcPipeFitting");
+                        //AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                        //    modelItemsToShow, modelItemToTransparant, "IfcDuctSegment");
+                        //AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                        //    modelItemsToShow, modelItemToTransparant, "IfcDuctFitting");
+                        //AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                        //    modelItemsToShow, modelItemToTransparant, "IfcCableCarrierSegment");
+                        //AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                        //    modelItemsToShow, modelItemToTransparant, "IfcCableCarrierFitting");
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                            modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] { systemInfo1 , systemInfo2});
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                            modelItemsToShow, modelItemToTransparant, "IfcCurtainWall", new string[] { "a", "b" });
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                            modelItemsToShow, modelItemToTransparant, "IfcSlab", new string[] { "a", "b" });
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                            modelItemsToShow, modelItemToTransparant, "IfcDoor", new string[] { "a", "b" });
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                            modelItemsToShow, modelItemToTransparant, "IfcColumn", new string[] { "a", "b" });
+                        AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                            modelItemsToShow, modelItemToTransparant, "IfcWindow", new string[] { "a", "b" });
+
+                        //AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+                        //modelItemsToShow, modelItemToTransparant, "IfcFurniture");
                     }
 
                     // 안 보일 item을 모두 숨기기
@@ -203,13 +272,13 @@ namespace Integrity_Checker_MEP
                     doc.CurrentSelection.Clear();
 
                     // 보이는 부재들 외의 배경을 흰색으로 통일 (주석 처리하면 나비스에서와 동일)
-                    doc.SetPlainBackground(Autodesk.Navisworks.Api.Color.White);
+                    //doc.SetPlainBackground(Autodesk.Navisworks.Api.Color.White);
 
                     // 간섭 부재에 색과 투명도 적용 
 
                     Autodesk.Navisworks.Api.Color RED = Autodesk.Navisworks.Api.Color.Red;
                     Autodesk.Navisworks.Api.Color GREEN = Autodesk.Navisworks.Api.Color.Green;
-                    
+
                     // 첫번째 item은 RED, 두번째 item은 GREEN으로 색 적용
                     if (!NativeHandle.ReferenceEquals(items.ElementAtOrDefault(0), null))
                         doc.Models.OverridePermanentColor(new ModelItem[1] { items.ElementAtOrDefault(0) }, RED);
@@ -271,39 +340,102 @@ namespace Integrity_Checker_MEP
                         directorySecurity.AddAccessRule(fileSystemRule);
                         diSide.SetAccessControl(directorySecurity);
                     }
-
+                    BoundingBox3D box = items.BoundingBox();
                     // 카메라 위치 조정 및 폴더에 이미지 저장
-                    for (int i = 0; i < 12; i++)
+                    for (int i = 0; i < 10; i++)
                     {
-                        const double pi = 3.14159265358979;
-                        double newAngle = (i * 30) * (pi / 180);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        if (i >= 0 && i <= 7)
+                        {
+                            const double pi = 3.14159265358979;
+                            double newAngle = (i * 45) * (pi / 180);
 
-                        UnitVector3D newAxis = new UnitVector3D(0, 0, 1);
-                        Rotation3D newRotation = new Rotation3D(newAxis, newAngle);
-                        ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
-                        Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+                            UnitVector3D newAxis = new UnitVector3D(0, 0, 1);
+                            Rotation3D newRotation = new Rotation3D(newAxis, newAngle);
+                            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT);
+                            Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+                            copy.Lighting = ViewpointLighting.FullLights;
 
-                        // 원근법 무시하려면 주석 해제
-                        //copy.Projection = ViewpointProjection.Orthographic;
+                            // 원근법 무시하려면 주석 해제s
+                            //copy.Projection = ViewpointProjection.Orthographic;
 
-                        BoundingBox3D box = items.BoundingBox();
-                        copy.PivotPoint = box.Center;
+                            // form_imageoption에서 설정한 배율에 따라
+                            setMagnification = form_imageOption.magnification;
+                            setMagnification = 0;
+                            // 새로운 최소 및 최대 포인트를 계산합니다.
+                            Point3D newMin = new Point3D(box.Min.X - setMagnification, box.Min.Y - setMagnification, box.Min.Z - setMagnification);
+                            Point3D newMax = new Point3D(box.Max.X + setMagnification, box.Max.Y + setMagnification, box.Max.Z + setMagnification);
 
-                        Rotation3D res = new Rotation3D(newRotation.D * copy.Rotation.A + newRotation.A * copy.Rotation.D + newRotation.B * copy.Rotation.C - newRotation.C * copy.Rotation.B,
-                            newRotation.D * copy.Rotation.B + newRotation.B * copy.Rotation.D + newRotation.C * copy.Rotation.A - newRotation.A * copy.Rotation.C,
-                            newRotation.D * copy.Rotation.C + newRotation.C * copy.Rotation.D + newRotation.A * copy.Rotation.B - newRotation.B * copy.Rotation.A,
-                            newRotation.D * copy.Rotation.D - newRotation.A * copy.Rotation.A - newRotation.B * copy.Rotation.B - newRotation.C * copy.Rotation.C);
+                            // 새로운 바운딩 박스를 생성합니다.
+                            BoundingBox3D expandedBox = new BoundingBox3D(newMin, newMax);
+                            //BoundingBox3D box = items.BoundingBox();
+                            copy.PivotPoint = expandedBox.Center;
 
-                        copy.Rotation = res;
-                        copy.ZoomBox(items.BoundingBox());
-                        
-                        //@@
-                        doc.CurrentSelection.Clear();
-                        copy.Lighting = 0;
+                            Rotation3D res = new Rotation3D(
+                                newRotation.D * copy.Rotation.A + newRotation.A * copy.Rotation.D + newRotation.B * copy.Rotation.C - newRotation.C * copy.Rotation.B,
+                                newRotation.D * copy.Rotation.B + newRotation.B * copy.Rotation.D + newRotation.C * copy.Rotation.A - newRotation.A * copy.Rotation.C,
+                                newRotation.D * copy.Rotation.C + newRotation.C * copy.Rotation.D + newRotation.A * copy.Rotation.B - newRotation.B * copy.Rotation.A,
+                                newRotation.D * copy.Rotation.D - newRotation.A * copy.Rotation.A - newRotation.B * copy.Rotation.B - newRotation.C * copy.Rotation.C
+                                );
 
-                        doc.CurrentViewpoint.CopyFrom(copy);
+                            copy.Rotation = res;
 
+                            Point3D currentPosition = copy.Position;
+                            Point3D newPosition = new Point3D(currentPosition.X, currentPosition.Y, currentPosition.Z);
+                            copy.Position = newPosition;
 
+                            copy.ZoomBox(expandedBox);
+
+                            //@@
+                            doc.CurrentSelection.Clear();
+                            //copy.Lighting = 0;
+
+                            doc.CurrentViewpoint.CopyFrom(copy);
+                        }
+
+                        if (i==8)
+                        {
+
+                            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eTOP);
+                            Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+
+                            // 원근법 무시하려면 주석 해제
+                            //copy.Projection = ViewpointProjection.Orthographic;
+
+                            //BoundingBox3D box = items.BoundingBox();
+                            copy.PivotPoint = box.Center;
+
+                            copy.ZoomBox(items.BoundingBox());
+
+                            //@@
+                            doc.CurrentSelection.Clear();
+                            //copy.Lighting = 0;
+
+                            doc.CurrentViewpoint.CopyFrom(copy);
+                        }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                        if (i == 9)
+                        {
+
+                            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eBOTTOM);
+                            Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+
+                            // 원근법 무시하려면 주석 해제
+                            //copy.Projection = ViewpointProjection.Orthographic;
+
+                            //BoundingBox3D box = items.BoundingBox();
+                            copy.PivotPoint = box.Center;
+
+                            copy.ZoomBox(items.BoundingBox());
+
+                            //@@
+                            doc.CurrentSelection.Clear();
+                            //copy.Lighting = 0;
+
+                            doc.CurrentViewpoint.CopyFrom(copy);
+                        }
+                                            
                         using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                         {
                             clashImage.Save(Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png"), ImageFormat.Png);
@@ -324,7 +456,7 @@ namespace Integrity_Checker_MEP
                     }*/
 
 
-                    ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT);
+                    ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
 
                     // 색 초기화
                     doc.Models.ResetAllPermanentMaterials();
@@ -434,33 +566,66 @@ namespace Integrity_Checker_MEP
         /// <param name="modelItemsToShow"> 표시될 item을 담고있는 ModelItemCollection </param>
         /// <param name="modelItemToTransparant"> 투명하게 표시될 item을 담고있는 ModelItemCollection <param>
         /// <param name="className"> 표시할 IfcClass의 이름 </param>
-        private void AddToItemsToShow(Document doc, string[] levelInfo, ModelItemCollection modelItemsToShow, ModelItemCollection modelItemToTransparant, string className)
+        private void AddToItemsToShow(Document doc, string[] levelInfo, ModelItemCollection modelItemsToShow, ModelItemCollection modelItemToTransparant, string className, string[] systeminfo)
         {
             if (levelInfo != null)
             {
                 // 검색 객체 생성
                 Search search = new Search();
+                Search search2 = new Search();
+                Search search3 = new Search();
                 // 검색 범위 지정
                 search.Selection.SelectAll();
+                search2.Selection.SelectAll();
+                search3.Selection.SelectAll();
                 // 검색 조건 생성
                 SearchCondition classcondition = SearchCondition.HasPropertyByDisplayName("요소", "IfcClass").EqualValue(new VariantData(className));
                 SearchCondition levelcondition1 = SearchCondition.HasPropertyByDisplayName("요소", "IfcSpatialContainer").EqualValue(new VariantData(levelInfo[0]));
                 SearchCondition levelcondition2 = SearchCondition.HasPropertyByDisplayName("Constraints", "Base Constraint").EqualValue(new VariantData(levelInfo[1]));
+                SearchCondition systemcondition1 = SearchCondition.HasPropertyByDisplayName("요소", "IfcSystem").EqualValue(new VariantData(systeminfo[0]));
+                SearchCondition systemcondition2 = SearchCondition.HasPropertyByDisplayName("요소", "IfcSystem").EqualValue(new VariantData(systeminfo[1]));
 
                 // 검색 조건 적용
                 List<SearchCondition> oG1 = new List<SearchCondition>();
                 List<SearchCondition> oG2 = new List<SearchCondition>();
+                List<SearchCondition> oG3 = new List<SearchCondition>();
+                List<SearchCondition> oG4 = new List<SearchCondition>();
+
                 oG1.Add(levelcondition1);
                 oG1.Add(classcondition);
                 oG2.Add(levelcondition2);
                 oG2.Add(classcondition);
+                oG3.Add(systemcondition1);
+                oG4.Add(systemcondition2);
+
                 search.SearchConditions.AddGroup(oG1);
                 search.SearchConditions.AddGroup(oG2);
+                search2.SearchConditions.AddGroup(oG3);
+                search3.SearchConditions.AddGroup(oG4);
+
+                Autodesk.Navisworks.Api.Color BLUE = Autodesk.Navisworks.Api.Color.Blue;
+                Autodesk.Navisworks.Api.Color ORANGE = Autodesk.Navisworks.Api.Color.FromByteRGB(255, 128, 64);
 
                 // spatialcontainer에 적힌 level 또는 Constraints의 Base Constraint에 적힌 level로 같은 층의 wall/curtainwall 검색
                 ModelItemCollection wallItems = search.FindAll(doc, false);
                 foreach (ModelItem item in wallItems)
                 {
+                    modelItemsToShow.Add(item);
+                    modelItemToTransparant.Add(item);
+                }
+
+                ModelItemCollection mepItems = search2.FindAll(doc, false);
+                foreach (ModelItem item in mepItems)
+                {
+                    doc.Models.OverridePermanentColor(new ModelItem[1] { item }, BLUE);
+                    modelItemsToShow.Add(item);
+                    modelItemToTransparant.Add(item);
+                }
+
+                ModelItemCollection mepItems2 = search3.FindAll(doc, false);
+                foreach (ModelItem item in mepItems2)
+                {
+                    doc.Models.OverridePermanentColor(new ModelItem[1] { item }, ORANGE);
                     modelItemsToShow.Add(item);
                     modelItemToTransparant.Add(item);
                 }
@@ -529,5 +694,4 @@ namespace Integrity_Checker_MEP
             }
         }
     }
-    
 }
