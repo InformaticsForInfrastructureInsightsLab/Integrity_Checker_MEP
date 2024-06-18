@@ -232,7 +232,8 @@ namespace Integrity_Checker_MEP {
 
 
             // 이미지가 저장될 위치를 imgCreator에 넘겨준다
-            imgCreator.CreateAndFillImages(resultImagePath);
+            imgCreator.ComplexCreateAndFillImages(resultImagePath);
+            imgCreator.SimpleCreateAndFillImages(resultImagePath);
             form_log.UpdateLog("이미지 추출 작업 종료");
 
         }
