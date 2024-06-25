@@ -56,80 +56,6 @@ namespace Integrity_Checker_MEP
         {
             clashResultDict = names;
         }
-
-        /// <summary>
-        /// 현재 불러올 수 있는 나비스웍스 document를 불러오고 
-        /// 테스트와 dictionary를 비교하고 받아온 경로로 이미지를 추출하는 함수
-        /// Complex(복합)이미지를 뽑아내는 함수.
-        /// </summary>
-        /// <param name="directoryPath"> 추출될 경로 -> "c:\objectinfo\resultImage" </param>
-        public void ComplexCreateAndFillImages(string directoryPath)
-        {
-            try
-            {
-                // 현재 나비스에 떠 있는 테스트 결과를 가져온다
-                Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
-                DocumentClash documentClash = doc.GetClash();
-                DocumentClashTests oDCT = documentClash.TestsData;
-
-                // 추출되기 원하는 test의 이름
-                // 만약 특정한 test만 추출되길 원한다면 주석 해제하고 직접 특정 테스트 이름을 추가한다
-                // 대소문자 주의
-
-                //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance", "MECH-MECH_Clearance" };
-                //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
-                string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance" };
-                //string[] clashtypes = { "Arch-MECH_Clearance", "Arch-Str_Clearance" };
-                //string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance"
-                //"Str-MECH_Clearance"
-                //};
-
-                // 현재 나비스에서 표시된 테스트를 순회하면서 추출할 것 인지 dictionary와 clashtypes 배열과 비교해서 이미지 추출
-                foreach (ClashTest test in oDCT.Tests)
-                {
-                    if (clashtypes.Contains(test.DisplayName) && clashResultDict.ContainsKey(test.DisplayName))
-                    //if (clashResultDict.ContainsKey(test.DisplayName))
-                    {
-
-                        List<string> resultNames = new List<string>();
-                        resultNames = clashResultDict[test.DisplayName];
-
-                        List<ClashResult> outedResults = new List<ClashResult>();
-                        RecurseFillResults(test, ref outedResults);
-                        if (outedResults != null && outedResults.Count > 0 && !string.IsNullOrEmpty(directoryPath) && Directory.Exists(directoryPath))
-                        {
-                            foreach (ClashResult r in outedResults)
-                            {
-                                if (!guidDictionary.ContainsKey(r.Item1.FindFirstObjectAncestor().PropertyCategories.
-                                        FindCategoryByDisplayName("요소").Properties
-                                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
-                                {
-                                    guidDictionary[r.Item1.FindFirstObjectAncestor().PropertyCategories.
-                                        FindCategoryByDisplayName("요소").Properties
-                                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()] = new List<ModelItem>();
-                                }
-                                guidDictionary[r.Item1.FindFirstObjectAncestor().PropertyCategories.
-                                    FindCategoryByDisplayName("요소").Properties
-                                    .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()].Add(r.Item2);
-                            }
-                            foreach (ClashResult r in outedResults)
-                            {
-                                if (resultNames.Contains(r.DisplayName))
-                                {
-                                    ComplexCreateAndFillImage(doc, r, directoryPath, test.DisplayName);
-                                }
-                            }
-                        }
-                    }
-                }
-                //show all
-                doc.Models.ResetAllHidden();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
         
         /// <summary>
         /// 현재 불러올 수 있는 나비스웍스 document를 불러오고 
@@ -421,6 +347,81 @@ namespace Integrity_Checker_MEP
                 }
             }
         }
+        
+        /// <summary>
+        /// 현재 불러올 수 있는 나비스웍스 document를 불러오고 
+        /// 테스트와 dictionary를 비교하고 받아온 경로로 이미지를 추출하는 함수
+        /// Complex(복합)이미지를 뽑아내는 함수.
+        /// </summary>
+        /// <param name="directoryPath"> 추출될 경로 -> "c:\objectinfo\resultImage" </param>
+        public void ComplexCreateAndFillImages(string directoryPath)
+        {
+            try
+            {
+                // 현재 나비스에 떠 있는 테스트 결과를 가져온다
+                Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+                DocumentClash documentClash = doc.GetClash();
+                DocumentClashTests oDCT = documentClash.TestsData;
+
+                // 추출되기 원하는 test의 이름
+                // 만약 특정한 test만 추출되길 원한다면 주석 해제하고 직접 특정 테스트 이름을 추가한다
+                // 대소문자 주의
+
+                //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance", "MECH-MECH_Clearance" };
+                //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
+                string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance" };
+                //string[] clashtypes = { "Arch-MECH_Clearance", "Arch-Str_Clearance" };
+                //string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance"
+                //"Str-MECH_Clearance"
+                //};
+
+                // 현재 나비스에서 표시된 테스트를 순회하면서 추출할 것 인지 dictionary와 clashtypes 배열과 비교해서 이미지 추출
+                foreach (ClashTest test in oDCT.Tests)
+                {
+                    if (clashtypes.Contains(test.DisplayName) && clashResultDict.ContainsKey(test.DisplayName))
+                    //if (clashResultDict.ContainsKey(test.DisplayName))
+                    {
+
+                        List<string> resultNames = new List<string>();
+                        resultNames = clashResultDict[test.DisplayName];
+
+                        List<ClashResult> outedResults = new List<ClashResult>();
+                        RecurseFillResults(test, ref outedResults);
+                        if (outedResults != null && outedResults.Count > 0 && !string.IsNullOrEmpty(directoryPath) && Directory.Exists(directoryPath))
+                        {
+                            foreach (ClashResult r in outedResults)
+                            {
+                                if (!guidDictionary.ContainsKey(r.Item1.FindFirstObjectAncestor().PropertyCategories.
+                                        FindCategoryByDisplayName("요소").Properties
+                                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
+                                {
+                                    guidDictionary[r.Item1.FindFirstObjectAncestor().PropertyCategories.
+                                        FindCategoryByDisplayName("요소").Properties
+                                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()] = new List<ModelItem>();
+                                }
+                                guidDictionary[r.Item1.FindFirstObjectAncestor().PropertyCategories.
+                                    FindCategoryByDisplayName("요소").Properties
+                                    .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()].Add(r.Item2);
+                            }
+
+                            foreach (ClashResult r in outedResults)
+                            {
+                                if (resultNames.Contains(r.DisplayName))
+                                {
+                                    ComplexCreateAndFillImage(doc, r, directoryPath, test.DisplayName);
+                                }
+                            }
+                        }
+                    }
+                }
+                //show all
+                doc.Models.ResetAllHidden();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
 
 
         private void ComplexCreateAndFillImage(Document doc, ClashResult clResult, string directoryPath, string testName)
@@ -455,15 +456,18 @@ namespace Integrity_Checker_MEP
                 items.Add(clResult.Item1);
                 //items.Add(clResult.Item2);
 
-                if (guidDictionary.ContainsKey(item1.FindFirstObjectAncestor().PropertyCategories.
-                        FindCategoryByDisplayName("요소").Properties
+                if (guidDictionary.ContainsKey(item1.FindFirstObjectAncestor().PropertyCategories
+                        .FindCategoryByDisplayName("요소").Properties
                         .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
                 {
-                    foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories.
-                                 FindCategoryByDisplayName("요소").Properties
+                    foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories
+                                 .FindCategoryByDisplayName("요소").Properties
                                  .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
                     {
                         items.Add(item);
+                        guidDictionary.Remove(item1.FindFirstObjectAncestor().PropertyCategories
+                            .FindCategoryByDisplayName("요소").Properties
+                            .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString());
                     }
                 }
 
@@ -484,11 +488,16 @@ namespace Integrity_Checker_MEP
                 //string item2class = Getinfo(item2, "요소", "IfcClass");
                 List<String> itemclass = new List<String>();
 
-                foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories.
-                             FindCategoryByDisplayName("요소").Properties
-                             .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
+                if (guidDictionary.ContainsKey(item1.FindFirstObjectAncestor().PropertyCategories
+                        .FindCategoryByDisplayName("요소").Properties
+                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
                 {
-                    itemclass.Add(Getinfo(item, "요소", "IfcClass"));
+                    foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories.
+                                 FindCategoryByDisplayName("요소").Properties
+                                 .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
+                    {
+                        itemclass.Add(Getinfo(item, "요소", "IfcClass"));
+                    }
                 }
                 //string item2class = Getinfo(item2, "요소", "IfcClass");
                 //bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
@@ -529,11 +538,16 @@ namespace Integrity_Checker_MEP
                 //string systemInfo2 = Getinfo(item2, "요소", "IfcSystem");
                 //string systemInfo2 = Getinfo(item2, "요소", "IfcSystem");
                 List<string> systemInfo2 = new List<string>();
-                foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories.
-                             FindCategoryByDisplayName("요소").Properties
-                             .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
+                if (guidDictionary.ContainsKey(item1.FindFirstObjectAncestor().PropertyCategories
+                        .FindCategoryByDisplayName("요소").Properties
+                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
                 {
-                    systemInfo2.Add(Getinfo(item, "요소", "IfcSystem"));
+                    foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories.
+                                 FindCategoryByDisplayName("요소").Properties
+                                 .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
+                    {
+                        systemInfo2.Add(Getinfo(item, "요소", "IfcSystem"));
+                    }
                 }
                 // 배경 보이게 설정 했을시에 보일 item에 원하는 유형의 item 추가
                 // IfcWall과 IfcCurtainWall 추가 (대소문자 맞추기)
@@ -657,106 +671,106 @@ namespace Integrity_Checker_MEP
                     diSide.SetAccessControl(directorySecurity);
                 }
                 BoundingBox3D box = items.BoundingBox();
+                
                 // 카메라 위치 조정 및 폴더에 이미지 저장
-                for (int i = 0; i < 10; i++)
+                if (items.Count != 1)
                 {
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    if (i >= 0 && i <= 7)
+                    for (int i = 0; i < 10; i++)
                     {
-                        const double pi = 3.14159265358979;
-                        double newAngle = (i * 45) * (pi / 180);
+                        if (i >= 0 && i <= 7)
+                        {
+                            const double pi = 3.14159265358979;
+                            double newAngle = (i * 45) * (pi / 180);
 
-                        UnitVector3D newAxis = new UnitVector3D(0, 0, 1);
-                        Rotation3D newRotation = new Rotation3D(newAxis, newAngle);
-                        ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT);
-                        Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
-                        copy.Lighting = ViewpointLighting.FullLights;
+                            UnitVector3D newAxis = new UnitVector3D(0, 0, 1);
+                            Rotation3D newRotation = new Rotation3D(newAxis, newAngle);
+                            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT);
+                            Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+                            copy.Lighting = ViewpointLighting.FullLights;
 
-                        // 원근법 무시하려면 주석 해제s
-                        //copy.Projection = ViewpointProjection.Orthographic;
+                            // 원근법 무시하려면 주석 해제s
+                            //copy.Projection = ViewpointProjection.Orthographic;
 
-                        // form_imageoption에서 설정한 배율에 따라
-                        setMagnification = form_imageOption.magnification;
-                        setMagnification = 0;
-                        // 새로운 최소 및 최대 포인트를 계산합니다.
-                        Point3D newMin = new Point3D(box.Min.X - setMagnification, box.Min.Y - setMagnification, box.Min.Z - setMagnification);
-                        Point3D newMax = new Point3D(box.Max.X + setMagnification, box.Max.Y + setMagnification, box.Max.Z + setMagnification);
+                            // form_imageoption에서 설정한 배율에 따라
+                            setMagnification = form_imageOption.magnification;
+                            setMagnification = 0;
+                            // 새로운 최소 및 최대 포인트를 계산합니다.
+                            Point3D newMin = new Point3D(box.Min.X - setMagnification, box.Min.Y - setMagnification, box.Min.Z - setMagnification);
+                            Point3D newMax = new Point3D(box.Max.X + setMagnification, box.Max.Y + setMagnification, box.Max.Z + setMagnification);
 
-                        // 새로운 바운딩 박스를 생성합니다.
-                        BoundingBox3D expandedBox = new BoundingBox3D(newMin, newMax);
-                        //BoundingBox3D box = items.BoundingBox();
-                        copy.PivotPoint = expandedBox.Center;
+                            // 새로운 바운딩 박스를 생성합니다.
+                            BoundingBox3D expandedBox = new BoundingBox3D(newMin, newMax);
+                            //BoundingBox3D box = items.BoundingBox();
+                            copy.PivotPoint = expandedBox.Center;
 
-                        Rotation3D res = new Rotation3D(
-                            newRotation.D * copy.Rotation.A + newRotation.A * copy.Rotation.D + newRotation.B * copy.Rotation.C - newRotation.C * copy.Rotation.B,
-                            newRotation.D * copy.Rotation.B + newRotation.B * copy.Rotation.D + newRotation.C * copy.Rotation.A - newRotation.A * copy.Rotation.C,
-                            newRotation.D * copy.Rotation.C + newRotation.C * copy.Rotation.D + newRotation.A * copy.Rotation.B - newRotation.B * copy.Rotation.A,
-                            newRotation.D * copy.Rotation.D - newRotation.A * copy.Rotation.A - newRotation.B * copy.Rotation.B - newRotation.C * copy.Rotation.C
-                            );
+                            Rotation3D res = new Rotation3D(
+                                newRotation.D * copy.Rotation.A + newRotation.A * copy.Rotation.D + newRotation.B * copy.Rotation.C - newRotation.C * copy.Rotation.B,
+                                newRotation.D * copy.Rotation.B + newRotation.B * copy.Rotation.D + newRotation.C * copy.Rotation.A - newRotation.A * copy.Rotation.C,
+                                newRotation.D * copy.Rotation.C + newRotation.C * copy.Rotation.D + newRotation.A * copy.Rotation.B - newRotation.B * copy.Rotation.A,
+                                newRotation.D * copy.Rotation.D - newRotation.A * copy.Rotation.A - newRotation.B * copy.Rotation.B - newRotation.C * copy.Rotation.C
+                                );
 
-                        copy.Rotation = res;
+                            copy.Rotation = res;
 
-                        Point3D currentPosition = copy.Position;
-                        Point3D newPosition = new Point3D(currentPosition.X, currentPosition.Y, currentPosition.Z);
-                        copy.Position = newPosition;
+                            Point3D currentPosition = copy.Position;
+                            Point3D newPosition = new Point3D(currentPosition.X, currentPosition.Y, currentPosition.Z);
+                            copy.Position = newPosition;
 
-                        copy.ZoomBox(expandedBox);
+                            copy.ZoomBox(expandedBox);
 
-                        //@@
-                        doc.CurrentSelection.Clear();
-                        //copy.Lighting = 0;
+                            //@@
+                            doc.CurrentSelection.Clear();
+                            //copy.Lighting = 0;
 
-                        doc.CurrentViewpoint.CopyFrom(copy);
+                            doc.CurrentViewpoint.CopyFrom(copy);
+                        }
+
+                        if (i==8)
+                        {
+
+                            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eTOP);
+                            Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+
+                            // 원근법 무시하려면 주석 해제
+                            //copy.Projection = ViewpointProjection.Orthographic;
+
+                            //BoundingBox3D box = items.BoundingBox();
+                            copy.PivotPoint = box.Center;
+
+                            copy.ZoomBox(items.BoundingBox());
+
+                            //@@
+                            doc.CurrentSelection.Clear();
+                            //copy.Lighting = 0;
+
+                            doc.CurrentViewpoint.CopyFrom(copy);
+                        }
+                        if (i == 9)
+                        {
+
+                            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eBOTTOM);
+                            Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
+
+                            // 원근법 무시하려면 주석 해제
+                            //copy.Projection = ViewpointProjection.Orthographic;
+
+                            //BoundingBox3D box = items.BoundingBox();
+                            copy.PivotPoint = box.Center;
+
+                            copy.ZoomBox(items.BoundingBox());
+
+                            //@@
+                            doc.CurrentSelection.Clear();
+                            //copy.Lighting = 0;
+
+                            doc.CurrentViewpoint.CopyFrom(copy);
+                        }
+                                            
+                        using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
+                        {
+                            clashImage.Save(Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png"), ImageFormat.Png);
+                        }
                     }
-
-                    if (i==8)
-                    {
-
-                        ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eTOP);
-                        Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
-
-                        // 원근법 무시하려면 주석 해제
-                        //copy.Projection = ViewpointProjection.Orthographic;
-
-                        //BoundingBox3D box = items.BoundingBox();
-                        copy.PivotPoint = box.Center;
-
-                        copy.ZoomBox(items.BoundingBox());
-
-                        //@@
-                        doc.CurrentSelection.Clear();
-                        //copy.Lighting = 0;
-
-                        doc.CurrentViewpoint.CopyFrom(copy);
-                    }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                    if (i == 9)
-                    {
-
-                        ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eBOTTOM);
-                        Viewpoint copy = doc.CurrentViewpoint.CreateCopy();
-
-                        // 원근법 무시하려면 주석 해제
-                        //copy.Projection = ViewpointProjection.Orthographic;
-
-                        //BoundingBox3D box = items.BoundingBox();
-                        copy.PivotPoint = box.Center;
-
-                        copy.ZoomBox(items.BoundingBox());
-
-                        //@@
-                        doc.CurrentSelection.Clear();
-                        //copy.Lighting = 0;
-
-                        doc.CurrentViewpoint.CopyFrom(copy);
-                    }
-                                        
-                    using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
-                    {
-                        clashImage.Save(Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png"), ImageFormat.Png);
-                    }
-
                 }
 
                 // 주석 해제하면 오른쪽 위에서 바라본 단순이미지도 추출
