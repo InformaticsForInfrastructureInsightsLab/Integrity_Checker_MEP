@@ -44,7 +44,7 @@ namespace Integrity_Checker_MEP
         public double setMagnification = 1500.0;
         private form_ImageOption form_imageOption = new form_ImageOption();
 
-        public Dictionary<string, List<ModelItem>> guidDictionary = new Dictionary<string, List<ModelItem>>();
+        public Dictionary<Guid, List<ModelItem>> guidDictionary = new Dictionary<Guid, List<ModelItem>>();
 
 
         /// <summary>
@@ -391,17 +391,11 @@ namespace Integrity_Checker_MEP
                         {
                             foreach (ClashResult r in outedResults)
                             {
-                                if (!guidDictionary.ContainsKey(r.Item1.FindFirstObjectAncestor().PropertyCategories.
-                                        FindCategoryByDisplayName("요소").Properties
-                                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
+                                if (!guidDictionary.ContainsKey(r.Item1.InstanceGuid))
                                 {
-                                    guidDictionary[r.Item1.FindFirstObjectAncestor().PropertyCategories.
-                                        FindCategoryByDisplayName("요소").Properties
-                                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()] = new List<ModelItem>();
+                                    guidDictionary[r.Item1.InstanceGuid] = new List<ModelItem>();
                                 }
-                                guidDictionary[r.Item1.FindFirstObjectAncestor().PropertyCategories.
-                                    FindCategoryByDisplayName("요소").Properties
-                                    .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()].Add(r.Item2);
+                                guidDictionary[r.Item1.InstanceGuid].Add(r.Item2);
                             }
 
                             foreach (ClashResult r in outedResults)
@@ -456,18 +450,12 @@ namespace Integrity_Checker_MEP
                 items.Add(clResult.Item1);
                 //items.Add(clResult.Item2);
 
-                if (guidDictionary.ContainsKey(item1.FindFirstObjectAncestor().PropertyCategories
-                        .FindCategoryByDisplayName("요소").Properties
-                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
+                if (guidDictionary.ContainsKey(item1.InstanceGuid))
                 {
-                    foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories
-                                 .FindCategoryByDisplayName("요소").Properties
-                                 .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
+                    foreach (ModelItem item in guidDictionary[item1.InstanceGuid])
                     {
                         items.Add(item);
-                        guidDictionary.Remove(item1.FindFirstObjectAncestor().PropertyCategories
-                            .FindCategoryByDisplayName("요소").Properties
-                            .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString());
+                        guidDictionary.Remove(item1.InstanceGuid);
                     }
                 }
 
@@ -488,13 +476,9 @@ namespace Integrity_Checker_MEP
                 //string item2class = Getinfo(item2, "요소", "IfcClass");
                 List<String> itemclass = new List<String>();
 
-                if (guidDictionary.ContainsKey(item1.FindFirstObjectAncestor().PropertyCategories
-                        .FindCategoryByDisplayName("요소").Properties
-                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
+                if (guidDictionary.ContainsKey(item1.InstanceGuid))
                 {
-                    foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories.
-                                 FindCategoryByDisplayName("요소").Properties
-                                 .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
+                    foreach (ModelItem item in guidDictionary[item1.InstanceGuid])
                     {
                         itemclass.Add(Getinfo(item, "요소", "IfcClass"));
                     }
@@ -538,13 +522,9 @@ namespace Integrity_Checker_MEP
                 //string systemInfo2 = Getinfo(item2, "요소", "IfcSystem");
                 //string systemInfo2 = Getinfo(item2, "요소", "IfcSystem");
                 List<string> systemInfo2 = new List<string>();
-                if (guidDictionary.ContainsKey(item1.FindFirstObjectAncestor().PropertyCategories
-                        .FindCategoryByDisplayName("요소").Properties
-                        .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()))
+                if (guidDictionary.ContainsKey(item1.InstanceGuid))
                 {
-                    foreach (ModelItem item in guidDictionary[item1.FindFirstObjectAncestor().PropertyCategories.
-                                 FindCategoryByDisplayName("요소").Properties
-                                 .FindPropertyByDisplayName("IfcGUID").Value.ToDisplayString()])
+                    foreach (ModelItem item in guidDictionary[item1.InstanceGuid])
                     {
                         systemInfo2.Add(Getinfo(item, "요소", "IfcSystem"));
                     }
