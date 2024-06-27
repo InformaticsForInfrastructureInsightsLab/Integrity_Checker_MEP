@@ -1376,6 +1376,44 @@ namespace Integrity_Checker_MEP {
             }
             return info;
         }
+        
+        /// <summary>
+        /// 지정된 원본 디렉터리에서 지정된 대상 디렉터리로 모든 파일과 하위 디렉터리를 복사합니다.
+        /// </summary>
+        /// <param name="sourceDirName">파일을 복사할 원본 디렉터리의 경로입니다.</param>
+        /// <param name="destDirName">파일을 복사할 대상 디렉터리의 경로입니다.</param>
+        /// <param name="copySubDirs">하위 디렉터리를 재귀적으로 복사하려면 true, 그렇지 않으면 false입니다.</param>
+        /// <exception cref="DirectoryNotFoundException">원본 디렉터리가 존재하지 않거나 찾을 수 없는 경우 발생합니다.</exception>
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            Directory.CreateDirectory(destDirName);
+
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string tempPath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+                }
+            }
+        }
 
         /// <summary>
         /// compressed.zip파일 생성
@@ -1394,6 +1432,7 @@ namespace Integrity_Checker_MEP {
                 //폴더에 파일 추가하기
                 string filepath = @"C:/objectinfo";
                 string modelpath = @"C:/models";
+                string resultImagePath = @"C:/objectinfo/ResultImage";
                 //결과파일 옮기기
                 if (string.IsNullOrEmpty(clashFile)) ShowMessage("No Clash Result File");
                 else File.Copy(clashFile, clashFile.Replace(filepath, newdirpath), true);
@@ -1427,6 +1466,10 @@ namespace Integrity_Checker_MEP {
                         //File.Copy(files[i], files[i].Replace(modelpath, newdirpath), true);
                     }
                 }
+                //이미지파일 옮기기
+                if (Directory.Exists(resultImagePath)) DirectoryCopy(resultImagePath, 
+                    Path.Combine(newdirpath, "ResultImage"), true);
+                else ShowMessage("No Result Image Folder");
 
                 //폴더 압축하기
                 string zippath = @"C:/objectinfo/compressed.zip";
@@ -1445,7 +1488,7 @@ namespace Integrity_Checker_MEP {
         void SendtoServer(string filepath) {
             form_log.UpdateLog("서버로 전송 시작");
             try {
-                string serverIP = "http://117.17.196.92:3116/upload";
+                string serverIP = "http://117.17.196.59:3116/upload";
                 ExtendedWebClient webClient = new ExtendedWebClient();
                 //webClient.Timeout = Timeout.Infinite;
                 webClient.AllowWriteStreamBuffering = false;
