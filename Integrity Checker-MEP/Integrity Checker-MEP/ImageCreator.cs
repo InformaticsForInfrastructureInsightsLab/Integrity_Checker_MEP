@@ -369,7 +369,7 @@ namespace Integrity_Checker_MEP
 
                 //string[] clashtypes = { "Arch-Arch_Duplicate", "Str-Str_Duplicate", "Arch-Arch_Clearance", "Arch-MECH_Clearance", "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance", "MECH-MECH_Clearance" };
                 //string[] clashtypes = { "Arch-Str_Clearance", "Str-MECH_Clearance", "Str-Str_Clearance" };
-                string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance" };
+                string[] clashtypes = { "Arch-MECH_Clearance", "Str-ELEC_Clearance", "COMM-FIRE_Clearance" };
                 //string[] clashtypes = { "Arch-MECH_Clearance", "Arch-Str_Clearance" };
                 //string[] clashtypes = { "Arch-MECH_Clearance", "Str-MECH_Clearance"
                 //"Str-MECH_Clearance"
@@ -391,11 +391,31 @@ namespace Integrity_Checker_MEP
                         {
                             foreach (ClashResult r in outedResults)
                             {
-                                if (!guidDictionary.ContainsKey(r.Item1.InstanceGuid))
+                                if (!(r.Distance > 0))
                                 {
-                                    guidDictionary[r.Item1.InstanceGuid] = new List<ModelItem>();
+                                    if (!guidDictionary.ContainsKey(r.Item1.InstanceGuid))
+                                    {
+                                        guidDictionary[r.Item1.InstanceGuid] = new List<ModelItem>();
+                                    }
+
+                                    guidDictionary[r.Item1.InstanceGuid].Add(r.Item2);
                                 }
-                                guidDictionary[r.Item1.InstanceGuid].Add(r.Item2);
+                            }
+                            List<Guid> keysToRemove = new List<Guid>();
+
+                            // Dictionary를 순회하며 value의 개수가 1개인 항목을 수집
+                            foreach (var entry in guidDictionary)
+                            {
+                                if (entry.Value.Count == 1)
+                                {
+                                    keysToRemove.Add(entry.Key);
+                                }
+                            }
+
+                            // 수집된 항목을 Dictionary에서 삭제
+                            foreach (var key in keysToRemove)
+                            {
+                                guidDictionary.Remove(key);
                             }
 
                             foreach (ClashResult r in outedResults)

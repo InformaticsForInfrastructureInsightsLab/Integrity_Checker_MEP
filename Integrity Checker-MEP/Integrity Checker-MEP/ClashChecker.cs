@@ -1467,9 +1467,12 @@ namespace Integrity_Checker_MEP {
                     }
                 }
                 //이미지파일 옮기기
-                if (Directory.Exists(resultImagePath)) DirectoryCopy(resultImagePath, 
-                    Path.Combine(newdirpath, "ResultImage"), true);
-                else ShowMessage("No Result Image Folder");
+                if (form_setting.Save_image)
+                {
+                    if (Directory.Exists(resultImagePath)) DirectoryCopy(resultImagePath, 
+                        Path.Combine(newdirpath, "ResultImage"), true);
+                    else ShowMessage("No Result Image Folder");
+                }
 
                 //폴더 압축하기
                 string zippath = @"C:/objectinfo/compressed.zip";
