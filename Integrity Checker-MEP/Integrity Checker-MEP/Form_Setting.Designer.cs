@@ -29,11 +29,11 @@
             this.cb_useless = new System.Windows.Forms.CheckBox();
             this.cb_sameSystem = new System.Windows.Forms.CheckBox();
             this.cb_properties = new System.Windows.Forms.CheckBox();
+            this.cb_saveimage = new System.Windows.Forms.CheckBox();
             this.cb_server = new System.Windows.Forms.CheckBox();
             this.btn_start = new System.Windows.Forms.Button();
             this.btn_cancel = new System.Windows.Forms.Button();
             this.cb_savelog = new System.Windows.Forms.CheckBox();
-            this.cb_saveimage = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cb_parent
@@ -120,13 +120,25 @@
             this.cb_properties.UseVisualStyleBackColor = true;
             this.cb_properties.CheckedChanged += new System.EventHandler(this.cb_properties_CheckedChanged);
             // 
+            // cb_saveimage
+            // 
+            this.cb_saveimage.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cb_saveimage.AutoSize = true;
+            this.cb_saveimage.Location = new System.Drawing.Point(58, 154);
+            this.cb_saveimage.Name = "cb_saveimage";
+            this.cb_saveimage.Size = new System.Drawing.Size(88, 16);
+            this.cb_saveimage.TabIndex = 11;
+            this.cb_saveimage.Text = "이미지 저장";
+            this.cb_saveimage.UseVisualStyleBackColor = true;
+            this.cb_saveimage.CheckedChanged += new System.EventHandler(this.cb_saveimage_CheckedChanged);
+            // 
             // cb_server
             // 
             this.cb_server.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cb_server.AutoSize = true;
             this.cb_server.Checked = true;
             this.cb_server.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_server.Location = new System.Drawing.Point(58, 154);
+            this.cb_server.Location = new System.Drawing.Point(58, 176);
             this.cb_server.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_server.Name = "cb_server";
             this.cb_server.Size = new System.Drawing.Size(76, 16);
@@ -138,7 +150,7 @@
             // btn_start
             // 
             this.btn_start.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btn_start.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.btn_start.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.btn_start.Location = new System.Drawing.Point(11, 219);
             this.btn_start.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btn_start.Name = "btn_start";
@@ -162,24 +174,13 @@
             // cb_savelog
             // 
             this.cb_savelog.AutoSize = true;
-            this.cb_savelog.Location = new System.Drawing.Point(58, 177);
+            this.cb_savelog.Location = new System.Drawing.Point(58, 197);
             this.cb_savelog.Name = "cb_savelog";
             this.cb_savelog.Size = new System.Drawing.Size(69, 16);
             this.cb_savelog.TabIndex = 10;
             this.cb_savelog.Text = "Log저장";
             this.cb_savelog.UseVisualStyleBackColor = true;
             this.cb_savelog.CheckedChanged += new System.EventHandler(this.cb_savelog_CheckedChanged);
-            // 
-            // cb_saveimage
-            // 
-            this.cb_saveimage.AutoSize = true;
-            this.cb_saveimage.Location = new System.Drawing.Point(58, 199);
-            this.cb_saveimage.Name = "cb_saveimage";
-            this.cb_saveimage.Size = new System.Drawing.Size(88, 16);
-            this.cb_saveimage.TabIndex = 11;
-            this.cb_saveimage.Text = "이미지 저장";
-            this.cb_saveimage.UseVisualStyleBackColor = true;
-            this.cb_saveimage.CheckedChanged += new System.EventHandler(this.cb_saveimage_CheckedChanged);
             // 
             // Form_Setting
             // 
@@ -200,11 +201,12 @@
             this.Controls.Add(this.cb_allInOne);
             this.Controls.Add(this.cb_exportResult);
             this.Controls.Add(this.cb_parent);
-            this.Font = new System.Drawing.Font("Gulim", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "Form_Setting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Integrity Checker-MEP Request";
+            this.Load += new System.EventHandler(this.Form_Setting_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,10 +220,11 @@
         private System.Windows.Forms.CheckBox cb_useless;
         private System.Windows.Forms.CheckBox cb_sameSystem;
         private System.Windows.Forms.CheckBox cb_properties;
+        private System.Windows.Forms.CheckBox cb_saveimage;
         private System.Windows.Forms.CheckBox cb_server;
         private System.Windows.Forms.Button btn_start;
         private System.Windows.Forms.Button btn_cancel;
         private System.Windows.Forms.CheckBox cb_savelog;
-        private System.Windows.Forms.CheckBox cb_saveimage;
+       
     }
 }
