@@ -1081,10 +1081,11 @@ namespace Integrity_Checker_MEP {
                         break;
                 }
                 //카테고리 이름으로 찾기
-                DataProperty oDP = item.PropertyCategories.FindCategoryByName("LcRevitData_Element").Properties.FindPropertyByDisplayName("IfcGUID");
+                //findcategorybyname이 null을 반환
+                DataProperty oDP = item.PropertyCategories.FindCategoryByName("LcRevitData_Element")?.Properties.FindPropertyByDisplayName("IfcGUID");
                 if (oDP == null)
                     //카테고리의 DisplayName으로 찾기
-                    oDP = item.PropertyCategories.FindCategoryByDisplayName("요소").Properties.FindPropertyByDisplayName("IfcGUID");
+                    oDP = item.PropertyCategories.FindCategoryByDisplayName("요소")?.Properties.FindPropertyByDisplayName("IfcGUID");
                 if (oDP != null)
                     //찾음
                     return oDP.Value.ToDisplayString();
