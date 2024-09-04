@@ -114,6 +114,11 @@ namespace Integrity_Checker_MEP {
 
         public int Execute(params string[] parameters) {
             try {
+                var ifcLoader = new IFCLoad();
+                ifcLoader.ShowDialog();
+
+                if (!ifcLoader.load) return 0;
+
                 form_setting = new Form_Setting();
                 imgCreator = new ImageCreator();
 
@@ -140,9 +145,7 @@ namespace Integrity_Checker_MEP {
                 form_log = new From_Log();
                 form_log.Show();
 
-
-                
-                if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
+                if (Autodesk.Navisworks.Api.Application.ActiveDocument.Models.Count == 0) return 0; // 모델을 불러오지 못했을 경우 종료
 
                 if (form_setting.export_Result) {
                     MakeClashTest(); // 테스트 생성
@@ -252,27 +255,33 @@ namespace Integrity_Checker_MEP {
         double toleroffset;
         /// <summary>
         /// "path" 폴더 안에있는 .ifc파일을 현재워크시트에 불러옵니다.
+        /// 변경: 대화상자에서 선택한 모델만을 불러옵니다.
         /// </summary>
         /// <param name="path"> 모델 파일 경로(폴더)</param>
-        bool GetModelFromFolder(string path = @"C:\models\") {
+        bool GetModelFromFolder(string path = IFCLoad.path) {
             Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
-            if(doc.Models.Count > 0)
-            {
-                return true;
-            }
-            //경로에서 .ifc파일만 찾아 불러오기
-            for (int i = 0; i < Directory.GetFiles(path).Length; i++) {
-                if (Directory.GetFiles(path)[i].Contains(".ifc")) {
-                    if (Directory.GetFiles(path)[i].Contains(".ifc."))
-                        continue;
-                    doc.AppendFile(Directory.GetFiles(path)[i]);
-                    form_log.UpdateLog($"ifc 불러오기 : {Directory.GetFiles(path)[i]}");
-                }
-            }
+            //if(doc.Models.Count > 0)
+            //{
+            //    return true;
+            //}
+            ////경로에서 .ifc파일만 찾아 불러오기
+            //for (int i = 0; i < Directory.GetFiles(path).Length; i++) {
+            //    // .ifc만 불러옴 .ifc.log 필터링
+            //    if (Directory.GetFiles(path)[i].Contains(".ifc") && Directory.GetFiles(path)[i].Contains(".ifc.")) {
+            //        doc.AppendFile(Directory.GetFiles(path)[i]);
+            //        form_log.UpdateLog($"ifc 불러오기 : {Directory.GetFiles(path)[i]}");
+            //    }
+            //}
 
-            if (doc.Models.Count == 0) {
-                ShowMessage("불러온 모델이 없습니다.");
-                return false;
+            //if (doc.Models.Count == 0) {
+            //    ShowMessage("불러온 모델이 없습니다.");
+            //    return false;
+            //}
+
+            //경로에서 .ifc파일만 찾아 불러오기
+            for (int i = 0; i < doc.Models.Count; i++)
+            {
+                form_log.UpdateLog($"ifc 불러오기 : {doc.Models.ToString()}");
             }
 
             //모델별 단위 통합
