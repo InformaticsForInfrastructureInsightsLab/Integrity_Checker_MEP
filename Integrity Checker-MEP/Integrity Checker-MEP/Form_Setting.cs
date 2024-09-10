@@ -89,5 +89,10 @@ namespace Integrity_Checker_MEP {
             if(cb_saveimage.Checked) Save_image = true;
             else Save_image = false;
         }
+
+        private void Form_Setting_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
