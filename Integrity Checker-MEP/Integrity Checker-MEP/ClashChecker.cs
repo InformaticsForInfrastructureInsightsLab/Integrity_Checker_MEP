@@ -110,12 +110,12 @@ namespace Integrity_Checker_MEP {
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
         form_ImageOption form_imageOption; // 이미지 출력 옵션
         From_Log form_log; // 로그 출력 폼
-        ImageCreator imgCreator; // 스크린샷 저장 클래스
+        ImageCreatorBase imgCreator; // 스크린샷 저장 클래스
 
         public int Execute(params string[] parameters) {
             try {
                 form_setting = new Form_Setting();
-                imgCreator = new ImageCreator();
+                imgCreator = new ImageCreatorBase();
 
                 form_setting.ShowDialog();
 
