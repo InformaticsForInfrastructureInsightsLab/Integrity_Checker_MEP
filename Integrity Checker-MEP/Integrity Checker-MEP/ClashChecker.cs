@@ -115,26 +115,30 @@ namespace Integrity_Checker_MEP {
         public int Execute(params string[] parameters) {
             try {
                 form_setting = new Form_Setting();
-                
+                imgCreator = new ImageCreator();
 
                 form_setting.ShowDialog();
 
                 
                 if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
-                
-                form_log = new From_Log();
-                form_log.Show();
+
                 if (form_setting.Save_image)
                 {
                     form_imageOption = new form_ImageOption();
                     form_imageOption.ShowDialog();
 
                     if (!form_imageOption.start) return 0;
-                    
-                    imgCreator = new ImageCreator(form_imageOption, form_log);
+
+                    imgCreator.setBackground = form_imageOption.background;
+                    imgCreator.isTransparant = form_imageOption.transparant;
+                    if (imgCreator.isTransparant)
+                    {
+                        imgCreator.transparancy = form_imageOption.transparancy;
+                    }
                 }
 
-                
+                form_log = new From_Log();
+                form_log.Show();
 
 
                 
