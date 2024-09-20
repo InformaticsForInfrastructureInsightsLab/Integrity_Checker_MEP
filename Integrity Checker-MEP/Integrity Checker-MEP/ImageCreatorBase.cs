@@ -20,6 +20,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Reflection;
 using Autodesk.Navisworks.Internal.ApiImplementation;
+using Autodesk.Navisworks.Api.DocumentParts;
 
 
 namespace Integrity_Checker_MEP
@@ -41,255 +42,31 @@ namespace Integrity_Checker_MEP
         public abstract void CreateAndFillImage(string path, clashResultDictType clash_result_dict);
         public abstract void image_thread(Document doc, ClashResult clResult, string directoryPath, string testName);
 
-        protected void extract(GroupItem group, ref List<ClashResult> outedResults)
+        protected void extract(GroupItem group, List<ClashResult> outedResults)
         {
-            foreach (SavedItem child in group.Children)
+            Parallel.ForEach(group.Children, (SavedItem child) =>
             {
-                /* If we only wanted to access first-level children
-                 * without reference to whether they were groups or results
-                 * then we could:
-                 *
-                 * // access groups and results via shared interface
-                 * IClashResult result = child as IClashResult;
-                 * 
-                 * operate on that and not recurse further. */
-
-                // GroupItem is the base-class of ClashResultGroup which defines
-                // group-like behaviour, if we needed to access ay ClashResultGroup properties
-                // we could cast to that equivalently... 
                 GroupItem child_group = child as GroupItem;
 
-                // is this a group?
+                // 그룹인지 확인
                 if (child_group != null)
                 {
-                    // operate on the group's children
-                    extract(child_group, ref outedResults);
+                    // 재귀적으로 자식 그룹에 대해서도 병렬 처리
+                    extract(child_group, outedResults);
                 }
                 else
                 {
-                    // Not a group, so must be a result.
+                    // 그룹이 아니라면 ClashResult로 처리
                     ClashResult result = child as ClashResult;
-                    if (outedResults != null)
+                    if (result != null)
                     {
-                        outedResults.Add(result);
+                        outedResults.Add(result); // ConcurrentBag은 스레드 안전함
                     }
                 }
-            }
-        }
-    }
-
-    class ImageCreatorSimple : ImageCreatorBase
-    {
-        public ImageCreatorSimple(From_Log log, form_ImageOption image_option)
-        {
-            form_log = log;
-            background = image_option.background;
-            transparent = image_option.transparant;
-            transparancy = image_option.transparancy;
-        }
-
-        override public void CreateAndFillImage(string path, clashResultDictType clash_result_dict)
-        {
-            Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
-            DocumentClash documentClash = doc.GetClash();
-            DocumentClashTests oDCT = documentClash.TestsData;
-
-            Parallel.ForEach(oDCT.Tests.Cast<ClashTest>(), (ClashTest test) =>
-            {
-                // 없으면 패스
-                if (!clash_result_dict.ContainsKey(test.DisplayName))
-                    return;
-
-                List<ClashResult> outed_results = new List<ClashResult>();
-                extract(test, ref outed_results);
-
-                foreach (ClashResult result in outed_results)
-                {
-                    if (!clash_result_dict[test.DisplayName].Contains(result.DisplayName))
-                        return;
-
-                    form_log.Invoke(new Action(() =>
-                    {
-                        form_log.UpdateLog($"{result.DisplayName} 이미지 추출");
-                    }));
-                    // 이미지 추출 로직
-                }
-
             });
         }
 
-        public override async void image_thread(Document doc, ClashResult clResult, string directoryPath, string testName)
-        {
-            if (clResult == null)
-                return;
-
-            // 저장경로 확인
-            string dPath = Path.Combine(@"C:\objectinfo\ResultImage\다각도이미지\", testName);
-            if (Directory.Exists(dPath))
-            {
-                try
-                {
-                    string[] files = Directory.GetFiles(dPath);
-                    if (files.Length >= 99999) return;
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.ToString());
-                }
-            }
-
-            doc.Models.ResetAllHidden();
-
-            ModelItemCollection items = new ModelItemCollection();
-            items.Add(clResult.Item1);
-            items.Add(clResult.Item2);
-
-            ModelItem item1 = clResult.Item1;
-            ModelItem item2 = clResult.Item2;
-            if (item1 == null) return;
-
-            string item1class = Getinfo(item1, "요소", "IfcClass");
-            string item2class = Getinfo(item2, "요소", "IfcClass");
-
-            bool clashImageCondition = item1class.Equals("IfcWall") || item1class.Equals("IfcSlab")
-                        && item2class.Equals("IfcPipeSegment") || item2class.Equals("IfcDuctSegment");
-            if (!clashImageCondition) return;
-
-            doc.CurrentSelection.Clear();
-            doc.ActiveView.RequestDelayedRedraw((ViewRedrawRequests)3);
-
-            ModelItemCollection modelItemsToShow = new ModelItemCollection();
-            ModelItemCollection modelItemsToHide = new ModelItemCollection();
-            ModelItemCollection modelItemToTransparant = new ModelItemCollection();
-
-            // 간섭된 항목들은 보일 item에 추가
-            foreach (ModelItem item in items)
-            {
-                if (item.DescendantsAndSelf != null)
-                    modelItemsToShow.AddRange(item.DescendantsAndSelf);
-            }
-
-            // 두 번째 부재의 층 정보를 갖고 오기
-            string levelInfo1 = Getinfo(item1, "요소", "IfcSpatialContainer");
-            string levelInfo2 = Getinfo(item1, "Constraints", "Level");
-            string systemInfo1 = Getinfo(item1, "요소", "IfcSystem");
-            string systemInfo2 = Getinfo(item2, "요소", "IfcSystem");
-
-            AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                        modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] { systemInfo1, systemInfo2 });
-            AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                modelItemsToShow, modelItemToTransparant, "IfcCurtainWall", new string[] { "a", "b" });
-            AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                modelItemsToShow, modelItemToTransparant, "IfcSlab", new string[] { "a", "b" });
-            AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                modelItemsToShow, modelItemToTransparant, "IfcDoor", new string[] { "a", "b" });
-            AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                modelItemsToShow, modelItemToTransparant, "IfcColumn", new string[] { "a", "b" });
-            AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                modelItemsToShow, modelItemToTransparant, "IfcWindow", new string[] { "a", "b" });
-
-            // 안 보일 item을 모두 숨기기
-            modelItemsToHide.CopyFrom(modelItemsToShow);
-            doc.CurrentSelection.CopyFrom(modelItemsToShow);
-            modelItemsToHide.Invert(doc); // invert 함수는 현재 선택된 item들을 반전
-            doc.Models.SetHidden(modelItemsToHide, true);
-
-            doc.CurrentSelection.Clear();
-
-            Autodesk.Navisworks.Api.Color RED = Autodesk.Navisworks.Api.Color.Red;
-            Autodesk.Navisworks.Api.Color GREEN = Autodesk.Navisworks.Api.Color.Green;
-
-            // 첫번째 item은 RED, 두번째 item은 GREEN으로 색 적용
-            if (!NativeHandle.ReferenceEquals(items.ElementAtOrDefault(0), null))
-                doc.Models.OverridePermanentColor(new ModelItem[1] { items.ElementAtOrDefault(0) }, RED);
-
-            if (!NativeHandle.ReferenceEquals(items.ElementAtOrDefault(1), null))
-                doc.Models.OverridePermanentColor(new ModelItem[1] { items.ElementAtOrDefault(1) }, GREEN);
-
-            // 간섭 부재 자체는 투명도 적용하지 않기
-            modelItemToTransparant.Remove(items.ElementAtOrDefault(0));
-            modelItemToTransparant.Remove(items.ElementAtOrDefault(1));
-
-            // Adjust transparancy (false일 경우엔 투명도를 적용하지 않음)
-            if (transparent)
-            {
-                doc.Models.OverridePermanentTransparency(modelItemToTransparant, transparancy);
-            }
-
-            string testsimpleNamePath = Path.Combine(directoryPath, "단순이미지", $"{testName}");
-            string testsideNamePath = Path.Combine(directoryPath, "다각도이미지", $"{testName}");
-
-            DirectoryInfo diSide = new DirectoryInfo(testsideNamePath);
-            if (!diSide.Exists)
-            {
-                diSide.Create();
-                var directorySecurity = diSide.GetAccessControl();
-                var currentUserIdentity = WindowsIdentity.GetCurrent();
-                var fileSystemRule = new FileSystemAccessRule(currentUserIdentity.Name,
-                                                              FileSystemRights.Read,
-                                                              InheritanceFlags.ObjectInherit |
-                                                              InheritanceFlags.ContainerInherit,
-                                                              PropagationFlags.None,
-                                                              AccessControlType.Allow);
-                directorySecurity.AddAccessRule(fileSystemRule);
-                diSide.SetAccessControl(directorySecurity);
-
-
-            }
-
-            // 이미지 추출 병렬처리
-            List<Task> tasks = new List<Task>();
-            for (int i = 0; i < 12; i++)
-            {
-                tasks.Add(capture_image(items, clResult, doc, testsideNamePath, i));
-            }
-            foreach (Task task in tasks)
-            {
-                await task;
-            }
-
-            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
-
-            // 색 초기화
-            doc.Models.ResetAllPermanentMaterials();
-            //Hide all
-            doc.Models.SetHidden(modelItemsToShow, true);
-
-            form_log.UpdateLog($"{clResult.DisplayName} 이미지 저장 완료");
-        }
-
-        private string Getinfo(ModelItem item, string category, string property)
-        {
-            string info = "";
-            try
-            {
-                info = item.PropertyCategories.FindCategoryByDisplayName(category)?.Properties.
-                    FindPropertyByDisplayName(property)?.Value.ToDisplayString();
-            }
-            catch
-            {
-                info = item.PropertyCategories.FindCategoryByDisplayName(category)?.Properties.
-                    FindPropertyByDisplayName(property)?.Value.ToString();
-            }
-
-            if (string.IsNullOrEmpty(info))
-            {
-                try
-                {
-                    info = item.FindFirstObjectAncestor().PropertyCategories.FindCategoryByDisplayName(category)?.Properties.
-                        FindPropertyByDisplayName(property)?.Value.ToDisplayString();
-                }
-                catch
-                {
-                    info = item.FindFirstObjectAncestor().PropertyCategories.FindCategoryByDisplayName(category)?.Properties.
-                        FindPropertyByDisplayName(property)?.Value.ToString();
-                }
-            }
-
-            return info;
-        }
-
-        private void AddToItemsToShow(Document doc, string[] levelInfo, ModelItemCollection modelItemsToShow,
+        protected void AddToItemsToShow(Document doc, string[] levelInfo, ModelItemCollection modelItemsToShow,
             ModelItemCollection modelItemToTransparant, string className, string[] systeminfo)
         {
             if (levelInfo == null) return;
@@ -352,6 +129,80 @@ namespace Integrity_Checker_MEP
                 modelItemsToShow.Add(item);
                 modelItemToTransparant.Add(item);
             }
+        }
+    }
+
+    class ImageCreatorSimple : ImageCreatorBase
+    {
+        public ImageCreatorSimple(From_Log log, form_ImageOption image_option)
+        {
+            form_log = log;
+            background = image_option.background;
+            transparent = image_option.transparant;
+            transparancy = image_option.transparancy;
+        }
+
+        override public void CreateAndFillImage(string path, clashResultDictType clash_result_dict)
+        {
+            Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+            DocumentClash documentClash = doc.GetClash();
+            DocumentClashTests oDCT = documentClash.TestsData;
+
+            Parallel.ForEach(oDCT.Tests.Cast<ClashTest>(), (ClashTest test) =>
+            {
+                // 없으면 패스
+                if (!clash_result_dict.ContainsKey(test.DisplayName))
+                    return;
+
+                List<ClashResult> outed_results = new List<ClashResult>();
+                extract(test, outed_results);
+
+                foreach (ClashResult result in outed_results)
+                {
+                    if (!clash_result_dict[test.DisplayName].Contains(result.DisplayName))
+                        return;
+
+                    form_log.Invoke(new Action(() =>
+                    {
+                        form_log.UpdateLog($"{result.DisplayName} 이미지 추출");
+                    }));
+                    image_thread(doc, result, path, test.DisplayName);
+                }
+            });
+        }
+
+        public override async void image_thread(Document doc, ClashResult clResult, string directoryPath, string testName)
+        {
+            lock (doc)
+            {
+                doc.Models.ResetAllHidden();
+                var current_selection = doc.CurrentSelection.CreateCopy();
+                var view = doc.ActiveView.CreateViewpointCopy();
+            }
+
+            if (clResult == null)
+                return;
+
+            // 저장경로 확인
+            string dPath = Path.Combine(@"C:\objectinfo\ResultImage\다각도이미지\", testName);
+            if (Directory.Exists(dPath))
+            {
+                try
+                {
+                    string[] files = Directory.GetFiles(dPath);
+                    if (files.Length >= 99999) return;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                }
+            }
+            
+            ModelItem item1 = clResult.Item1;
+            ModelItem item2 = clResult.Item2;
+            if (item1 == null || item2 == null) return;
+
+            
         }
 
         private async Task capture_image(ModelItemCollection items, ClashResult result, Document doc, string path, int i)
