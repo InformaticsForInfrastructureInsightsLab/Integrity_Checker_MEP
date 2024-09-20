@@ -115,7 +115,7 @@ namespace Integrity_Checker_MEP {
         public int Execute(params string[] parameters) {
             try {
                 form_setting = new Form_Setting();
-                imgCreator = new ImageCreatorBase();
+                
 
                 form_setting.ShowDialog();
 
@@ -129,17 +129,17 @@ namespace Integrity_Checker_MEP {
 
                     if (!form_imageOption.start) return 0;
 
-                    imgCreator.setBackground = form_imageOption.background;
-                    imgCreator.isTransparant = form_imageOption.transparant;
-                    if (imgCreator.isTransparant)
-                    {
-                        imgCreator.transparancy = form_imageOption.transparancy;
-                    }
+                    //imgCreator.setBackground = form_imageOption.background;
+                    //imgCreator.isTransparant = form_imageOption.transparant;
+                    //if (imgCreator.isTransparant)
+                    //{
+                    //    imgCreator.transparancy = form_imageOption.transparancy;
+                    //}
                 }
 
                 form_log = new From_Log();
                 form_log.Show();
-
+                imgCreator = new ImageCreatorSimple(form_log, form_imageOption);
 
                 
                 if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
@@ -218,21 +218,19 @@ namespace Integrity_Checker_MEP {
 
 
             // 이미지로 추출할 간섭 결과들을 갖고있는 json파일을 불러오고 imgCreator에 넘겨준다
+            Dictionary<string, List<string>> tests_dict;
             try
             {
-                Dictionary<string, List<string>> tests_dict = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(@"c:\objectinfo\tests_dict.json"));
+                tests_dict = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(@"c:\objectinfo\tests_dict.json"));
 
-                // imageCreator에 dictionary 전달
-                imgCreator.getResultName(tests_dict);
+                // 이미지가 저장될 위치를 imgCreator에 넘겨준다
+                imgCreator.CreateAndFillImage(resultImagePath, tests_dict);
             }
             catch(Exception ex)
             {
                 form_log.UpdateLog(ex.ToString());
             }
 
-
-            // 이미지가 저장될 위치를 imgCreator에 넘겨준다
-            imgCreator.CreateAndFillImages(resultImagePath);
             form_log.UpdateLog("이미지 추출 작업 종료");
 
         }
@@ -1087,10 +1085,10 @@ namespace Integrity_Checker_MEP {
                         break;
                 }
                 //카테고리 이름으로 찾기
-                DataProperty oDP = item.PropertyCategories.FindCategoryByName("LcRevitData_Element").Properties.FindPropertyByDisplayName("IfcGUID");
+                DataProperty oDP = item.PropertyCategories.FindCategoryByName("LcRevitData_Element")?.Properties.FindPropertyByDisplayName("IfcGUID");
                 if (oDP == null)
                     //카테고리의 DisplayName으로 찾기
-                    oDP = item.PropertyCategories.FindCategoryByDisplayName("요소").Properties.FindPropertyByDisplayName("IfcGUID");
+                    oDP = item.PropertyCategories.FindCategoryByDisplayName("요소")?.Properties.FindPropertyByDisplayName("IfcGUID");
                 if (oDP != null)
                     //찾음
                     return oDP.Value.ToDisplayString();
