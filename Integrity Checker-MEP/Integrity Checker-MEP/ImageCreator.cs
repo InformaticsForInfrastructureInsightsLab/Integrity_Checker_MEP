@@ -63,7 +63,7 @@ namespace Integrity_Checker_MEP
         /// Simple(단순)이미지를 뽑아내는 함수.
         /// </summary>
         /// <param name="directoryPath"> 추출될 경로 -> "c:\objectinfo\resultImage" </param>
-        public void SimpleCreateAndFillImages(string directoryPath)
+        public void SimpleCreateAndFillImages(string directoryPath, From_Log log)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace Integrity_Checker_MEP
                             {
                                 if (resultNames.Contains(r.DisplayName))
                                 {
-                                    SimpleCreateAndFillImage(doc, r, directoryPath, test.DisplayName);
+                                    SimpleCreateAndFillImage(doc, r, directoryPath, test.DisplayName, log);
                                 }
                             }
                         }
@@ -114,7 +114,7 @@ namespace Integrity_Checker_MEP
             }
         }
         
-        private void SimpleCreateAndFillImage(Document doc, ClashResult clResult, string directoryPath, string testName)
+        private void SimpleCreateAndFillImage(Document doc, ClashResult clResult, string directoryPath, string testName, From_Log log)
         {
             if (clResult != null)
             {
@@ -315,7 +315,7 @@ namespace Integrity_Checker_MEP
 
                         using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                         {
-                            clashImage.Save(Path.Combine(testsideNamePath, $"{clResult.DisplayName.Substring(2)}_{i+1}.png"), ImageFormat.Png);
+                            clashImage.Save(Path.Combine(testsideNamePath, $"{item1.InstanceHashCode.ToString()}+{item1.InstanceHashCode.ToString()}_{i+1}.png"), ImageFormat.Png);
                         }
 
                     }
