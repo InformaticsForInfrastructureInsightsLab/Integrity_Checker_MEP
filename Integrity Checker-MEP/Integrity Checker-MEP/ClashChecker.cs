@@ -110,7 +110,7 @@ namespace Integrity_Checker_MEP {
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
         form_ImageOption form_imageOption; // 이미지 출력 옵션
         From_Log form_log; // 로그 출력 폼
-        ImageCreatorBase imgCreator; // 스크린샷 저장 클래스
+        ImageCreator_new imgCreator; // 스크린샷 저장 클래스
 
         public int Execute(params string[] parameters) {
             try {
@@ -119,7 +119,10 @@ namespace Integrity_Checker_MEP {
 
                 form_setting.ShowDialog();
 
-                
+                form_log = new From_Log();
+                form_log.Show();
+
+
                 if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
 
                 if (form_setting.Save_image)
@@ -128,18 +131,8 @@ namespace Integrity_Checker_MEP {
                     form_imageOption.ShowDialog();
 
                     if (!form_imageOption.start) return 0;
-
-                    //imgCreator.setBackground = form_imageOption.background;
-                    //imgCreator.isTransparant = form_imageOption.transparant;
-                    //if (imgCreator.isTransparant)
-                    //{
-                    //    imgCreator.transparancy = form_imageOption.transparancy;
-                    //}
+                    imgCreator = new ImageCreator_new(form_log, form_imageOption);
                 }
-
-                form_log = new From_Log();
-                form_log.Show();
-                imgCreator = new ImageCreatorSimple(form_log, form_imageOption);
 
                 
                 if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
@@ -222,9 +215,7 @@ namespace Integrity_Checker_MEP {
             try
             {
                 tests_dict = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(@"c:\objectinfo\tests_dict.json"));
-
-                // 이미지가 저장될 위치를 imgCreator에 넘겨준다
-                imgCreator.CreateAndFillImage(resultImagePath, tests_dict);
+                imgCreator.save_image(tests_dict, sideImagePath);
             }
             catch(Exception ex)
             {

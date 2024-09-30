@@ -180,7 +180,9 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageCreator.cs" />
     <Compile Include="ImageCreatorBase.cs" />
+    <Compile Include="ImageCreator_new.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="MessageBoxEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
