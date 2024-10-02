@@ -44,12 +44,18 @@ namespace Integrity_Checker_MEP
                 stopwatch = new Stopwatch();
                 stopwatch.Start();
 
+                var keysToRemove = new List<Guid>(); // 삭제할 키를 저장할 리스트
                 foreach (var entry in complex.guid_dictionary)
                 {
                     if (entry.Value.Count == 1)
                     {
-                        complex.guid_dictionary.Remove(entry.Key);
+                        keysToRemove.Add(entry.Key); // 삭제할 키를 따로 저장
                     }
+                }
+                // 컬렉션 수정은 루프 이후에 처리
+                foreach (var key in keysToRemove)
+                {
+                    complex.guid_dictionary.Remove(key);
                 }
 
                 foreach (pair<string, ClashResult> p in ImageCreatorBase.outed_results_list)
