@@ -39,7 +39,7 @@ namespace Integrity_Checker_MEP
                 stopwatch.Stop();
                 log.UpdateLog($"간섭리스트 추출 완료, " +
                     $"경과시간 : {stopwatch.ElapsedMilliseconds}ms; " +
-                    $"이미지 저장을 시작합니다");
+                    $"{ImageCreatorBase.outed_results_list.Count}개의 이미지 저장을 시작합니다");
 
                 stopwatch = new Stopwatch();
                 stopwatch.Start();

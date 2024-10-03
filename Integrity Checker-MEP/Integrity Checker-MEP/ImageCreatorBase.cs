@@ -577,7 +577,7 @@ namespace Integrity_Checker_MEP
             {
                 diSide.Create();
                 var directorySecurity = diSide.GetAccessControl();
-                var currentUserIdentity = WindowsIdentity.GetCurrent(); modelItemToTransparant.Remove(items.ElementAtOrDefault(1));
+                var currentUserIdentity = WindowsIdentity.GetCurrent();
                 var fileSystemRule = new FileSystemAccessRule(currentUserIdentity.Name,
                                                               FileSystemRights.Read,
                                                               InheritanceFlags.ObjectInherit |
