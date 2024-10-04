@@ -420,6 +420,11 @@ namespace Integrity_Checker_MEP
                 }
                 
             }
+            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
+            // 색 초기화
+            doc.Models.ResetAllPermanentMaterials();
+            //Hide all
+            doc.Models.SetHidden(modelItemsToShow, true);
         }
     }
 
@@ -646,6 +651,12 @@ namespace Integrity_Checker_MEP
                     clashImage.Save(Path.Combine(testsideNamePath, $"{cl_result.DisplayName.Substring(2)}_{i + 1}.png"), ImageFormat.Png);
                 }
             }
+
+            ((LcOwViewer)doc.ActiveView.Viewer).LookFrom(LcOaPartitionViewDirection.eFRONT_RIGHT_TOP);
+            // 색 초기화
+            doc.Models.ResetAllPermanentMaterials();
+            //Hide all
+            doc.Models.SetHidden(modelItemsToShow, true);
         }
     }
 
