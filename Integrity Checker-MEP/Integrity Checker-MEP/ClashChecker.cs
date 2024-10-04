@@ -114,6 +114,11 @@ namespace Integrity_Checker_MEP {
 
         public int Execute(params string[] parameters) {
             try {
+                var ifcLoader = new IFCLoad();
+                ifcLoader.ShowDialog();
+
+                if (!ifcLoader.load) return 0;
+
                 form_setting = new Form_Setting();
                 
 
@@ -124,7 +129,7 @@ namespace Integrity_Checker_MEP {
 
 
                 if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
-
+                
                 if (form_setting.Save_image)
                 {
                     form_imageOption = new form_ImageOption();
@@ -141,6 +146,10 @@ namespace Integrity_Checker_MEP {
                     MakeClashTest(); // 테스트 생성
                     TestClashTest(); // 테스트 실행
                     GetClashResult(); // 테스트 결과 받기
+                }
+                if(form_setting.Save_image)
+                {
+                    SaveImage(); // 이미지 추출
                 }
                 if (form_setting.export_Properties) {
                     GetSpaceHeights(); // 공간별 높이 구하기
@@ -162,10 +171,6 @@ namespace Integrity_Checker_MEP {
                 }
                 if (form_setting.Save_log) {
                     SaveLog(); // 로그를 파일로 저장
-                }
-                if(form_setting.Save_image)
-                {
-                    SaveImage(); // 이미지 추출
                 }
                 form_log.UpdateLog("종료");
             }
@@ -240,27 +245,33 @@ namespace Integrity_Checker_MEP {
         double toleroffset;
         /// <summary>
         /// "path" 폴더 안에있는 .ifc파일을 현재워크시트에 불러옵니다.
+        /// 변경: 대화상자에서 선택한 모델만을 불러옵니다.
         /// </summary>
         /// <param name="path"> 모델 파일 경로(폴더)</param>
-        bool GetModelFromFolder(string path = @"C:\models\") {
+        bool GetModelFromFolder(string path = IFCLoad.path) {
             Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
-            if(doc.Models.Count > 0)
-            {
-                return true;
-            }
-            //경로에서 .ifc파일만 찾아 불러오기
-            for (int i = 0; i < Directory.GetFiles(path).Length; i++) {
-                if (Directory.GetFiles(path)[i].Contains(".ifc")) {
-                    if (Directory.GetFiles(path)[i].Contains(".ifc."))
-                        continue;
-                    doc.AppendFile(Directory.GetFiles(path)[i]);
-                    form_log.UpdateLog($"ifc 불러오기 : {Directory.GetFiles(path)[i]}");
-                }
-            }
+            //if(doc.Models.Count > 0)
+            //{
+            //    return true;
+            //}
+            ////경로에서 .ifc파일만 찾아 불러오기
+            //for (int i = 0; i < Directory.GetFiles(path).Length; i++) {
+            //    // .ifc만 불러옴 .ifc.log 필터링
+            //    if (Directory.GetFiles(path)[i].Contains(".ifc") && Directory.GetFiles(path)[i].Contains(".ifc.")) {
+            //        doc.AppendFile(Directory.GetFiles(path)[i]);
+            //        form_log.UpdateLog($"ifc 불러오기 : {Directory.GetFiles(path)[i]}");
+            //    }
+            //}
 
-            if (doc.Models.Count == 0) {
-                ShowMessage("불러온 모델이 없습니다.");
-                return false;
+            //if (doc.Models.Count == 0) {
+            //    ShowMessage("불러온 모델이 없습니다.");
+            //    return false;
+            //}
+
+            //경로에서 .ifc파일만 찾아 불러오기
+            for (int i = 0; i < doc.Models.Count; i++)
+            {
+                form_log.UpdateLog($"ifc 불러오기 : {doc.Models.ToString()}");
             }
 
             //모델별 단위 통합
@@ -287,76 +298,70 @@ namespace Integrity_Checker_MEP {
             return true;
         }
 
-        int _i, _j;
-        /// <summary>
-        /// 지정한 형식으로 테스트 생성
-        /// </summary>
         void MakeClashTest() {
-            _i = 0; _j = 0;
-            NewClashTest("Arch-Arch_Duplicate", 50f, ClashTestType.Duplicate);
-            _i = 5; _j = 5;
-            NewClashTest("Str-Str_Duplicate", 50f, ClashTestType.Duplicate);
+            // 모델 이름 배열 (순서가 중요)
+            string[] models = { "Arch", "COMM", "ELEC", "FIRE", "MECH", "Str" };
 
-            _i = 0; _j = 0;
-            NewClashTest("Arch-Arch_Clearance", 50f, ClashTestType.Clearance);
-            _i = 0; _j = 1;
-            NewClashTest("Arch-COMM_Clearance", 50f, ClashTestType.Clearance);
-            _i = 0; _j = 2;
-            NewClashTest("Arch-ELEC_Clearance", 50f, ClashTestType.Clearance);
-            _i = 0; _j = 3;
-            NewClashTest("Arch-FIRE_Clearance", 50f, ClashTestType.Clearance);
-            _i = 0; _j = 4;
-            NewClashTest("Arch-MECH_Clearance", 50f, ClashTestType.Clearance);
-            _i = 0; _j = 5;
-            NewClashTest("Arch-Str_Clearance", 50f, ClashTestType.Clearance);
+            // 모델이 실제로 존재하는지 확인
+            Document document = Autodesk.Navisworks.Api.Application.ActiveDocument;
+            var availableModels = document.Models
+                .Select((model, index) => new {
+                    Model = model,
+                    Name = Path.GetFileNameWithoutExtension(model.RootItem.DisplayName),
+                    Index = index
+                })
+                .Where(x => models.Contains(x.Name))  // 확장자를 제거한 이름만 선택
+                .ToList();
 
-            _i = 1; _j = 1;
-            NewClashTest("COMM-COMM_Clearance", 50f, ClashTestType.Clearance);
-            _i = 1; _j = 2;
-            NewClashTest("COMM-ELEC_Clearance", 50f, ClashTestType.Clearance);
-            _i = 1; _j = 3;
-            NewClashTest("COMM-FIRE_Clearance", 50f, ClashTestType.Clearance);
-            _i = 1; _j = 4;
-            NewClashTest("COMM-MECH_Clearance", 50f, ClashTestType.Clearance);
+            // 모델 이름과 인덱스를 딕셔너리에 저장
+            var modelDict = availableModels.ToDictionary(x => x.Name, x => x.Index);
 
-            _i = 2; _j = 2;
-            NewClashTest("ELEC-ELEC_Clearance", 50f, ClashTestType.Clearance);
-            _i = 2; _j = 3;
-            NewClashTest("ELEC-FIRE_Clearance", 50f, ClashTestType.Clearance);
-            _i = 2; _j = 4;
-            NewClashTest("ELEC-MECH_Clearance", 50f, ClashTestType.Clearance);
+            // Duplicate Tests
+            CreateTest("Duplicate", ClashTestType.Duplicate, modelDict, new (string, string)[] {
+                ("Arch", "Arch"), // Arch-Arch
+                ("Str", "Str")    // Str-Str
+            });
 
-            _i = 3; _j = 3;
-            NewClashTest("FIRE-FIRE_Clearance", 50f, ClashTestType.Clearance);
-            _i = 3; _j = 4;
-            NewClashTest("FIRE-MECH_Clearance", 50f, ClashTestType.Clearance);
-
-            _i = 4; _j = 4;
-            NewClashTest("MECH-MECH_Clearance", 50f, ClashTestType.Clearance);
-
-            _i = 5; _j = 1;
-            NewClashTest("Str-COMM_Clearance", 50f, ClashTestType.Clearance);
-            _i = 5; _j = 2;
-            NewClashTest("Str-ELEC_Clearance", 50f, ClashTestType.Clearance);
-            _i = 5; _j = 3;
-            NewClashTest("Str-FIRE_Clearance", 50f, ClashTestType.Clearance);
-            _i = 5; _j = 4;
-            NewClashTest("Str-MECH_Clearance", 50f, ClashTestType.Clearance);
-            _i = 5; _j = 5;
-            NewClashTest("Str-Str_Clearance", 50f, ClashTestType.Clearance);
-
+            // Clearance Tests
+            CreateTest("Clearance", ClashTestType.Clearance, modelDict, new (string, string)[] {
+                ("Arch", "Arch"), // Arch-Arch
+                ("Arch", "COMM"), // Arch-COMM
+                ("Arch", "ELEC"), // Arch-ELEC
+                ("Arch", "FIRE"), // Arch-FIRE
+                ("Arch", "MECH"), // Arch-MECH
+                ("Arch", "Str"),  // Arch-Str
+                ("COMM", "COMM"), // COMM-COMM
+                ("COMM", "ELEC"), // COMM-ELEC
+                ("COMM", "FIRE"), // COMM-FIRE
+                ("COMM", "MECH"), // COMM-MECH
+                ("ELEC", "ELEC"), // ELEC-ELEC
+                ("ELEC", "FIRE"), // ELEC-FIRE
+                ("ELEC", "MECH"), // ELEC-MECH
+                ("FIRE", "FIRE"), // FIRE-FIRE
+                ("FIRE", "MECH"), // FIRE-MECH
+                ("MECH", "MECH"), // MECH-MECH
+                ("Str", "COMM"),  // Str-COMM
+                ("Str", "ELEC"),  // Str-ELEC
+                ("Str", "FIRE"),  // Str-FIRE
+                ("Str", "MECH"),  // Str-MECH
+                ("Str", "Str")    // Str-Str
+            });
         }
 
-        /// <summary>
-        /// 새로운 테스트를 만들고 이름을 'ClashtestName', 공차를 'toler'로 설정합니다.
-        /// 동일한 이름의 테스트가 이미 존재하면 테스트를 만들지 않음
-        /// </summary>
-        /// <param name="ClashtestName"> 테스트의 DisplayName</param>
-        /// <param name="toler"> 테스트의 공차(단위:m)</param>
-        void NewClashTest(string ClashtestName, double toler, ClashTestType type) {
+        void CreateTest(string testTypeName, ClashTestType testType, Dictionary<string, int> modelDict, (string, string)[] pairs) {
+            foreach (var (nameA, nameB) in pairs) {
+                if (modelDict.ContainsKey(nameA) && modelDict.ContainsKey(nameB)) {
+                    int i = modelDict[nameA];
+                    int j = modelDict[nameB];
+                    string testName = $"{nameA}-{nameB}_{testTypeName}";
+                    NewClashTest(testName, 50f, testType, i, j);
+                }
+            }
+        }
+
+        void NewClashTest(string ClashtestName, double toler, ClashTestType type, int i, int j) {
             // 현재 Navisworks에 접근
             DocumentClash documentClash = Autodesk.Navisworks.Api.Application.ActiveDocument.GetClash();
-            Document document = Autodesk.Navisworks.Api.Application.ActiveDocument;
             DocumentClashTests oDCT = documentClash.TestsData;
             ClashTest ct = documentClash.TestsData.Tests.Where(x => string.Compare(x.DisplayName, ClashtestName) == 0).FirstOrDefault() as ClashTest;
             if (ct == null) {
@@ -371,10 +376,10 @@ namespace Integrity_Checker_MEP {
                 ModelItemCollection oSelA = new ModelItemCollection();
                 ModelItemCollection oSelB = new ModelItemCollection();
 
-                //assume the first and second model item are not null.
-                ModelItemEnumerableCollection oModelCollect = document.Models[0].RootItem.Children;
-                oSelA.Add(document.Models[_i].RootItem);
-                oSelB.Add(document.Models[_j].RootItem);
+                // 모델 선택
+                Document document = Autodesk.Navisworks.Api.Application.ActiveDocument;
+                oSelA.Add(document.Models[i].RootItem);
+                oSelB.Add(document.Models[j].RootItem);
                 ct.SelectionA.Selection.CopyFrom(oSelA);
                 ct.SelectionB.Selection.CopyFrom(oSelB);
                 oDCT.TestsAddCopy(ct);
@@ -382,7 +387,6 @@ namespace Integrity_Checker_MEP {
             }
             else {
                 form_log.UpdateLog($"(경고)테스트 존재 {ClashtestName}, {toler}mm, {type}");
-                //ShowMessage("[" + ClashtestName + "] is already exsist. Set other name");
             }
         }
 
@@ -1076,6 +1080,7 @@ namespace Integrity_Checker_MEP {
                         break;
                 }
                 //카테고리 이름으로 찾기
+                //findcategorybyname이 null을 반환
                 DataProperty oDP = item.PropertyCategories.FindCategoryByName("LcRevitData_Element")?.Properties.FindPropertyByDisplayName("IfcGUID");
                 if (oDP == null)
                     //카테고리의 DisplayName으로 찾기
@@ -1364,6 +1369,44 @@ namespace Integrity_Checker_MEP {
             }
             return info;
         }
+        
+        /// <summary>
+        /// 지정된 원본 디렉터리에서 지정된 대상 디렉터리로 모든 파일과 하위 디렉터리를 복사합니다.
+        /// </summary>
+        /// <param name="sourceDirName">파일을 복사할 원본 디렉터리의 경로입니다.</param>
+        /// <param name="destDirName">파일을 복사할 대상 디렉터리의 경로입니다.</param>
+        /// <param name="copySubDirs">하위 디렉터리를 재귀적으로 복사하려면 true, 그렇지 않으면 false입니다.</param>
+        /// <exception cref="DirectoryNotFoundException">원본 디렉터리가 존재하지 않거나 찾을 수 없는 경우 발생합니다.</exception>
+        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            Directory.CreateDirectory(destDirName);
+
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(tempPath, false);
+            }
+
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string tempPath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+                }
+            }
+        }
 
         /// <summary>
         /// compressed.zip파일 생성
@@ -1382,6 +1425,7 @@ namespace Integrity_Checker_MEP {
                 //폴더에 파일 추가하기
                 string filepath = @"C:/objectinfo";
                 string modelpath = @"C:/models";
+                string resultImagePath = @"C:/objectinfo/ResultImage";
                 //결과파일 옮기기
                 if (string.IsNullOrEmpty(clashFile)) ShowMessage("No Clash Result File");
                 else File.Copy(clashFile, clashFile.Replace(filepath, newdirpath), true);
@@ -1415,6 +1459,13 @@ namespace Integrity_Checker_MEP {
                         //File.Copy(files[i], files[i].Replace(modelpath, newdirpath), true);
                     }
                 }
+                //이미지파일 옮기기
+                if (form_setting.Save_image)
+                {
+                    if (Directory.Exists(resultImagePath)) DirectoryCopy(resultImagePath, 
+                        Path.Combine(newdirpath, "ResultImage"), true);
+                    else ShowMessage("No Result Image Folder");
+                }
 
                 //폴더 압축하기
                 string zippath = @"C:/objectinfo/compressed.zip";
@@ -1433,7 +1484,7 @@ namespace Integrity_Checker_MEP {
         void SendtoServer(string filepath) {
             form_log.UpdateLog("서버로 전송 시작");
             try {
-                string serverIP = "http://117.17.196.92:3116/upload";
+                string serverIP = "http://117.17.196.59:3116/upload";
                 ExtendedWebClient webClient = new ExtendedWebClient();
                 //webClient.Timeout = Timeout.Infinite;
                 webClient.AllowWriteStreamBuffering = false;
