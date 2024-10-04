@@ -252,7 +252,7 @@ namespace ClashTest2
         /// <returns></returns>
         private async Task downloadFromServer()
         {
-            string serverUrl = "http://117.17.196.59:3116/final"; // 서버 주소를 적절히 변경하세요
+            string serverUrl = "http://117.17.196.59:3116/result"; // 서버 주소를 적절히 변경하세요
             string downloadDir = "C:\\objectinfo\\"; // 다운로드할 디렉토리를 적절히 변경하세요
 
             using (HttpClient httpClient = new HttpClient())
