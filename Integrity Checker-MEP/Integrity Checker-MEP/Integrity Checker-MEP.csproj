@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\..\source\repos\Integrity Checker-MEP\Integrity Checker-MEP\bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\Program Files\Autodesk\Navisworks Manage 2023\Plugins\Integrity Checker-MEP\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>5</WarningLevel>
