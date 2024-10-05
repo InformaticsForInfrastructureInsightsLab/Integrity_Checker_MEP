@@ -37,31 +37,25 @@ namespace ClashTest2
         // When header is changed, change the enum and add from designer
         enum Header
         {
-            ClashType = 0,
-            HardClashType = 1,
-            SoftClashType = 2,
-            Severity = 3,
-            Element1discipline = 4,
-            Element1GUID = 5,
-            Element1Type = 6,
-            Element2discipline = 7,
-            Element2GUID = 8,
-            Element2Type = 9,
-            ClashDistance = 10,
-            Clearance = 11,
-            ClashPoint = 12,
-            ClashVolume = 13,
-            Topology = 14,
-            Offset = 15,
+            Element1Guid = 0,
+            Element2Guid = 1,
+            Type = 2,
+            MovabilityValue = 3,
+            Topology = 4,
+            HardClashType = 5,
+            Severity = 6,
+            Clearance = 7,
+            MovabilityResult = 8,
+            Offset = 9
         }
 
         // bool for checked column header
         private bool[] headerBool;
 
         // number of each result
-        private int major_hard = 0, major_soft = 0;
-        private int medium_hard = 0, medium_soft = 0;
-        private int minor_hard = 0, minor_soft = 0;
+        private int major_hard = 0;
+        private int medium_hard = 0;
+        private int minor_hard = 0;
 
         // string for 2 selected guid
         private string guid1;
@@ -184,7 +178,7 @@ namespace ClashTest2
                 addDataToList();
 
                 // Only group by severity -> if canceled can be grouped by other headers
-                folv.AlwaysGroupByColumn = SeverityCol;
+                folv.AlwaysGroupByColumn = MovabilityValue;
                 // MVC pattern -> check objectListView 
                 folv.SetObjects(dataList);
 
@@ -215,7 +209,7 @@ namespace ClashTest2
         /// <returns></returns>
         private async Task downloadFromServer()
         {
-            string serverUrl = "http://117.17.196.59:3116/result"; // 서버 주소를 적절히 변경하세요
+            string serverUrl = "http://117.17.196.59:3116/final"; // 서버 주소를 적절히 변경하세요
             string downloadDir = "C:\\objectinfo\\"; // 다운로드할 디렉토리를 적절히 변경하세요
 
             using (HttpClient httpClient = new HttpClient())
@@ -251,8 +245,8 @@ namespace ClashTest2
         /// <param name="e"></param>
         void folv_SelectionChanged(object sender, EventArgs e)
         {
-            guid1 = folv.SelectedItem.GetSubItem((int)Header.Element1GUID).Text;
-            guid2 = folv.SelectedItem.GetSubItem((int)Header.Element2GUID).Text;
+            guid1 = folv.SelectedItem.GetSubItem((int)Header.Element1Guid).Text;
+            guid2 = folv.SelectedItem.GetSubItem((int)Header.Element2Guid).Text;
             showGUID();
             SelectClash(guid1, guid2);
         }
@@ -343,27 +337,21 @@ namespace ClashTest2
                 // Change accordingly
                 if (headerBool[0] == false)
                 {
-                    folv.Columns[(int)Header.ClashType].Width = 0;
+                    folv.Columns[(int)Header.Element1Guid].Width = 0;
                 }
                 else
                 {
-                    folv.Columns[(int)Header.ClashType].Width = 81;
+                    folv.Columns[(int)Header.Element1Guid].Width = 81;
                 }
-                HardClashTypeCol.IsVisible = headerBool[(int)Header.HardClashType];
-                SoftClashTypeCol.IsVisible = headerBool[(int)Header.SoftClashType];
-                SeverityCol.IsVisible = headerBool[(int)Header.Severity];
-                Elem1disciplineCol.IsVisible = headerBool[(int)Header.Element1discipline];
-                Elem1GUIDCol.IsVisible = headerBool[(int)Header.Element1GUID];
-                Elem1TypeCol.IsVisible = headerBool[(int)Header.Element1Type];
-                Elem2disciplineCol.IsVisible = headerBool[(int)Header.Element2discipline];
-                Elem2GUIDCol.IsVisible = headerBool[(int)Header.Element2GUID];
-                Elem2TypeCol.IsVisible = headerBool[(int)Header.Element2Type];
-                ClashDistCol.IsVisible = headerBool[(int)Header.ClashDistance];
-                ClearanceCol.IsVisible = headerBool[(int)Header.Clearance];
-                ClashPointCol.IsVisible = headerBool[(int)Header.ClashPoint];
-                ClashVolumeCol.IsVisible = headerBool[(int)Header.ClashVolume];
-                TopologyCol.IsVisible = headerBool[(int)Header.Topology];
-                OffsetCol.IsVisible = headerBool[(int)Header.Offset];
+                Element2Guid.IsVisible = headerBool[(int)Header.HardClashType];
+                Type.IsVisible = headerBool[(int)Header.Type];
+                MovabilityValue.IsVisible = headerBool[(int)Header.Severity];
+                Topology.IsVisible = headerBool[(int)Header.Topology];
+                HardClashType.IsVisible = headerBool[(int)Header.HardClashType];
+                HardClashType.IsVisible = headerBool[(int)Header.Severity];
+                Clearance.IsVisible = headerBool[(int)Header.Clearance];
+                MovabilityResult.IsVisible = headerBool[(int)Header.MovabilityResult];
+                Offset.IsVisible = headerBool[(int)Header.Offset];
 
                 folv.RebuildColumns();
             }
@@ -382,11 +370,8 @@ namespace ClashTest2
             minorSoft.Visible = true;
 
             majorHard.Text = "MAJOR_H:" + major_hard.ToString();
-            majorSoft.Text = "MAJOR_S:" + major_soft.ToString();
             mediumHard.Text = "MEDIUM_H:" + medium_hard.ToString();
-            mediumSoft.Text = "MEDIUM_S:" + medium_soft.ToString();
             minorHard.Text = "MINOR_H:" + minor_hard.ToString();
-            minorSoft.Text = "MINOR_S:" + minor_soft.ToString();
             
         }
 
@@ -415,7 +400,7 @@ namespace ClashTest2
             if(folv.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element1GUID).Text);
+                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element1Guid).Text);
             }
 
         }
@@ -431,7 +416,7 @@ namespace ClashTest2
             if (folv.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element2GUID).Text);
+                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element2Guid).Text);
             }
         }
         #endregion
@@ -551,12 +536,12 @@ namespace ClashTest2
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            string stringPos = folv.SelectedItem.GetSubItem((int)Header.ClashPoint).Text;
+/*            string stringPos = folv.SelectedItem.GetSubItem((int)Header.ClashPoint).Text;
             MessageBox.Show(stringPos);
             string[] coordinates = stringPos.Split(',');
             Point3D centerPos = new Point3D(float.Parse(coordinates[0]), float.Parse(coordinates[1]), float.Parse(coordinates[2]));
             Viewpoint currView = doc.CurrentViewpoint.CreateCopy();
-            SetPlaneSectioningItem(centerPos, 50, true,currView);
+            SetPlaneSectioningItem(centerPos, 50, true,currView);*/
         }
 
         /// <summary>
