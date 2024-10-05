@@ -111,23 +111,7 @@ namespace ClashTest2
                         // Remove leading and trailing double quotes if present
                         stringdata[i] = stringdata[i].Trim('"');
                     }
-                    ClashData clashdata = new ClashData();
-                    clashdata.ClashType = stringdata[((int)Header.ClashType)];
-                    clashdata.HardClashType = stringdata[((int)Header.HardClashType)];
-                    clashdata.SoftClashType = stringdata[((int)Header.SoftClashType)];
-                    clashdata.Severity = stringdata[((int)Header.Severity)].ToUpper();
-                    clashdata.Element1discipline = stringdata[((int)Header.Element1discipline)];
-                    clashdata.Element1GUID = stringdata[((int)Header.Element1GUID)];
-                    clashdata.Element1Type = stringdata[((int)Header.Element1Type)];
-                    clashdata.Element2discipline = stringdata[((int)Header.Element2discipline)];
-                    clashdata.Element2GUID = stringdata[((int)Header.Element2GUID)];
-                    clashdata.Element2Type = stringdata[((int)Header.Element2Type)];
-                    clashdata.ClashDistance = stringdata[((int)Header.ClashDistance)];
-                    clashdata.Clearance = stringdata[((int)Header.Clearance)];
-                    clashdata.ClashPoint = stringdata[((int)Header.ClashPoint)];
-                    clashdata.ClashVolume = stringdata[((int)Header.ClashVolume)];
-                    clashdata.Topology = stringdata[((int)Header.Topology)];
-                    clashdata.Offset = stringdata[((int)Header.Offset)];
+                    ClashData clashdata = new ClashData(stringdata);                    
                     clashDataList.Add(clashdata);
                 }
                 return clashDataList;
@@ -150,42 +134,21 @@ namespace ClashTest2
         /// </summary>
         void addDataToList()
         {
-            if (dataList != null)
+            if (dataList == null) return;
+
+            foreach (ClashData clash in dataList)
             {
-                foreach (ClashData clash in dataList)
+                if (clash.Severity == "MAJOR")
                 {
-                    if (clash.ClashType == "Hard")
-                    {
-                        dataHardList.Add(clash);
-                        if (clash.Severity == "MAJOR")
-                        {
-                            major_hard++;
-                        }
-                        else if (clash.Severity == "MEDIUM")
-                        {
-                            medium_hard++;
-                        }
-                        else
-                        {
-                            minor_hard++;
-                        }
-                    }
-                    else if (clash.ClashType == "Soft")
-                    {
-                        dataSoftList.Add(clash);
-                        if (clash.Severity == "MAJOR")
-                        {
-                            major_soft++;
-                        }
-                        else if (clash.Severity == "MEDIUM")
-                        {
-                            medium_soft++;
-                        }
-                        else
-                        {
-                            minor_soft++;
-                        }
-                    }
+                    major_hard++;
+                }
+                else if (clash.Severity == "MEDIUM")
+                {
+                    medium_hard++;
+                }
+                else
+                {
+                    minor_hard++;
                 }
             }
         }
