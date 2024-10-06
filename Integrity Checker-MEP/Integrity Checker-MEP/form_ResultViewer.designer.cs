@@ -54,6 +54,7 @@
             this.MovabilityValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Topology = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.HardClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.SoftClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -285,7 +286,8 @@
             this.folv.AllColumns.Add(this.MovabilityValue);
             this.folv.AllColumns.Add(this.Topology);
             this.folv.AllColumns.Add(this.HardClashType);
-            this.folv.AllColumns.Add(this.HardClashType);
+            this.folv.AllColumns.Add(this.SoftClashType);
+            this.folv.AllColumns.Add(this.Severity);
             this.folv.AllColumns.Add(this.Clearance);
             this.folv.AllColumns.Add(this.MovabilityResult);
             this.folv.AllColumns.Add(this.Offset);
@@ -300,10 +302,12 @@
             this.MovabilityValue,
             this.Topology,
             this.HardClashType,
-            this.HardClashType,
+            this.SoftClashType,
+            this.Severity,
             this.Clearance,
             this.MovabilityResult,
-            this.Offset});
+            this.Offset
+            });
             this.folv.Cursor = System.Windows.Forms.Cursors.Default;
             this.folv.FullRowSelect = true;
             this.folv.HideSelection = false;
@@ -450,6 +454,7 @@
         private BrightIdeasSoftware.OLVColumn MovabilityValue;
         private BrightIdeasSoftware.OLVColumn Topology;
         private BrightIdeasSoftware.OLVColumn HardClashType;
+        private BrightIdeasSoftware.OLVColumn SoftClashType;
         private BrightIdeasSoftware.OLVColumn Severity;
         private BrightIdeasSoftware.OLVColumn Clearance;
         private BrightIdeasSoftware.OLVColumn MovabilityResult;

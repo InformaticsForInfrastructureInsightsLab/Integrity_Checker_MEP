@@ -37,25 +37,26 @@ namespace ClashTest2
         // When header is changed, change the enum and add from designer
         enum Header
         {
-            Element1Guid = 0,
-            Element2Guid = 1,
-            Type = 2,
-            MovabilityValue = 3,
-            Topology = 4,
-            HardClashType = 5,
-            Severity = 6,
-            Clearance = 7,
-            MovabilityResult = 8,
-            Offset = 9
+            Element1Guid,
+            Element2Guid,
+            Type,
+            MovabilityValue,
+            Topology,
+            HardClashType,
+            SoftClashType,
+            Severity,
+            Clearance,
+            MovabilityResult,
+            Offset
         }
 
         // bool for checked column header
         private bool[] headerBool;
 
         // number of each result
-        private int major_hard = 0;
-        private int medium_hard = 0;
-        private int minor_hard = 0;
+        private int major_hard = 0, major_soft = 0;
+        private int medium_hard = 0, medium_soft = 0;
+        private int minor_hard = 0, minor_soft = 0;
 
         // string for 2 selected guid
         private string guid1;
@@ -132,17 +133,31 @@ namespace ClashTest2
 
             foreach (ClashData clash in dataList)
             {
-                if (clash.Severity == "MAJOR")
+                if (clash.HardClashType == "None")
                 {
-                    major_hard++;
+                    dataSoftList.Add(clash);
+                    switch(clash.Severity)
+                    {
+                        case "Major":
+                            major_soft++;  break;
+                        case "Medium":
+                            medium_soft++; break;
+                        case "Minor":
+                            minor_soft++; break;
+                    }
                 }
-                else if (clash.Severity == "MEDIUM")
+                else if (clash.SoftClashType == "None")
                 {
-                    medium_hard++;
-                }
-                else
-                {
-                    minor_hard++;
+                    dataSoftList.Add(clash);
+                    switch (clash.Severity)
+                    {
+                        case "Major":
+                            major_hard++; break;
+                        case "Medium":
+                            medium_hard++; break;
+                        case "Minor":
+                            minor_hard++; break;
+                    }
                 }
             }
         }
@@ -348,7 +363,8 @@ namespace ClashTest2
                 MovabilityValue.IsVisible = headerBool[(int)Header.Severity];
                 Topology.IsVisible = headerBool[(int)Header.Topology];
                 HardClashType.IsVisible = headerBool[(int)Header.HardClashType];
-                HardClashType.IsVisible = headerBool[(int)Header.Severity];
+                SoftClashType.IsVisible = headerBool[(int)Header.SoftClashType];
+                Severity.IsVisible = headerBool[(int)Header.Severity];
                 Clearance.IsVisible = headerBool[(int)Header.Clearance];
                 MovabilityResult.IsVisible = headerBool[(int)Header.MovabilityResult];
                 Offset.IsVisible = headerBool[(int)Header.Offset];

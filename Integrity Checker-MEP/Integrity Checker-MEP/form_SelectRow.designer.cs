@@ -56,6 +56,7 @@ namespace ClashTest2
                 "MovabilityValue",
                 "Topology",
                 "HardClashType",
+                "SoftClashType",
                 "Severity",
                 "Clearance",
                 "MovabilityResult",
