@@ -48,13 +48,8 @@ namespace Integrity_Checker_MEP
 
         public static List<pair<string, ClashResult>> outed_results_list = new List<pair<string, ClashResult>>();
 
-        protected bool background, transparent;
-        protected int transparancy;
-
         protected int width = 500;
         protected int height = 500;
-
-        bool set_background;
 
         public abstract void make_image(ClashResult cl_result, string directoryPath, string testName);
 
@@ -254,12 +249,9 @@ namespace Integrity_Checker_MEP
 
     class ImageCreatorSimple : ImageCreatorBase
     {
-        public ImageCreatorSimple(From_Log log, form_ImageOption image_option)
+        public ImageCreatorSimple(From_Log log)
         {
             form_log = log;
-            background = image_option.background;
-            transparent = image_option.transparant;
-            transparancy = image_option.transparancy;
         }
 
         public override void make_image(ClashResult cl_result, string directory_path, string test_name)
@@ -320,13 +312,13 @@ namespace Integrity_Checker_MEP
 
             // 배경 보이게 설정 했을시에 보일 item에 원하는 유형의 item 추가
             // IfcWall과 IfcCurtainWall 추가 (대소문자 맞추기)
-            if (background == true)
+/*            if (background == true)
             {
                 AddToItemsToShow(doc, new string[] {levelInfo1, levelInfo2},
                     modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] {systemInfo1, systemInfo2});
                 AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
                     modelItemsToShow, modelItemToTransparant, "IfcCurtainWall", new string[] { systemInfo1, systemInfo2 });
-            }
+            }*/
 
             // 안 보일 item을 모두 숨기기
             modelItemsToHide.CopyFrom(modelItemsToShow);
@@ -356,10 +348,10 @@ namespace Integrity_Checker_MEP
             modelItemToTransparant.Remove(items.ElementAtOrDefault(1));
 
             // Adjust transparancy (false일 경우엔 투명도를 적용하지 않음)
-            if (transparent == true)
+/*            if (transparent == true)
             {
                 doc.Models.OverridePermanentTransparency(modelItemToTransparant, transparancy);
-            }
+            }*/
 
             string testsimpleNamePath = Path.Combine(directory_path, "단순-단순이미지", $"{test_name}");
             string testsideNamePath = Path.Combine(directory_path, "단순-다각도이미지", $"{test_name}");
@@ -432,12 +424,9 @@ namespace Integrity_Checker_MEP
     {
         public Dictionary<Guid, List<ModelItem>> guid_dictionary;
 
-        public ImageCreatorComplex(From_Log log, form_ImageOption image_option)
+        public ImageCreatorComplex(From_Log log)
         {
             form_log = log;
-            background = image_option.background;
-            transparent = image_option.transparant;
-            transparancy = image_option.transparancy;
 
             guid_dictionary = new Dictionary<Guid, List<ModelItem>>();
         }
@@ -525,7 +514,7 @@ namespace Integrity_Checker_MEP
                 }
             }
 
-            if (background)
+/*            if (background)
             {
                 AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
                     modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] { systemInfo1 }.Concat(systemInfo2).ToArray());
@@ -539,7 +528,7 @@ namespace Integrity_Checker_MEP
                     modelItemsToShow, modelItemToTransparant, "IfcColumn", new string[] { "a", "b" });
                 AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
                     modelItemsToShow, modelItemToTransparant, "IfcWindow", new string[] { "a", "b" });
-            }
+            }*/
 
             modelItemsToHide.CopyFrom(modelItemsToShow);
             doc.CurrentSelection.CopyFrom(modelItemsToShow);
@@ -569,10 +558,10 @@ namespace Integrity_Checker_MEP
             }
             //modelItemToTransparant.Remove(items.ElementAtOrDefault(1));
             // Adjust transparancy (false일 경우엔 투명도를 적용하지 않음)
-            if (transparent)
+/*            if (transparent)
             {
                 doc.Models.OverridePermanentTransparency(modelItemToTransparant, transparancy);
-            }
+            }*/
 
             string testsimpleNamePath = Path.Combine(directoryPath, "복합-단순이미지", $"{test_name}");
             string testsideNamePath = Path.Combine(directoryPath, "복합-다각도이미지", $"{test_name}");

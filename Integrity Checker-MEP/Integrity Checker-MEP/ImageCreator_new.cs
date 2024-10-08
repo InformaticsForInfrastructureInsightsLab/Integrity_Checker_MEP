@@ -22,10 +22,10 @@ namespace Integrity_Checker_MEP
 
         private From_Log log;
 
-        public ImageCreator_new(From_Log log, form_ImageOption image_option)
+        public ImageCreator_new(From_Log log)
         {
-            simple = new ImageCreatorSimple(log, image_option);
-            complex = new ImageCreatorComplex(log, image_option);
+            simple = new ImageCreatorSimple(log);
+            complex = new ImageCreatorComplex(log);
             this.log = log;
         }
 

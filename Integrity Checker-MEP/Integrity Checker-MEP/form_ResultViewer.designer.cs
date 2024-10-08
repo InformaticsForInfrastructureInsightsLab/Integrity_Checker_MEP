@@ -48,7 +48,7 @@
             this.rdo_none = new System.Windows.Forms.RadioButton();
             this.btn_Screenshot = new System.Windows.Forms.Button();
             this.folv = new BrightIdeasSoftware.FastObjectListView();
-            this.Element1Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Element1Guid = new BrightIdeasSoftware.OLVColumn("Element1Guid", "Element1Guid");
             this.Element2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Type = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -59,7 +59,6 @@
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Offset = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.folv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -295,18 +294,19 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.folv.CellEditUseWholeCell = false;
+
             this.folv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Element1Guid,
-            this.Element2Guid,
-            this.Type,
-            this.MovabilityValue,
-            this.Topology,
-            this.HardClashType,
-            this.SoftClashType,
-            this.Severity,
-            this.Clearance,
-            this.MovabilityResult,
-            this.Offset
+                this.Element1Guid,
+                this.Element2Guid,
+                this.Type,
+                this.MovabilityValue,
+                this.Topology,
+                this.HardClashType,
+                this.SoftClashType,
+                this.Severity,
+                this.Clearance,
+                this.MovabilityResult,
+                this.Offset
             });
             this.folv.Cursor = System.Windows.Forms.Cursors.Default;
             this.folv.FullRowSelect = true;
@@ -323,81 +323,75 @@
             this.folv.VirtualMode = true;
             this.folv.SelectionChanged += new System.EventHandler(this.folv_SelectionChanged);
             // 
-            // ClashTypeCol
+            // Element1Guid
             // 
-            this.Element1Guid.AspectName = "Element1 Guid";
+            this.Element1Guid.AspectName = "Element1Guid";
             this.Element1Guid.Text = "Element1 Guid";
             this.Element1Guid.Width = 81;
             // 
-            // HardClashTypeCol
+            // Element2Guid
             // 
-            this.Element2Guid.AspectName = "Element2 Guid";
+            this.Element2Guid.AspectName = "Element2Guid";
             this.Element2Guid.Text = "Element2 Guid";
             this.Element2Guid.Width = 100;
             // 
-            // SoftClashTypeCol
+            // Type
             // 
             this.Type.AspectName = "Type";
             this.Type.Text = "hard clash type";
             this.Type.Width = 93;
             // 
-            // SeverityCol
+            // MovabilityValue
             // 
             this.MovabilityValue.AspectName = "MovabilityValue";
             this.MovabilityValue.Text = "Movability value";
             // 
-            // Elem1disciplineCol
+            // Topology
             // 
-            this.Topology.AspectName = "topology";
+            this.Topology.AspectName = "Topology";
             this.Topology.Text = "topology(x+z+y)";
             this.Topology.Width = 127;
             // 
-            // Elem1GUIDCol
+            // HardClashType
             // 
-            this.HardClashType.AspectName = "hard clash type";
+            this.HardClashType.AspectName = "HardClashType";
             this.HardClashType.Text = "hard clash type";
-            this.HardClashType.Width = 101;
+            this.HardClashType.Width = 103;
             // 
-            // Elem1TypeCol
+            // SoftClashType
+            // 
+            this.SoftClashType.AspectName = "SoftClashType";
+            this.SoftClashType.Text = "soft clash type";
+            this.HardClashType.Width = 103;
+            // 
+            // Severity
             // 
             this.Severity.AspectName = "Severity";
             this.Severity.Text = "Severity";
-            this.HardClashType.Width = 103;
             // 
-            // Elem2disciplineCol
+            // Clearance
             // 
             this.Clearance.AspectName = "Clearance";
             this.Clearance.Text = "Clearance";
             this.Clearance.Width = 123;
             // 
-            // Elem2GUIDCol
+            // MovabilityResult
             // 
             this.MovabilityResult.AspectName = "MovabilityResult";
             this.MovabilityResult.Text = "Movability Result";
             this.MovabilityResult.Width = 98;
             // 
-            // Elem2TypeCol
+            // Offset
             // 
             this.Offset.AspectName = "Offset";
             this.Offset.Text = "Offset";
             this.Offset.Width = 98;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(643, 207);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 23);
-            this.button1.TabIndex = 24;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(749, 553);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.folv);
             this.Controls.Add(this.btn_Screenshot);
             this.Controls.Add(this.rdo_none);
@@ -459,7 +453,6 @@
         private BrightIdeasSoftware.OLVColumn Clearance;
         private BrightIdeasSoftware.OLVColumn MovabilityResult;
         private BrightIdeasSoftware.OLVColumn Offset;
-        private System.Windows.Forms.Button button1;
     }
 }
 

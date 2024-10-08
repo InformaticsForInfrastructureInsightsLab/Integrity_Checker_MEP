@@ -108,7 +108,6 @@ namespace Integrity_Checker_MEP {
         bool show_Setting = false;
         
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
-        form_ImageOption form_imageOption; // 이미지 출력 옵션
         From_Log form_log; // 로그 출력 폼
         ImageCreator_new imgCreator; // 스크린샷 저장 클래스
 
@@ -132,11 +131,7 @@ namespace Integrity_Checker_MEP {
                 
                 if (form_setting.Save_image)
                 {
-                    form_imageOption = new form_ImageOption();
-                    form_imageOption.ShowDialog();
-
-                    if (!form_imageOption.start) return 0;
-                    imgCreator = new ImageCreator_new(form_log, form_imageOption);
+                    imgCreator = new ImageCreator_new(form_log);
                 }
 
                 

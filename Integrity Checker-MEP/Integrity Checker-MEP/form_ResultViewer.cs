@@ -105,9 +105,8 @@ namespace ClashTest2
                     {
                         // Remove leading and trailing double quotes if present
                         stringdata[i] = stringdata[i].Trim('"');
-                    }
-                    ClashData clashdata = new ClashData(stringdata);                    
-                    clashDataList.Add(clashdata);
+                    }                  
+                    clashDataList.Add(new ClashData(stringdata));
                 }
                 return clashDataList;
             }
@@ -148,7 +147,7 @@ namespace ClashTest2
                 }
                 else if (clash.SoftClashType == "None")
                 {
-                    dataSoftList.Add(clash);
+                    dataHardList.Add(clash);
                     switch (clash.Severity)
                     {
                         case "Major":
@@ -528,36 +527,6 @@ namespace ClashTest2
                 vp.Projection = ViewpointProjection.Orthographic;
             }
             Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CopyFrom(vp);
-        }
-
-        public void SetPlaneSectioningItem(Point3D CenterPoint3D, double meter, bool Enabled = true, Viewpoint currView = null)
-        {
-
-            currView.InternalClipPlanes.SetMode(Autodesk.Navisworks.Api.Interop.LcOaClipPlaneSetMode.eMODE_BOX);
-
-            //InternalClipPlanes는 숨겨진 프로퍼티이다. 모드를 박스 모드로 바꿔준다.
-            Point3D minPoint = new Point3D(CenterPoint3D.X - meter, CenterPoint3D.Y - meter, CenterPoint3D.Z - meter);
-            Point3D maxPoint = new Point3D(CenterPoint3D.X + meter, CenterPoint3D.Y + meter, CenterPoint3D.Z + meter);
-            currView.InternalClipPlanes.SetBox(new BoundingBox3D(minPoint, maxPoint));
-
-            //중심점으로부터 거리만큼 박스를 만들어준다. 현재 여기서는 일정 크기만큼 박싱을 해주지만 본인이 원하는 지점의 위치에서 원하는 박스를 만들어서 사용하면 됨.
-            currView.InternalClipPlanes.SetEnabled(Enabled);
-
-            //존재여부설정
-
-            Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CopyFrom(currView);
-
-            //현재 뷰포인트에 카피시켜준다.
-
-        }
-        private void button1_Click(object sender, EventArgs e)
-        {
-/*            string stringPos = folv.SelectedItem.GetSubItem((int)Header.ClashPoint).Text;
-            MessageBox.Show(stringPos);
-            string[] coordinates = stringPos.Split(',');
-            Point3D centerPos = new Point3D(float.Parse(coordinates[0]), float.Parse(coordinates[1]), float.Parse(coordinates[2]));
-            Viewpoint currView = doc.CurrentViewpoint.CreateCopy();
-            SetPlaneSectioningItem(centerPos, 50, true,currView);*/
         }
 
         /// <summary>

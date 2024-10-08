@@ -43,16 +43,6 @@ namespace Integrity_Checker_MEP {
             if (cb_allInOne.Checked) export_AllinOne = true;
             else export_AllinOne = false;
         }
-        //불필요 간섭출력
-        private void cb_useless_CheckedChanged(object sender, EventArgs e) {
-            if (cb_useless.Checked) export_UselessClash = true;
-            else export_UselessClash = false;
-        }
-        //동일 IfcSystem출력
-        private void cb_sameSystem_CheckedChanged(object sender, EventArgs e) {
-            if (cb_sameSystem.Checked) export_SameIfcSystem = true;
-            else export_SameIfcSystem = false;
-        }
         //Properties 출력
         private void cb_properties_CheckedChanged(object sender, EventArgs e) {
             if (cb_properties.Checked) export_Properties = true;

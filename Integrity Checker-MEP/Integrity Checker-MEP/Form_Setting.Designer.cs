@@ -26,8 +26,6 @@
             this.cb_parent = new System.Windows.Forms.CheckBox();
             this.cb_exportResult = new System.Windows.Forms.CheckBox();
             this.cb_allInOne = new System.Windows.Forms.CheckBox();
-            this.cb_useless = new System.Windows.Forms.CheckBox();
-            this.cb_sameSystem = new System.Windows.Forms.CheckBox();
             this.cb_properties = new System.Windows.Forms.CheckBox();
             this.cb_saveimage = new System.Windows.Forms.CheckBox();
             this.cb_server = new System.Windows.Forms.CheckBox();
@@ -40,7 +38,7 @@
             // 
             this.cb_parent.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cb_parent.AutoSize = true;
-            this.cb_parent.Location = new System.Drawing.Point(58, 22);
+            this.cb_parent.Location = new System.Drawing.Point(58, 37);
             this.cb_parent.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_parent.Name = "cb_parent";
             this.cb_parent.Size = new System.Drawing.Size(128, 16);
@@ -55,7 +53,7 @@
             this.cb_exportResult.AutoSize = true;
             this.cb_exportResult.Checked = true;
             this.cb_exportResult.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_exportResult.Location = new System.Drawing.Point(58, 44);
+            this.cb_exportResult.Location = new System.Drawing.Point(58, 59);
             this.cb_exportResult.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_exportResult.Name = "cb_exportResult";
             this.cb_exportResult.Size = new System.Drawing.Size(100, 16);
@@ -70,7 +68,7 @@
             this.cb_allInOne.AutoSize = true;
             this.cb_allInOne.Checked = true;
             this.cb_allInOne.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_allInOne.Location = new System.Drawing.Point(58, 66);
+            this.cb_allInOne.Location = new System.Drawing.Point(58, 81);
             this.cb_allInOne.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_allInOne.Name = "cb_allInOne";
             this.cb_allInOne.Size = new System.Drawing.Size(107, 16);
@@ -79,39 +77,13 @@
             this.cb_allInOne.UseVisualStyleBackColor = true;
             this.cb_allInOne.CheckedChanged += new System.EventHandler(this.cb_allInOne_CheckedChanged);
             // 
-            // cb_useless
-            // 
-            this.cb_useless.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.cb_useless.AutoSize = true;
-            this.cb_useless.Location = new System.Drawing.Point(58, 88);
-            this.cb_useless.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.cb_useless.Name = "cb_useless";
-            this.cb_useless.Size = new System.Drawing.Size(116, 16);
-            this.cb_useless.TabIndex = 3;
-            this.cb_useless.Text = "불필요 간섭 출력";
-            this.cb_useless.UseVisualStyleBackColor = true;
-            this.cb_useless.CheckedChanged += new System.EventHandler(this.cb_useless_CheckedChanged);
-            // 
-            // cb_sameSystem
-            // 
-            this.cb_sameSystem.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.cb_sameSystem.AutoSize = true;
-            this.cb_sameSystem.Location = new System.Drawing.Point(58, 110);
-            this.cb_sameSystem.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.cb_sameSystem.Name = "cb_sameSystem";
-            this.cb_sameSystem.Size = new System.Drawing.Size(136, 16);
-            this.cb_sameSystem.TabIndex = 4;
-            this.cb_sameSystem.Text = "동일 IfcSystem 출력";
-            this.cb_sameSystem.UseVisualStyleBackColor = true;
-            this.cb_sameSystem.CheckedChanged += new System.EventHandler(this.cb_sameSystem_CheckedChanged);
-            // 
             // cb_properties
             // 
             this.cb_properties.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cb_properties.AutoSize = true;
             this.cb_properties.Checked = true;
             this.cb_properties.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_properties.Location = new System.Drawing.Point(58, 132);
+            this.cb_properties.Location = new System.Drawing.Point(58, 103);
             this.cb_properties.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_properties.Name = "cb_properties";
             this.cb_properties.Size = new System.Drawing.Size(109, 16);
@@ -124,7 +96,7 @@
             // 
             this.cb_saveimage.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cb_saveimage.AutoSize = true;
-            this.cb_saveimage.Location = new System.Drawing.Point(58, 154);
+            this.cb_saveimage.Location = new System.Drawing.Point(58, 125);
             this.cb_saveimage.Name = "cb_saveimage";
             this.cb_saveimage.Size = new System.Drawing.Size(88, 16);
             this.cb_saveimage.TabIndex = 11;
@@ -138,7 +110,7 @@
             this.cb_server.AutoSize = true;
             this.cb_server.Checked = true;
             this.cb_server.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_server.Location = new System.Drawing.Point(58, 176);
+            this.cb_server.Location = new System.Drawing.Point(58, 147);
             this.cb_server.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cb_server.Name = "cb_server";
             this.cb_server.Size = new System.Drawing.Size(76, 16);
@@ -174,7 +146,7 @@
             // cb_savelog
             // 
             this.cb_savelog.AutoSize = true;
-            this.cb_savelog.Location = new System.Drawing.Point(58, 197);
+            this.cb_savelog.Location = new System.Drawing.Point(58, 169);
             this.cb_savelog.Name = "cb_savelog";
             this.cb_savelog.Size = new System.Drawing.Size(69, 16);
             this.cb_savelog.TabIndex = 10;
@@ -196,8 +168,6 @@
             this.Controls.Add(this.btn_start);
             this.Controls.Add(this.cb_server);
             this.Controls.Add(this.cb_properties);
-            this.Controls.Add(this.cb_sameSystem);
-            this.Controls.Add(this.cb_useless);
             this.Controls.Add(this.cb_allInOne);
             this.Controls.Add(this.cb_exportResult);
             this.Controls.Add(this.cb_parent);
@@ -217,8 +187,6 @@
         private System.Windows.Forms.CheckBox cb_parent;
         private System.Windows.Forms.CheckBox cb_exportResult;
         private System.Windows.Forms.CheckBox cb_allInOne;
-        private System.Windows.Forms.CheckBox cb_useless;
-        private System.Windows.Forms.CheckBox cb_sameSystem;
         private System.Windows.Forms.CheckBox cb_properties;
         private System.Windows.Forms.CheckBox cb_saveimage;
         private System.Windows.Forms.CheckBox cb_server;
