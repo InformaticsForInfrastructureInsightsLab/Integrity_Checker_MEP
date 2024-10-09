@@ -192,9 +192,10 @@ namespace ClashTest2
                 addDataToList();
 
                 // Only group by severity -> if canceled can be grouped by other headers
-                folv.AlwaysGroupByColumn = MovabilityValue;
+                folv.AlwaysGroupByColumn = Severity;
                 // MVC pattern -> check objectListView 
                 folv.SetObjects(dataList);
+                folv.BuildGroups(Severity, SortOrder.None);
 
                 tog_Hard.Checked = true;
                 tog_Soft.Checked = true;
