@@ -327,65 +327,79 @@
             // 
             this.Element1Guid.AspectName = "Element1Guid";
             this.Element1Guid.Text = "Element1 Guid";
-            this.Element1Guid.Width = 81;
+            this.Element1Guid.Width = 100;
+            this.Element1Guid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+          
             // 
             // Element2Guid
             // 
             this.Element2Guid.AspectName = "Element2Guid";
             this.Element2Guid.Text = "Element2 Guid";
             this.Element2Guid.Width = 100;
+            this.Element2Guid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Type
             // 
             this.Type.AspectName = "Type";
-            this.Type.Text = "hard clash type";
+            this.Type.Text = "Clash Type";
             this.Type.Width = 93;
+            this.Type.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+
             // 
             // MovabilityValue
             // 
             this.MovabilityValue.AspectName = "MovabilityValue";
             this.MovabilityValue.Text = "Movability value";
+            this.MovabilityValue.Width = 100;
+            this.MovabilityValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Topology
             // 
             this.Topology.AspectName = "Topology";
             this.Topology.Text = "topology(x+z+y)";
             this.Topology.Width = 127;
+            this.Topology.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // HardClashType
             // 
             this.HardClashType.AspectName = "HardClashType";
             this.HardClashType.Text = "hard clash type";
             this.HardClashType.Width = 103;
+            this.HardClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // SoftClashType
             // 
             this.SoftClashType.AspectName = "SoftClashType";
             this.SoftClashType.Text = "soft clash type";
-            this.HardClashType.Width = 103;
+            this.SoftClashType.Width = 103;
+            this.SoftClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Severity
             // 
             this.Severity.AspectName = "Severity";
             this.Severity.Text = "Severity";
+            this.Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Clearance
             // 
             this.Clearance.AspectName = "Clearance";
             this.Clearance.Text = "Clearance";
             this.Clearance.Width = 123;
+            this.Clearance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // MovabilityResult
             // 
             this.MovabilityResult.AspectName = "MovabilityResult";
             this.MovabilityResult.Text = "Movability Result";
             this.MovabilityResult.Width = 98;
+            this.MovabilityResult.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Offset
             // 
             this.Offset.AspectName = "Offset";
             this.Offset.Text = "Offset";
             this.Offset.Width = 98;
+            this.Offset.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // form_ResultViewer
             // 
