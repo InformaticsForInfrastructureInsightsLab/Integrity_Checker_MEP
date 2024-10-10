@@ -132,7 +132,7 @@ namespace ClashTest2
 
             foreach (ClashData clash in dataList)
             {
-                if (clash.HardClashType == "None")
+                if (clash.HardClashType == "   ")
                 {
                     dataSoftList.Add(clash);
                     switch(clash.Severity)
@@ -145,7 +145,7 @@ namespace ClashTest2
                             minor_soft++; break;
                     }
                 }
-                else if (clash.SoftClashType == "None")
+                else if (clash.SoftClashType == "   ")
                 {
                     dataHardList.Add(clash);
                     switch (clash.Severity)
@@ -358,7 +358,7 @@ namespace ClashTest2
                 {
                     folv.Columns[(int)Header.Element1Guid].Width = 81;
                 }
-                Element2Guid.IsVisible = headerBool[(int)Header.HardClashType];
+                Element2Guid.IsVisible = headerBool[(int)Header.Element2Guid];
                 Type.IsVisible = headerBool[(int)Header.Type];
                 MovabilityValue.IsVisible = headerBool[(int)Header.Severity];
                 Topology.IsVisible = headerBool[(int)Header.Topology];
@@ -388,7 +388,10 @@ namespace ClashTest2
             majorHard.Text = "MAJOR_H:" + major_hard.ToString();
             mediumHard.Text = "MEDIUM_H:" + medium_hard.ToString();
             minorHard.Text = "MINOR_H:" + minor_hard.ToString();
-            
+
+            majorSoft.Text = "MAJOR_H:" + major_soft.ToString();
+            mediumSoft.Text = "MEDIUM_H:" + medium_soft.ToString();
+            minorSoft.Text = "MINOR_H:" + minor_soft.ToString();
         }
 
         /// <summary>

@@ -48,7 +48,7 @@
             this.rdo_none = new System.Windows.Forms.RadioButton();
             this.btn_Screenshot = new System.Windows.Forms.Button();
             this.folv = new BrightIdeasSoftware.FastObjectListView();
-            this.Element1Guid = new BrightIdeasSoftware.OLVColumn("Element1Guid", "Element1Guid");
+            this.Element1Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Element2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Type = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -65,7 +65,7 @@
             // btn_Load
             // 
             this.btn_Load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Load.Location = new System.Drawing.Point(643, 41);
+            this.btn_Load.Location = new System.Drawing.Point(658, 41);
             this.btn_Load.Name = "btn_Load";
             this.btn_Load.Size = new System.Drawing.Size(94, 23);
             this.btn_Load.TabIndex = 1;
@@ -96,7 +96,7 @@
             this.tog_Hard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tog_Hard.Appearance = System.Windows.Forms.Appearance.Button;
             this.tog_Hard.Enabled = false;
-            this.tog_Hard.Location = new System.Drawing.Point(643, 70);
+            this.tog_Hard.Location = new System.Drawing.Point(658, 70);
             this.tog_Hard.Name = "tog_Hard";
             this.tog_Hard.Size = new System.Drawing.Size(47, 22);
             this.tog_Hard.TabIndex = 6;
@@ -110,7 +110,7 @@
             this.tog_Soft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tog_Soft.Appearance = System.Windows.Forms.Appearance.Button;
             this.tog_Soft.Enabled = false;
-            this.tog_Soft.Location = new System.Drawing.Point(690, 70);
+            this.tog_Soft.Location = new System.Drawing.Point(705, 70);
             this.tog_Soft.Name = "tog_Soft";
             this.tog_Soft.Size = new System.Drawing.Size(47, 22);
             this.tog_Soft.TabIndex = 7;
@@ -122,7 +122,7 @@
             // btn_Download
             // 
             this.btn_Download.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Download.Location = new System.Drawing.Point(643, 12);
+            this.btn_Download.Location = new System.Drawing.Point(658, 12);
             this.btn_Download.Name = "btn_Download";
             this.btn_Download.Size = new System.Drawing.Size(94, 23);
             this.btn_Download.TabIndex = 8;
@@ -133,7 +133,7 @@
             // btn_SelectHeader
             // 
             this.btn_SelectHeader.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_SelectHeader.Location = new System.Drawing.Point(643, 98);
+            this.btn_SelectHeader.Location = new System.Drawing.Point(658, 98);
             this.btn_SelectHeader.Name = "btn_SelectHeader";
             this.btn_SelectHeader.Size = new System.Drawing.Size(94, 23);
             this.btn_SelectHeader.TabIndex = 9;
@@ -167,7 +167,7 @@
             // 
             this.majorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.majorHard.AutoSize = true;
-            this.majorHard.Location = new System.Drawing.Point(641, 389);
+            this.majorHard.Location = new System.Drawing.Point(640, 389);
             this.majorHard.Name = "majorHard";
             this.majorHard.Size = new System.Drawing.Size(89, 12);
             this.majorHard.TabIndex = 13;
@@ -178,7 +178,7 @@
             // 
             this.majorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.majorSoft.AutoSize = true;
-            this.majorSoft.Location = new System.Drawing.Point(641, 409);
+            this.majorSoft.Location = new System.Drawing.Point(640, 407);
             this.majorSoft.Name = "majorSoft";
             this.majorSoft.Size = new System.Drawing.Size(89, 12);
             this.majorSoft.TabIndex = 14;
@@ -189,7 +189,7 @@
             // 
             this.mediumHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mediumHard.AutoSize = true;
-            this.mediumHard.Location = new System.Drawing.Point(641, 429);
+            this.mediumHard.Location = new System.Drawing.Point(640, 429);
             this.mediumHard.Name = "mediumHard";
             this.mediumHard.Size = new System.Drawing.Size(96, 12);
             this.mediumHard.TabIndex = 15;
@@ -200,7 +200,7 @@
             // 
             this.mediumSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mediumSoft.AutoSize = true;
-            this.mediumSoft.Location = new System.Drawing.Point(641, 449);
+            this.mediumSoft.Location = new System.Drawing.Point(640, 449);
             this.mediumSoft.Name = "mediumSoft";
             this.mediumSoft.Size = new System.Drawing.Size(96, 12);
             this.mediumSoft.TabIndex = 16;
@@ -211,7 +211,7 @@
             // 
             this.minorHard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.minorHard.AutoSize = true;
-            this.minorHard.Location = new System.Drawing.Point(641, 469);
+            this.minorHard.Location = new System.Drawing.Point(640, 469);
             this.minorHard.Name = "minorHard";
             this.minorHard.Size = new System.Drawing.Size(87, 12);
             this.minorHard.TabIndex = 17;
@@ -222,7 +222,7 @@
             // 
             this.minorSoft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.minorSoft.AutoSize = true;
-            this.minorSoft.Location = new System.Drawing.Point(641, 489);
+            this.minorSoft.Location = new System.Drawing.Point(640, 489);
             this.minorSoft.Name = "minorSoft";
             this.minorSoft.Size = new System.Drawing.Size(87, 12);
             this.minorSoft.TabIndex = 18;
@@ -233,7 +233,7 @@
             // 
             this.rdo_hide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_hide.AutoSize = true;
-            this.rdo_hide.Location = new System.Drawing.Point(643, 150);
+            this.rdo_hide.Location = new System.Drawing.Point(658, 150);
             this.rdo_hide.Name = "rdo_hide";
             this.rdo_hide.Size = new System.Drawing.Size(103, 16);
             this.rdo_hide.TabIndex = 19;
@@ -245,7 +245,7 @@
             // 
             this.rdo_trans.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_trans.AutoSize = true;
-            this.rdo_trans.Location = new System.Drawing.Point(643, 173);
+            this.rdo_trans.Location = new System.Drawing.Point(658, 173);
             this.rdo_trans.Name = "rdo_trans";
             this.rdo_trans.Size = new System.Drawing.Size(103, 16);
             this.rdo_trans.TabIndex = 20;
@@ -258,7 +258,7 @@
             this.rdo_none.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rdo_none.AutoSize = true;
             this.rdo_none.Checked = true;
-            this.rdo_none.Location = new System.Drawing.Point(643, 128);
+            this.rdo_none.Location = new System.Drawing.Point(658, 128);
             this.rdo_none.Name = "rdo_none";
             this.rdo_none.Size = new System.Drawing.Size(87, 16);
             this.rdo_none.TabIndex = 21;
@@ -269,7 +269,7 @@
             // btn_Screenshot
             // 
             this.btn_Screenshot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_Screenshot.Location = new System.Drawing.Point(643, 513);
+            this.btn_Screenshot.Location = new System.Drawing.Point(658, 513);
             this.btn_Screenshot.Name = "btn_Screenshot";
             this.btn_Screenshot.Size = new System.Drawing.Size(94, 23);
             this.btn_Screenshot.TabIndex = 22;
@@ -294,20 +294,18 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.folv.CellEditUseWholeCell = false;
-
             this.folv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-                this.Element1Guid,
-                this.Element2Guid,
-                this.Type,
-                this.MovabilityValue,
-                this.Topology,
-                this.HardClashType,
-                this.SoftClashType,
-                this.Severity,
-                this.Clearance,
-                this.MovabilityResult,
-                this.Offset
-            });
+            this.Element1Guid,
+            this.Element2Guid,
+            this.Type,
+            this.MovabilityValue,
+            this.Topology,
+            this.HardClashType,
+            this.SoftClashType,
+            this.Severity,
+            this.Clearance,
+            this.MovabilityResult,
+            this.Offset});
             this.folv.Cursor = System.Windows.Forms.Cursors.Default;
             this.folv.FullRowSelect = true;
             this.folv.HideSelection = false;
@@ -316,7 +314,7 @@
             this.folv.Name = "folv";
             this.folv.ShowGroups = false;
             this.folv.ShowItemCountOnGroups = true;
-            this.folv.Size = new System.Drawing.Size(612, 489);
+            this.folv.Size = new System.Drawing.Size(627, 489);
             this.folv.TabIndex = 23;
             this.folv.UseCompatibleStateImageBehavior = false;
             this.folv.View = System.Windows.Forms.View.Details;
@@ -327,52 +325,50 @@
             // 
             this.Element1Guid.AspectName = "Element1Guid";
             this.Element1Guid.Text = "Element1 Guid";
-            this.Element1Guid.Width = 100;
             this.Element1Guid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-          
+            this.Element1Guid.Width = 100;
             // 
             // Element2Guid
             // 
             this.Element2Guid.AspectName = "Element2Guid";
             this.Element2Guid.Text = "Element2 Guid";
-            this.Element2Guid.Width = 100;
             this.Element2Guid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Element2Guid.Width = 100;
             // 
             // Type
             // 
             this.Type.AspectName = "Type";
             this.Type.Text = "Clash Type";
-            this.Type.Width = 93;
             this.Type.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-
+            this.Type.Width = 93;
             // 
             // MovabilityValue
             // 
             this.MovabilityValue.AspectName = "MovabilityValue";
             this.MovabilityValue.Text = "Movability value";
-            this.MovabilityValue.Width = 100;
             this.MovabilityValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue.Width = 100;
             // 
             // Topology
             // 
             this.Topology.AspectName = "Topology";
             this.Topology.Text = "topology(x+z+y)";
-            this.Topology.Width = 127;
             this.Topology.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Topology.Width = 127;
             // 
             // HardClashType
             // 
             this.HardClashType.AspectName = "HardClashType";
             this.HardClashType.Text = "hard clash type";
-            this.HardClashType.Width = 103;
             this.HardClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.HardClashType.Width = 103;
             // 
             // SoftClashType
             // 
             this.SoftClashType.AspectName = "SoftClashType";
             this.SoftClashType.Text = "soft clash type";
-            this.SoftClashType.Width = 103;
             this.SoftClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.SoftClashType.Width = 103;
             // 
             // Severity
             // 
@@ -384,28 +380,28 @@
             // 
             this.Clearance.AspectName = "Clearance";
             this.Clearance.Text = "Clearance";
-            this.Clearance.Width = 123;
             this.Clearance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Clearance.Width = 123;
             // 
             // MovabilityResult
             // 
             this.MovabilityResult.AspectName = "MovabilityResult";
             this.MovabilityResult.Text = "Movability Result";
-            this.MovabilityResult.Width = 98;
             this.MovabilityResult.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityResult.Width = 98;
             // 
             // Offset
             // 
             this.Offset.AspectName = "Offset";
             this.Offset.Text = "Offset";
-            this.Offset.Width = 98;
             this.Offset.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Offset.Width = 98;
             // 
             // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(749, 553);
+            this.ClientSize = new System.Drawing.Size(764, 553);
             this.Controls.Add(this.folv);
             this.Controls.Add(this.btn_Screenshot);
             this.Controls.Add(this.rdo_none);
