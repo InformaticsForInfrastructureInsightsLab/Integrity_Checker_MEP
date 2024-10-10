@@ -16,6 +16,9 @@ namespace Integrity_Checker_MEP
     {
         public bool load;
         public const string path = @"C:\models\";
+
+        public List<string> usedmodel = new List<string>();
+
         public IFCLoad()
         {
             InitializeComponent();
@@ -54,6 +57,7 @@ namespace Integrity_Checker_MEP
                 if (control is CheckBox checkBox && checkBox.Checked)
                 {
                     doc.AppendFile(Path.Combine(path, checkBox.Text));
+                    usedmodel.Add(checkBox.Text);
                 }
             }
 

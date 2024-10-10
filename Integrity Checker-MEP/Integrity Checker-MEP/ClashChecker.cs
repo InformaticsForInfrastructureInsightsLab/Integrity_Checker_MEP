@@ -110,10 +110,12 @@ namespace Integrity_Checker_MEP {
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
         From_Log form_log; // 로그 출력 폼
         ImageCreator_new imgCreator; // 스크린샷 저장 클래스
-
+        IFCLoad ifcLoader;
         public int Execute(params string[] parameters) {
+            Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+            doc.Clear();
             try {
-                var ifcLoader = new IFCLoad();
+                ifcLoader = new IFCLoad();
                 ifcLoader.ShowDialog();
 
                 if (!ifcLoader.load) return 0;
@@ -1460,6 +1462,15 @@ namespace Integrity_Checker_MEP {
                     if (Directory.Exists(resultImagePath)) DirectoryCopy(resultImagePath, 
                         Path.Combine(newdirpath, "ResultImage"), true);
                     else ShowMessage("No Result Image Folder");
+                }
+
+                //사용한 모델 정보 텍스트 파일
+                using (StreamWriter writer = new StreamWriter(Path.Combine(newdirpath, "used_model.txt")))
+                {
+                    foreach (string model_name in ifcLoader.usedmodel)
+                    {
+                        writer.WriteLine(model_name);
+                    }
                 }
 
                 //폴더 압축하기
