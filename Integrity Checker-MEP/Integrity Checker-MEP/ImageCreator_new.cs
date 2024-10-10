@@ -60,6 +60,7 @@ namespace Integrity_Checker_MEP
 
                 foreach (pair<string, ClashResult> p in ImageCreatorBase.outed_results_list)
                 {
+                    if (p == null) continue;
                     string test_display_name = p.first;
                     ClashResult result = p.second;
 
