@@ -407,7 +407,9 @@ namespace Integrity_Checker_MEP
 
                 using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                 {
-                    string path = Path.Combine(testsideNamePath, $"{items[0].InstanceGuid.ToString()}+{items[1].InstanceGuid.ToString()}_{i + 1}.png");
+                    string item1_ifcguid = Getinfo(items[0], "요소", "IfcGUID");
+                    string item2_ifcguid = Getinfo(items[1], "요소", "IfcGUID");
+                    string path = Path.Combine(testsideNamePath, $"{item1_ifcguid}+{item2_ifcguid}_{i + 1}.png");
                     clashImage.Save(path, ImageFormat.Png);
                 }
                 
