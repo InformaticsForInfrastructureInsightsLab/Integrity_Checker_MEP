@@ -683,10 +683,10 @@ namespace Integrity_Checker_MEP {
                         oEachResult.distance = nwissue.Distance;
 
                         oEachResult.path1ID = "[Not Assigned]";
-                        oEachResult.path1ID = getElementID(nwissue.Item1);
+                        oEachResult.path1ID = Getinfo(nwissue.Item1, "요소", "IfcGUID");
 
                         oEachResult.path2ID = "[Not Assigned]";
-                        oEachResult.path2ID = getElementID(nwissue.Item2);
+                        oEachResult.path2ID = Getinfo(nwissue.Item2, "요소", "IfcGUID");
 
                         #region 자신과의 충돌
                         // 드물게 존재하는 케이스
