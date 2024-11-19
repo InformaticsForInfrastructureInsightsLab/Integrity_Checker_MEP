@@ -84,7 +84,7 @@ public class ExtendedWebClient : WebClient
                 var httpRequest = request as HttpWebRequest;
                 if (httpRequest != null)
                 {
-                    httpRequest.KeepAlive = false;
+                    httpRequest.KeepAlive = true;
                     httpRequest.AllowWriteStreamBuffering = AllowWriteStreamBuffering;
                 }
             }
@@ -99,7 +99,7 @@ public class ExtendedWebClient : WebClient
 
     public ExtendedWebClient()
     {
-        Timeout = 100000;
+        Timeout = System.Threading.Timeout.Infinite;
     }
 }
 
