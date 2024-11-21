@@ -84,7 +84,7 @@ public class ExtendedWebClient : WebClient
                 var httpRequest = request as HttpWebRequest;
                 if (httpRequest != null)
                 {
-                    httpRequest.KeepAlive = false;
+                    httpRequest.KeepAlive = true;
                     httpRequest.AllowWriteStreamBuffering = AllowWriteStreamBuffering;
                 }
             }
@@ -99,7 +99,7 @@ public class ExtendedWebClient : WebClient
 
     public ExtendedWebClient()
     {
-        Timeout = 100000;
+        Timeout = System.Threading.Timeout.Infinite;
     }
 }
 
@@ -108,44 +108,36 @@ namespace Integrity_Checker_MEP {
         bool show_Setting = false;
         
         Form_Setting form_setting; // 초기 세팅 폼 (디버그용)
-        form_ImageOption form_imageOption; // 이미지 출력 옵션
         From_Log form_log; // 로그 출력 폼
-        ImageCreator imgCreator; // 스크린샷 저장 클래스
-
+        ImageCreator_new imgCreator; // 스크린샷 저장 클래스
+        IFCLoad ifcLoader;
         public int Execute(params string[] parameters) {
+            Document doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+            doc.Clear();
             try {
-                var ifcLoader = new IFCLoad();
+                ifcLoader = new IFCLoad();
                 ifcLoader.ShowDialog();
 
                 if (!ifcLoader.load) return 0;
 
                 form_setting = new Form_Setting();
-                imgCreator = new ImageCreator();
+                
 
                 form_setting.ShowDialog();
-
-                
-                if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
-                
-                if (form_setting.Save_image)
-                {
-                    form_imageOption = new form_ImageOption();
-                    form_imageOption.ShowDialog();
-
-                    if (!form_imageOption.start) return 0;
-
-                    imgCreator.setBackground = form_imageOption.background;
-                    imgCreator.isTransparant = form_imageOption.transparant;
-                    if (imgCreator.isTransparant)
-                    {
-                        imgCreator.transparancy = form_imageOption.transparancy;
-                    }
-                }
 
                 form_log = new From_Log();
                 form_log.Show();
 
-                if (Autodesk.Navisworks.Api.Application.ActiveDocument.Models.Count == 0) return 0; // 모델을 불러오지 못했을 경우 종료
+
+                if (!form_setting.start) return 0; // 세팅폼에서 취소를 누를 시 종료
+                
+                if (form_setting.Save_image)
+                {
+                    imgCreator = new ImageCreator_new(form_log);
+                }
+
+                
+                if (!GetModelFromFolder(@"C:\models\")) return 0; // 모델을 불러오지 못했을 경우 종료
 
                 if (form_setting.export_Result) {
                     MakeClashTest(); // 테스트 생성
@@ -221,22 +213,17 @@ namespace Integrity_Checker_MEP {
 
 
             // 이미지로 추출할 간섭 결과들을 갖고있는 json파일을 불러오고 imgCreator에 넘겨준다
+            Dictionary<string, List<string>> tests_dict;
             try
             {
-                Dictionary<string, List<string>> tests_dict = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(@"c:\objectinfo\tests_dict.json"));
-
-                // imageCreator에 dictionary 전달
-                imgCreator.getResultName(tests_dict);
+                tests_dict = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(@"c:\objectinfo\tests_dict.json"));
+                imgCreator.save_image(tests_dict, sideImagePath);
             }
             catch(Exception ex)
             {
                 form_log.UpdateLog(ex.ToString());
             }
 
-
-            // 이미지가 저장될 위치를 imgCreator에 넘겨준다
-            imgCreator.ComplexCreateAndFillImages(resultImagePath);
-            imgCreator.SimpleCreateAndFillImages(resultImagePath, form_log);
             form_log.UpdateLog("이미지 추출 작업 종료");
 
         }
@@ -696,10 +683,10 @@ namespace Integrity_Checker_MEP {
                         oEachResult.distance = nwissue.Distance;
 
                         oEachResult.path1ID = "[Not Assigned]";
-                        oEachResult.path1ID = getElementID(nwissue.Item1);
+                        oEachResult.path1ID = Getinfo(nwissue.Item1, "요소", "IfcGUID");
 
                         oEachResult.path2ID = "[Not Assigned]";
-                        oEachResult.path2ID = getElementID(nwissue.Item2);
+                        oEachResult.path2ID = Getinfo(nwissue.Item2, "요소", "IfcGUID");
 
                         #region 자신과의 충돌
                         // 드물게 존재하는 케이스
@@ -1475,6 +1462,15 @@ namespace Integrity_Checker_MEP {
                     if (Directory.Exists(resultImagePath)) DirectoryCopy(resultImagePath, 
                         Path.Combine(newdirpath, "ResultImage"), true);
                     else ShowMessage("No Result Image Folder");
+                }
+
+                //사용한 모델 정보 텍스트 파일
+                using (StreamWriter writer = new StreamWriter(Path.Combine(newdirpath, "used_model.txt")))
+                {
+                    foreach (string model_name in ifcLoader.usedmodel)
+                    {
+                        writer.WriteLine(model_name);
+                    }
                 }
 
                 //폴더 압축하기

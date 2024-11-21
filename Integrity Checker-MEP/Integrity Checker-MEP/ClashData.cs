@@ -8,22 +8,30 @@ namespace Integrity_Checker_MEP
 {
     public class ClashData
     {
-        public ClashData() { }
-        public string ClashType { get; set; }
-        public string HardClashType { get; set; }
-        public string SoftClashType { get; set; }
-        public string Severity { get; set; }
-        public string Element1discipline { get; set; }
-        public string Element1GUID { get; set; }
-        public string Element1Type { get; set; }
-        public string Element2discipline { get; set; }
-        public string Element2GUID { get; set; }
-        public string Element2Type { get; set; }
-        public string ClashDistance { get; set; }
-        public string Clearance { get; set; }
-        public string ClashPoint { get; set; }
-        public string ClashVolume { get; set; }
-        public string Topology { get; set; }
-        public string Offset { get; set; }
+        public string Element1Guid;
+        public string Element2Guid;
+        public string Type;
+        public string MovabilityValue;
+        public string Topology;
+        public string HardClashType;
+        public string SoftClashType;
+        public string Severity;
+        public string Clearance;
+        public string MovabilityResult;
+        public string Offset;
+
+        public ClashData(string[] stringdata) {
+            Element1Guid = stringdata[0];
+            Element2Guid = stringdata[1];
+            Type = stringdata[2];
+            MovabilityValue = stringdata[3];
+            Topology = stringdata[4];
+            HardClashType = stringdata[5];
+            SoftClashType = stringdata[6];
+            Severity = stringdata[7];
+            Clearance = stringdata[8];
+            MovabilityResult = stringdata[9];
+            Offset = stringdata[10];
+        }
     }
 }

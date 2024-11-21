@@ -37,22 +37,17 @@ namespace ClashTest2
         // When header is changed, change the enum and add from designer
         enum Header
         {
-            ClashType = 0,
-            HardClashType = 1,
-            SoftClashType = 2,
-            Severity = 3,
-            Element1discipline = 4,
-            Element1GUID = 5,
-            Element1Type = 6,
-            Element2discipline = 7,
-            Element2GUID = 8,
-            Element2Type = 9,
-            ClashDistance = 10,
-            Clearance = 11,
-            ClashPoint = 12,
-            ClashVolume = 13,
-            Topology = 14,
-            Offset = 15,
+            Element1Guid,
+            Element2Guid,
+            Type,
+            MovabilityValue,
+            Topology,
+            HardClashType,
+            SoftClashType,
+            Severity,
+            Clearance,
+            MovabilityResult,
+            Offset
         }
 
         // bool for checked column header
@@ -110,25 +105,8 @@ namespace ClashTest2
                     {
                         // Remove leading and trailing double quotes if present
                         stringdata[i] = stringdata[i].Trim('"');
-                    }
-                    ClashData clashdata = new ClashData();
-                    clashdata.ClashType = stringdata[((int)Header.ClashType)];
-                    clashdata.HardClashType = stringdata[((int)Header.HardClashType)];
-                    clashdata.SoftClashType = stringdata[((int)Header.SoftClashType)];
-                    clashdata.Severity = stringdata[((int)Header.Severity)].ToUpper();
-                    clashdata.Element1discipline = stringdata[((int)Header.Element1discipline)];
-                    clashdata.Element1GUID = stringdata[((int)Header.Element1GUID)];
-                    clashdata.Element1Type = stringdata[((int)Header.Element1Type)];
-                    clashdata.Element2discipline = stringdata[((int)Header.Element2discipline)];
-                    clashdata.Element2GUID = stringdata[((int)Header.Element2GUID)];
-                    clashdata.Element2Type = stringdata[((int)Header.Element2Type)];
-                    clashdata.ClashDistance = stringdata[((int)Header.ClashDistance)];
-                    clashdata.Clearance = stringdata[((int)Header.Clearance)];
-                    clashdata.ClashPoint = stringdata[((int)Header.ClashPoint)];
-                    clashdata.ClashVolume = stringdata[((int)Header.ClashVolume)];
-                    clashdata.Topology = stringdata[((int)Header.Topology)];
-                    clashdata.Offset = stringdata[((int)Header.Offset)];
-                    clashDataList.Add(clashdata);
+                    }                  
+                    clashDataList.Add(new ClashData(stringdata));
                 }
                 return clashDataList;
             }
@@ -150,41 +128,34 @@ namespace ClashTest2
         /// </summary>
         void addDataToList()
         {
-            if (dataList != null)
+            if (dataList == null) return;
+
+            foreach (ClashData clash in dataList)
             {
-                foreach (ClashData clash in dataList)
+                if (clash.HardClashType == "   ")
                 {
-                    if (clash.ClashType == "Hard")
+                    dataSoftList.Add(clash);
+                    switch(clash.Severity)
                     {
-                        dataHardList.Add(clash);
-                        if (clash.Severity == "MAJOR")
-                        {
-                            major_hard++;
-                        }
-                        else if (clash.Severity == "MEDIUM")
-                        {
-                            medium_hard++;
-                        }
-                        else
-                        {
-                            minor_hard++;
-                        }
+                        case "Major":
+                            major_soft++;  break;
+                        case "Medium":
+                            medium_soft++; break;
+                        case "Minor":
+                            minor_soft++; break;
                     }
-                    else if (clash.ClashType == "Soft")
+                }
+                else if (clash.SoftClashType == "   ")
+                {
+                    dataHardList.Add(clash);
+                    switch (clash.Severity)
                     {
-                        dataSoftList.Add(clash);
-                        if (clash.Severity == "MAJOR")
-                        {
-                            major_soft++;
-                        }
-                        else if (clash.Severity == "MEDIUM")
-                        {
-                            medium_soft++;
-                        }
-                        else
-                        {
-                            minor_soft++;
-                        }
+                        case "Major":
+                            major_hard++; break;
+                        case "Medium":
+                            medium_hard++; break;
+                        case "Minor":
+                            minor_hard++; break;
                     }
                 }
             }
@@ -221,9 +192,10 @@ namespace ClashTest2
                 addDataToList();
 
                 // Only group by severity -> if canceled can be grouped by other headers
-                folv.AlwaysGroupByColumn = SeverityCol;
+                folv.AlwaysGroupByColumn = Severity;
                 // MVC pattern -> check objectListView 
                 folv.SetObjects(dataList);
+                folv.BuildGroups(Severity, SortOrder.None);
 
                 tog_Hard.Checked = true;
                 tog_Soft.Checked = true;
@@ -288,8 +260,8 @@ namespace ClashTest2
         /// <param name="e"></param>
         void folv_SelectionChanged(object sender, EventArgs e)
         {
-            guid1 = folv.SelectedItem.GetSubItem((int)Header.Element1GUID).Text;
-            guid2 = folv.SelectedItem.GetSubItem((int)Header.Element2GUID).Text;
+            guid1 = folv.SelectedItem.GetSubItem((int)Header.Element1Guid).Text;
+            guid2 = folv.SelectedItem.GetSubItem((int)Header.Element2Guid).Text;
             showGUID();
             SelectClash(guid1, guid2);
         }
@@ -380,27 +352,22 @@ namespace ClashTest2
                 // Change accordingly
                 if (headerBool[0] == false)
                 {
-                    folv.Columns[(int)Header.ClashType].Width = 0;
+                    folv.Columns[(int)Header.Element1Guid].Width = 0;
                 }
                 else
                 {
-                    folv.Columns[(int)Header.ClashType].Width = 81;
+                    folv.Columns[(int)Header.Element1Guid].Width = 81;
                 }
-                HardClashTypeCol.IsVisible = headerBool[(int)Header.HardClashType];
-                SoftClashTypeCol.IsVisible = headerBool[(int)Header.SoftClashType];
-                SeverityCol.IsVisible = headerBool[(int)Header.Severity];
-                Elem1disciplineCol.IsVisible = headerBool[(int)Header.Element1discipline];
-                Elem1GUIDCol.IsVisible = headerBool[(int)Header.Element1GUID];
-                Elem1TypeCol.IsVisible = headerBool[(int)Header.Element1Type];
-                Elem2disciplineCol.IsVisible = headerBool[(int)Header.Element2discipline];
-                Elem2GUIDCol.IsVisible = headerBool[(int)Header.Element2GUID];
-                Elem2TypeCol.IsVisible = headerBool[(int)Header.Element2Type];
-                ClashDistCol.IsVisible = headerBool[(int)Header.ClashDistance];
-                ClearanceCol.IsVisible = headerBool[(int)Header.Clearance];
-                ClashPointCol.IsVisible = headerBool[(int)Header.ClashPoint];
-                ClashVolumeCol.IsVisible = headerBool[(int)Header.ClashVolume];
-                TopologyCol.IsVisible = headerBool[(int)Header.Topology];
-                OffsetCol.IsVisible = headerBool[(int)Header.Offset];
+                Element2Guid.IsVisible = headerBool[(int)Header.Element2Guid];
+                Type.IsVisible = headerBool[(int)Header.Type];
+                MovabilityValue.IsVisible = headerBool[(int)Header.Severity];
+                Topology.IsVisible = headerBool[(int)Header.Topology];
+                HardClashType.IsVisible = headerBool[(int)Header.HardClashType];
+                SoftClashType.IsVisible = headerBool[(int)Header.SoftClashType];
+                Severity.IsVisible = headerBool[(int)Header.Severity];
+                Clearance.IsVisible = headerBool[(int)Header.Clearance];
+                MovabilityResult.IsVisible = headerBool[(int)Header.MovabilityResult];
+                Offset.IsVisible = headerBool[(int)Header.Offset];
 
                 folv.RebuildColumns();
             }
@@ -419,12 +386,12 @@ namespace ClashTest2
             minorSoft.Visible = true;
 
             majorHard.Text = "MAJOR_H:" + major_hard.ToString();
-            majorSoft.Text = "MAJOR_S:" + major_soft.ToString();
             mediumHard.Text = "MEDIUM_H:" + medium_hard.ToString();
-            mediumSoft.Text = "MEDIUM_S:" + medium_soft.ToString();
             minorHard.Text = "MINOR_H:" + minor_hard.ToString();
-            minorSoft.Text = "MINOR_S:" + minor_soft.ToString();
-            
+
+            majorSoft.Text = "MAJOR_H:" + major_soft.ToString();
+            mediumSoft.Text = "MEDIUM_H:" + medium_soft.ToString();
+            minorSoft.Text = "MINOR_H:" + minor_soft.ToString();
         }
 
         /// <summary>
@@ -452,7 +419,7 @@ namespace ClashTest2
             if(folv.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element1GUID).Text);
+                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element1Guid).Text);
             }
 
         }
@@ -468,7 +435,7 @@ namespace ClashTest2
             if (folv.SelectedIndices.Count > 0)
             {
                 doc.CurrentSelection.Clear();
-                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element2GUID).Text);
+                SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element2Guid).Text);
             }
         }
         #endregion
@@ -564,36 +531,6 @@ namespace ClashTest2
                 vp.Projection = ViewpointProjection.Orthographic;
             }
             Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CopyFrom(vp);
-        }
-
-        public void SetPlaneSectioningItem(Point3D CenterPoint3D, double meter, bool Enabled = true, Viewpoint currView = null)
-        {
-
-            currView.InternalClipPlanes.SetMode(Autodesk.Navisworks.Api.Interop.LcOaClipPlaneSetMode.eMODE_BOX);
-
-            //InternalClipPlanes는 숨겨진 프로퍼티이다. 모드를 박스 모드로 바꿔준다.
-            Point3D minPoint = new Point3D(CenterPoint3D.X - meter, CenterPoint3D.Y - meter, CenterPoint3D.Z - meter);
-            Point3D maxPoint = new Point3D(CenterPoint3D.X + meter, CenterPoint3D.Y + meter, CenterPoint3D.Z + meter);
-            currView.InternalClipPlanes.SetBox(new BoundingBox3D(minPoint, maxPoint));
-
-            //중심점으로부터 거리만큼 박스를 만들어준다. 현재 여기서는 일정 크기만큼 박싱을 해주지만 본인이 원하는 지점의 위치에서 원하는 박스를 만들어서 사용하면 됨.
-            currView.InternalClipPlanes.SetEnabled(Enabled);
-
-            //존재여부설정
-
-            Autodesk.Navisworks.Api.Application.ActiveDocument.CurrentViewpoint.CopyFrom(currView);
-
-            //현재 뷰포인트에 카피시켜준다.
-
-        }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string stringPos = folv.SelectedItem.GetSubItem((int)Header.ClashPoint).Text;
-            MessageBox.Show(stringPos);
-            string[] coordinates = stringPos.Split(',');
-            Point3D centerPos = new Point3D(float.Parse(coordinates[0]), float.Parse(coordinates[1]), float.Parse(coordinates[2]));
-            Viewpoint currView = doc.CurrentViewpoint.CreateCopy();
-            SetPlaneSectioningItem(centerPos, 50, true,currView);
         }
 
         /// <summary>

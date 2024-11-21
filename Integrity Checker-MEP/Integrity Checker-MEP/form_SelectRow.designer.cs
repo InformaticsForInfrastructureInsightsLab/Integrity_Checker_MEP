@@ -1,4 +1,6 @@
-﻿namespace ClashTest2
+﻿using System;
+
+namespace ClashTest2
 {
     partial class SelectHeader
     {
@@ -48,22 +50,18 @@
             this.checkedListBox1.CheckOnClick = true;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
-            "Clash type",
-            "Hardclash type",
-            "Softclash type",
-            "Severity",
-            "Element1 discipline",
-            "Element1 GUID",
-            "Element1 type",
-            "Element2 discipline",
-            "Element2 GUID",
-            "Element2 type",
-            "Clash distance",
-            "Clearance",
-            "Clash point",
-            "Clash volume",
-            "Topology",
-            "Offset"});
+                "Element1Guid",
+                "Element2Guid",
+                "Type",
+                "MovabilityValue",
+                "Topology",
+                "HardClashType",
+                "SoftClashType",
+                "Severity",
+                "Clearance",
+                "MovabilityResult",
+                "Offset"
+            });
             this.checkedListBox1.Location = new System.Drawing.Point(2, 3);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(183, 260);

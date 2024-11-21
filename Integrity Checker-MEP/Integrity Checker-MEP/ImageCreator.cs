@@ -315,7 +315,7 @@ namespace Integrity_Checker_MEP
 
                         using (Bitmap clashImage = doc.ActiveView.GenerateImage(ImageGenerationStyle.Scene, width, height))
                         {
-                            clashImage.Save(Path.Combine(testsideNamePath, $"{item1.InstanceHashCode.ToString()}+{item1.InstanceHashCode.ToString()}_{i+1}.png"), ImageFormat.Png);
+                            clashImage.Save(Path.Combine(testsideNamePath, $"{item1.InstanceGuid.ToString()}+{item2.InstanceGuid.ToString()}_{i+1}.png"), ImageFormat.Png);
                         }
 
                     }
