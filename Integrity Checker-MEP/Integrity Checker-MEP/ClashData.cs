@@ -18,8 +18,14 @@ namespace Integrity_Checker_MEP
         public string Severity;
         public string Clearance;
         public string MovabilityResult;
+        public string MovableSpace;
+        public string MovableDistance;
         public string Offset;
         public string Penetration;
+        public string ABS_Volume_Diff;
+        public string ABS_Volume_SUM;
+        public string ClashVolume;
+
 
         public ClashData(string[] stringdata) {
             Element1Guid = stringdata[0];
@@ -32,8 +38,13 @@ namespace Integrity_Checker_MEP
             Severity = stringdata[7];
             Clearance = stringdata[8];
             MovabilityResult = stringdata[9];
-            Offset = stringdata[10];
-            Penetration = stringdata[11];
+            MovableSpace = stringdata[10];
+            MovableDistance = stringdata[11];
+            Offset = stringdata[12];
+            Penetration = stringdata[13];
+            ABS_Volume_Diff = stringdata[14];
+            ABS_Volume_SUM = stringdata[15];
+            ClashVolume = stringdata[16];
         }
     }
 }

@@ -58,8 +58,13 @@
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovableSpace = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovableDistance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Offset = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Penetration = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ABS_Volume_Diff = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ABS_Volume_SUM = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClashVolume = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.folv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -283,15 +288,20 @@
             this.folv.AllColumns.Add(this.Element1Guid);
             this.folv.AllColumns.Add(this.Element2Guid);
             this.folv.AllColumns.Add(this.Type);
-            this.folv.AllColumns.Add(this.MovabilityValue);
             this.folv.AllColumns.Add(this.Topology);
             this.folv.AllColumns.Add(this.HardClashType);
             this.folv.AllColumns.Add(this.SoftClashType);
             this.folv.AllColumns.Add(this.Severity);
             this.folv.AllColumns.Add(this.Clearance);
+            this.folv.AllColumns.Add(this.MovabilityValue);
             this.folv.AllColumns.Add(this.MovabilityResult);
+            this.folv.AllColumns.Add(this.MovableSpace);
+            this.folv.AllColumns.Add(this.MovableDistance);
             this.folv.AllColumns.Add(this.Offset);
             this.folv.AllColumns.Add(this.Penetration);
+            this.folv.AllColumns.Add(this.ABS_Volume_Diff);
+            this.folv.AllColumns.Add(this.ABS_Volume_SUM);
+            this.folv.AllColumns.Add(this.ClashVolume);
             this.folv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -307,8 +317,13 @@
             this.Clearance,
             this.MovabilityResult,
             this.MovabilityValue,
+            this.MovableSpace,
+            this.MovableDistance,
             this.Offset,
-            this.Penetration});
+            this.Penetration,
+            this.ABS_Volume_Diff,
+            this.ABS_Volume_SUM,
+            this.ClashVolume});
             this.folv.Cursor = System.Windows.Forms.Cursors.Default;
             this.folv.FullRowSelect = true;
             this.folv.HideSelection = false;
@@ -393,6 +408,20 @@
             this.MovabilityResult.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.MovabilityResult.Width = 98;
             // 
+            // Movable_space
+            // 
+            this.MovableSpace.AspectName = "MovableSpace";
+            this.MovableSpace.Text = "MovableSpace";
+            this.MovableSpace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovableSpace.Width = 98;
+            // 
+            // MovabilityResult
+            // 
+            this.MovableDistance.AspectName = "MovableDistance";
+            this.MovableDistance.Text = "MovableDistance";
+            this.MovableDistance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovableDistance.Width = 98;
+            // 
             // Offset
             // 
             this.Offset.AspectName = "Offset";
@@ -402,10 +431,31 @@
             // 
             // Penetration
             // 
-            this.Offset.AspectName = "Penetration";
-            this.Offset.Text = "Penetration";
-            this.Offset.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Offset.Width = 98;
+            this.Penetration.AspectName = "Penetration";
+            this.Penetration.Text = "Penetration";
+            this.Penetration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Penetration.Width = 98;
+            // 
+            // ABS_Volume_Diff
+            // 
+            this.ABS_Volume_Diff.AspectName = "ABS_Volume_Diff";
+            this.ABS_Volume_Diff.Text = "ABS_Volume_Diff";
+            this.ABS_Volume_Diff.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ABS_Volume_Diff.Width = 98;
+            // 
+            // ABS_Volume_Sum
+            // 
+            this.ABS_Volume_SUM.AspectName = "ABS_Volume_SUM";
+            this.ABS_Volume_SUM.Text = "ABS_Volume_SUM";
+            this.ABS_Volume_SUM.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ABS_Volume_SUM.Width = 98;
+            // 
+            // Clash_Volume
+            // 
+            this.ClashVolume.AspectName = "ClashVolume";
+            this.ClashVolume.Text = "ClashVolume";
+            this.ClashVolume.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ClashVolume.Width = 98;            
             // 
             // form_ResultViewer
             // 
@@ -472,8 +522,13 @@
         private BrightIdeasSoftware.OLVColumn Severity;
         private BrightIdeasSoftware.OLVColumn Clearance;
         private BrightIdeasSoftware.OLVColumn MovabilityResult;
+        private BrightIdeasSoftware.OLVColumn MovableSpace;
+        private BrightIdeasSoftware.OLVColumn MovableDistance;
         private BrightIdeasSoftware.OLVColumn Offset;
         private BrightIdeasSoftware.OLVColumn Penetration;
+        private BrightIdeasSoftware.OLVColumn ABS_Volume_Diff;
+        private BrightIdeasSoftware.OLVColumn ABS_Volume_SUM;
+        private BrightIdeasSoftware.OLVColumn ClashVolume;
     }
 }
 

@@ -47,8 +47,13 @@ namespace ClashTest2
             Severity,
             Clearance,
             MovabilityResult,
+            MovablSpace,
+            MovableDistance,
             Offset,
-            Penetration
+            Penetration,
+            ABS_Volume_Diff,
+            ABS_Volume_SUM,
+            ClashVolume
         }
 
         // bool for checked column header
