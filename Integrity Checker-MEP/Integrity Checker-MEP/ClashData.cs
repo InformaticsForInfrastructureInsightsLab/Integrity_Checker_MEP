@@ -19,6 +19,7 @@ namespace Integrity_Checker_MEP
         public string Clearance;
         public string MovabilityResult;
         public string Offset;
+        public string Penetration;
 
         public ClashData(string[] stringdata) {
             Element1Guid = stringdata[0];
@@ -32,6 +33,7 @@ namespace Integrity_Checker_MEP
             Clearance = stringdata[8];
             MovabilityResult = stringdata[9];
             Offset = stringdata[10];
+            Penetration = stringdata[11];
         }
     }
 }

@@ -47,7 +47,8 @@ namespace ClashTest2
             Severity,
             Clearance,
             MovabilityResult,
-            Offset
+            Offset,
+            Penetration
         }
 
         // bool for checked column header

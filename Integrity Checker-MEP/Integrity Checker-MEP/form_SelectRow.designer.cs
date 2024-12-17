@@ -60,7 +60,8 @@ namespace ClashTest2
                 "Severity",
                 "Clearance",
                 "MovabilityResult",
-                "Offset"
+                "Offset",
+                "Penetration"
             });
             this.checkedListBox1.Location = new System.Drawing.Point(2, 3);
             this.checkedListBox1.Name = "checkedListBox1";

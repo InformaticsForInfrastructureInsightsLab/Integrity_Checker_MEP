@@ -59,6 +59,7 @@
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Offset = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Penetration = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.folv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -290,6 +291,7 @@
             this.folv.AllColumns.Add(this.Clearance);
             this.folv.AllColumns.Add(this.MovabilityResult);
             this.folv.AllColumns.Add(this.Offset);
+            this.folv.AllColumns.Add(this.Penetration);
             this.folv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -298,14 +300,15 @@
             this.Element1Guid,
             this.Element2Guid,
             this.Type,
-            this.MovabilityValue,
             this.Topology,
             this.HardClashType,
             this.SoftClashType,
             this.Severity,
             this.Clearance,
             this.MovabilityResult,
-            this.Offset});
+            this.MovabilityValue,
+            this.Offset,
+            this.Penetration});
             this.folv.Cursor = System.Windows.Forms.Cursors.Default;
             this.folv.FullRowSelect = true;
             this.folv.HideSelection = false;
@@ -397,6 +400,13 @@
             this.Offset.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Offset.Width = 98;
             // 
+            // Penetration
+            // 
+            this.Offset.AspectName = "Penetration";
+            this.Offset.Text = "Penetration";
+            this.Offset.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Offset.Width = 98;
+            // 
             // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -463,6 +473,7 @@
         private BrightIdeasSoftware.OLVColumn Clearance;
         private BrightIdeasSoftware.OLVColumn MovabilityResult;
         private BrightIdeasSoftware.OLVColumn Offset;
+        private BrightIdeasSoftware.OLVColumn Penetration;
     }
 }
 
