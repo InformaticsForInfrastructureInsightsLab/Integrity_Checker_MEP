@@ -169,7 +169,7 @@
             this.btn_load_chat.TabIndex = 9;
             this.btn_load_chat.Text = "Load AI Chat";
             this.btn_load_chat.UseVisualStyleBackColor = true;
-            //this.btn_load_chat.Click += new System.EventHandler(this.click_btn_show_graph);
+            this.btn_load_chat.Click += new System.EventHandler(this.click_btn_load_chat);
             // 
             // btn_Item1
             // 

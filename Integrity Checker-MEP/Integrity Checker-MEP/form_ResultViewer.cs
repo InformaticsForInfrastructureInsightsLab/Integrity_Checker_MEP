@@ -455,6 +455,12 @@ namespace ClashTest2
             });
         }
 
+        private void click_btn_load_chat(object sender, EventArgs e)
+        {
+            Form_Chat chat = new Form_Chat();
+            chat.ShowDialog();
+        }
+
         #endregion
 
         #region Navisworks
