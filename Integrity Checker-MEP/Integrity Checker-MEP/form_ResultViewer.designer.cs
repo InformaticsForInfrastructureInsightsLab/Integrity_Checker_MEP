@@ -35,6 +35,8 @@
             this.tog_Soft = new System.Windows.Forms.CheckBox();
             this.btn_Download = new System.Windows.Forms.Button();
             this.btn_SelectHeader = new System.Windows.Forms.Button();
+            this.btn_show_graph = new System.Windows.Forms.Button();
+            this.btn_load_chat = new System.Windows.Forms.Button();
             this.btn_Item1 = new System.Windows.Forms.Button();
             this.btn_item2 = new System.Windows.Forms.Button();
             this.majorHard = new System.Windows.Forms.Label();
@@ -51,12 +53,12 @@
             this.Element1Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Element2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Type = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.MovabilityValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Topology = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.HardClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.SoftClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovableSpace = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovableDistance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -146,6 +148,28 @@
             this.btn_SelectHeader.Text = "Select header";
             this.btn_SelectHeader.UseVisualStyleBackColor = true;
             this.btn_SelectHeader.Click += new System.EventHandler(this.click_btn_SelectHeader);
+            // 
+            // btn_show_graph
+            // 
+            this.btn_show_graph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_show_graph.Location = new System.Drawing.Point(658, 235);
+            this.btn_show_graph.Name = "btn_show_graph";
+            this.btn_show_graph.Size = new System.Drawing.Size(94, 23);
+            this.btn_show_graph.TabIndex = 9;
+            this.btn_show_graph.Text = "Link Graph";
+            this.btn_show_graph.UseVisualStyleBackColor = true;
+            this.btn_show_graph.Click += new System.EventHandler(this.click_btn_show_graph);
+            // 
+            // btn_load_chat
+            // 
+            this.btn_load_chat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_load_chat.Location = new System.Drawing.Point(658, 266);
+            this.btn_load_chat.Name = "btn_load_chat";
+            this.btn_load_chat.Size = new System.Drawing.Size(94, 23);
+            this.btn_load_chat.TabIndex = 9;
+            this.btn_load_chat.Text = "Load AI Chat";
+            this.btn_load_chat.UseVisualStyleBackColor = true;
+            //this.btn_load_chat.Click += new System.EventHandler(this.click_btn_show_graph);
             // 
             // btn_Item1
             // 
@@ -360,13 +384,6 @@
             this.Type.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Type.Width = 93;
             // 
-            // MovabilityValue
-            // 
-            this.MovabilityValue.AspectName = "MovabilityValue";
-            this.MovabilityValue.Text = "Movability value";
-            this.MovabilityValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MovabilityValue.Width = 100;
-            // 
             // Topology
             // 
             this.Topology.AspectName = "Topology";
@@ -401,6 +418,13 @@
             this.Clearance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Clearance.Width = 123;
             // 
+            // MovabilityValue
+            // 
+            this.MovabilityValue.AspectName = "MovabilityValue";
+            this.MovabilityValue.Text = "Movability value";
+            this.MovabilityValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue.Width = 100;
+            // 
             // MovabilityResult
             // 
             this.MovabilityResult.AspectName = "MovabilityResult";
@@ -408,14 +432,14 @@
             this.MovabilityResult.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.MovabilityResult.Width = 98;
             // 
-            // Movable_space
+            // MovableSpace
             // 
             this.MovableSpace.AspectName = "MovableSpace";
             this.MovableSpace.Text = "MovableSpace";
             this.MovableSpace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.MovableSpace.Width = 98;
             // 
-            // MovabilityResult
+            // MovableDistance
             // 
             this.MovableDistance.AspectName = "MovableDistance";
             this.MovableDistance.Text = "MovableDistance";
@@ -432,7 +456,7 @@
             // Penetration
             // 
             this.Penetration.AspectName = "Penetration";
-            this.Penetration.Text = "Penetration";
+            this.Penetration.Text = "penetrabilityResult";
             this.Penetration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Penetration.Width = 98;
             // 
@@ -443,19 +467,19 @@
             this.ABS_Volume_Diff.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ABS_Volume_Diff.Width = 98;
             // 
-            // ABS_Volume_Sum
+            // ABS_Volume_SUM
             // 
             this.ABS_Volume_SUM.AspectName = "ABS_Volume_SUM";
             this.ABS_Volume_SUM.Text = "ABS_Volume_SUM";
             this.ABS_Volume_SUM.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ABS_Volume_SUM.Width = 98;
             // 
-            // Clash_Volume
+            // ClashVolume
             // 
             this.ClashVolume.AspectName = "ClashVolume";
             this.ClashVolume.Text = "ClashVolume";
             this.ClashVolume.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ClashVolume.Width = 98;            
+            this.ClashVolume.Width = 98;
             // 
             // form_ResultViewer
             // 
@@ -476,6 +500,8 @@
             this.Controls.Add(this.btn_item2);
             this.Controls.Add(this.btn_Item1);
             this.Controls.Add(this.btn_SelectHeader);
+            this.Controls.Add(this.btn_show_graph);
+            this.Controls.Add(this.btn_load_chat);
             this.Controls.Add(this.btn_Download);
             this.Controls.Add(this.tog_Soft);
             this.Controls.Add(this.tog_Hard);
@@ -500,6 +526,8 @@
         private System.Windows.Forms.Button btn_SelectHeader;
         private System.Windows.Forms.Button btn_Item1;
         private System.Windows.Forms.Button btn_item2;
+        private System.Windows.Forms.Button btn_show_graph;
+        private System.Windows.Forms.Button btn_load_chat;
         private System.Windows.Forms.Label majorHard;
         private System.Windows.Forms.Label majorSoft;
         private System.Windows.Forms.Label mediumHard;

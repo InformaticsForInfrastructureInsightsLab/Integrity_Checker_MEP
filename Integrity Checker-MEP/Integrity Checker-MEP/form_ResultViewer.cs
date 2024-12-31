@@ -21,6 +21,7 @@ using ComApiBridge = Autodesk.Navisworks.Api.ComApi.ComApiBridge;
 using Autodesk.Navisworks.Api.ComApi;
 using Autodesk.Navisworks.Api.Interop;
 using Autodesk.Navisworks.Api.Interop.ComApi;
+using System.Diagnostics;
 
 namespace ClashTest2
 {
@@ -444,6 +445,16 @@ namespace ClashTest2
                 SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element2Guid).Text);
             }
         }
+
+        private void click_btn_show_graph(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "http://117.17.196.59:7474/browser/",
+                UseShellExecute = true // 기본 브라우저에서 실행
+            });
+        }
+
         #endregion
 
         #region Navisworks
