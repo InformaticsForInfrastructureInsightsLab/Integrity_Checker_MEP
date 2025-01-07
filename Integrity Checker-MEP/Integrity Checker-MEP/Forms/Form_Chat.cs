@@ -16,5 +16,12 @@ namespace Integrity_Checker_MEP
         {
             InitializeComponent();
         }
+
+
+
+        private void input_text_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
