@@ -35,7 +35,6 @@
             this.tog_Soft = new System.Windows.Forms.CheckBox();
             this.btn_Download = new System.Windows.Forms.Button();
             this.btn_SelectHeader = new System.Windows.Forms.Button();
-            this.btn_show_graph = new System.Windows.Forms.Button();
             this.btn_load_chat = new System.Windows.Forms.Button();
             this.btn_Item1 = new System.Windows.Forms.Button();
             this.btn_item2 = new System.Windows.Forms.Button();
@@ -148,18 +147,7 @@
             this.btn_SelectHeader.Text = "Select header";
             this.btn_SelectHeader.UseVisualStyleBackColor = true;
             this.btn_SelectHeader.Click += new System.EventHandler(this.click_btn_SelectHeader);
-            // 
-            // btn_show_graph
-            // 
-            this.btn_show_graph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_show_graph.Location = new System.Drawing.Point(658, 235);
-            this.btn_show_graph.Name = "btn_show_graph";
-            this.btn_show_graph.Size = new System.Drawing.Size(94, 23);
-            this.btn_show_graph.TabIndex = 9;
-            this.btn_show_graph.Text = "Link Graph";
-            this.btn_show_graph.UseVisualStyleBackColor = true;
-            this.btn_show_graph.Click += new System.EventHandler(this.click_btn_show_graph);
-            // 
+            //
             // btn_load_chat
             // 
             this.btn_load_chat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -500,7 +488,6 @@
             this.Controls.Add(this.btn_item2);
             this.Controls.Add(this.btn_Item1);
             this.Controls.Add(this.btn_SelectHeader);
-            this.Controls.Add(this.btn_show_graph);
             this.Controls.Add(this.btn_load_chat);
             this.Controls.Add(this.btn_Download);
             this.Controls.Add(this.tog_Soft);
@@ -526,7 +513,6 @@
         private System.Windows.Forms.Button btn_SelectHeader;
         private System.Windows.Forms.Button btn_Item1;
         private System.Windows.Forms.Button btn_item2;
-        private System.Windows.Forms.Button btn_show_graph;
         private System.Windows.Forms.Button btn_load_chat;
         private System.Windows.Forms.Label majorHard;
         private System.Windows.Forms.Label majorSoft;

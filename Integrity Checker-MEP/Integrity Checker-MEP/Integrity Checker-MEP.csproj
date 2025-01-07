@@ -149,56 +149,50 @@
   <ItemGroup>
     <Compile Include="ClashChecker.cs" />
     <Compile Include="ClashData.cs" />
-    <Compile Include="IFCLoad.cs">
+    <Compile Include="Forms\Form_Chat.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IFCLoad.Designer.cs">
+    <Compile Include="Forms\Form_Chat.Designer.cs">
+      <DependentUpon>Form_Chat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\IFCLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\IFCLoad.Designer.cs">
       <DependentUpon>IFCLoad.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_ImageOption.cs">
+    <Compile Include="Forms\form_ImageOption.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_ImageOption.Designer.cs">
+    <Compile Include="Forms\form_ImageOption.Designer.cs">
       <DependentUpon>form_ImageOption.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_ResultViewer.cs">
+    <Compile Include="Forms\form_ResultViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_ResultViewer.designer.cs">
+    <Compile Include="Forms\form_ResultViewer.designer.cs">
       <DependentUpon>form_ResultViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_SelectRow.cs">
+    <Compile Include="Forms\form_SelectRow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_SelectRow.designer.cs">
+    <Compile Include="Forms\form_SelectRow.designer.cs">
       <DependentUpon>form_SelectRow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Setting.cs">
+    <Compile Include="Forms\Form_Setting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Setting.Designer.cs">
+    <Compile Include="Forms\Form_Setting.Designer.cs">
       <DependentUpon>Form_Setting.cs</DependentUpon>
     </Compile>
-    <Compile Include="From_Log.cs">
+    <Compile Include="Forms\From_Log.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="From_Log.Designer.cs">
+    <Compile Include="Forms\From_Log.Designer.cs">
       <DependentUpon>From_Log.cs</DependentUpon>
     </Compile>
     <Compile Include="CollapsibleListView.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageCreator.cs" />
     <Compile Include="ImageCreatorBase.cs" />
@@ -217,28 +211,25 @@
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Form_Chat.resx">
+      <DependentUpon>Form_Chat.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form_ImageOption.resx">
+    <EmbeddedResource Include="Forms\form_ImageOption.resx">
       <DependentUpon>form_ImageOption.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_ResultViewer.resx">
+    <EmbeddedResource Include="Forms\form_ResultViewer.resx">
       <DependentUpon>form_ResultViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_SelectRow.resx">
+    <EmbeddedResource Include="Forms\form_SelectRow.resx">
       <DependentUpon>form_SelectRow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Setting.resx">
+    <EmbeddedResource Include="Forms\Form_Setting.resx">
       <DependentUpon>Form_Setting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="From_Log.resx">
+    <EmbeddedResource Include="Forms\From_Log.resx">
       <DependentUpon>From_Log.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="IFCLoad.resx">
+    <EmbeddedResource Include="Forms\IFCLoad.resx">
       <DependentUpon>IFCLoad.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
