@@ -499,20 +499,20 @@ namespace Integrity_Checker_MEP {
                             }
                             continue;
                         }
-                        if (temp1.Contains("IfcSpace")) { //물리적 간섭만 고려
-                            if (form_setting.export_UselessClash) {
-                                List_uselessClashes.Add(nwissue);
-                                List_uselessReasons.Add("[1]IfcSpace");
-                            }
-                            continue;
-                        }
-                        if (temp1.Contains("IfcPipeFitting")) {
-                            if (form_setting.export_UselessClash) {
-                                List_uselessClashes.Add(nwissue);
-                                List_uselessReasons.Add("[1]IfcPipeFitting");
-                            }
-                            continue;
-                        }
+                        //if (temp1.Contains("IfcSpace")) { //물리적 간섭만 고려
+                        //    if (form_setting.export_UselessClash) {
+                        //        List_uselessClashes.Add(nwissue);
+                        //        List_uselessReasons.Add("[1]IfcSpace");
+                        //    }
+                        //    continue;
+                        //}
+                        //if (temp1.Contains("IfcPipeFitting")) {
+                        //    if (form_setting.export_UselessClash) {
+                        //        List_uselessClashes.Add(nwissue);
+                        //        List_uselessReasons.Add("[1]IfcPipeFitting");
+                        //    }
+                        //    continue;
+                        //}
                         if (temp1.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
@@ -535,13 +535,13 @@ namespace Integrity_Checker_MEP {
                             }
                             continue;
                         }
-                        if (temp11.Contains("IfcPipeFitting")) {
-                            if (form_setting.export_UselessClash) {
-                                List_uselessClashes.Add(nwissue);
-                                List_uselessReasons.Add("[1]IfcPipeFitting");
-                            }
-                            continue;
-                        }
+                        //if (temp11.Contains("IfcPipeFitting")) {
+                        //    if (form_setting.export_UselessClash) {
+                        //        List_uselessClashes.Add(nwissue);
+                        //        List_uselessReasons.Add("[1]IfcPipeFitting");
+                        //    }
+                        //    continue;
+                        //}
                         if (temp11.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
@@ -565,20 +565,20 @@ namespace Integrity_Checker_MEP {
                             }
                             continue;
                         }
-                        if (temp2.Contains("IfcSpace")) {
-                            if (form_setting.export_UselessClash) {
-                                List_uselessClashes.Add(nwissue);
-                                List_uselessReasons.Add("[2]IfcSpace");
-                            }
-                            continue;
-                        }
-                        if (temp2.Contains("IfcPipeFitting")) {
-                            if (form_setting.export_UselessClash) {
-                                List_uselessClashes.Add(nwissue);
-                                List_uselessReasons.Add("[2]IfcPipeFitting");
-                            }
-                            continue;
-                        }
+                        //if (temp2.Contains("IfcSpace")) {
+                        //    if (form_setting.export_UselessClash) {
+                        //        List_uselessClashes.Add(nwissue);
+                        //        List_uselessReasons.Add("[2]IfcSpace");
+                        //    }
+                        //    continue;
+                        //}
+                        //if (temp2.Contains("IfcPipeFitting")) {
+                        //    if (form_setting.export_UselessClash) {
+                        //        List_uselessClashes.Add(nwissue);
+                        //        List_uselessReasons.Add("[2]IfcPipeFitting");
+                        //    }
+                        //    continue;
+                        //}
                         if (temp2.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
@@ -600,13 +600,13 @@ namespace Integrity_Checker_MEP {
                             }
                             continue;
                         }
-                        if (temp22.Contains("IfcPipeFitting")) {
-                            if (form_setting.export_UselessClash) {
-                                List_uselessClashes.Add(nwissue);
-                                List_uselessReasons.Add("[2]IfcPipeFitting");
-                            }
-                            continue;
-                        }
+                        //if (temp22.Contains("IfcPipeFitting")) {
+                        //    if (form_setting.export_UselessClash) {
+                        //        List_uselessClashes.Add(nwissue);
+                        //        List_uselessReasons.Add("[2]IfcPipeFitting");
+                        //    }
+                        //    continue;
+                        //}
                         if (temp22.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
