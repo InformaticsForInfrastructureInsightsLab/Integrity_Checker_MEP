@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Forms;
-using OxyPlot.WindowsForms;
+using Microsoft.Msagl.Drawing;
+using Microsoft.Msagl.GraphViewerGdi;
 
 namespace Integrity_Checker_MEP
 {
@@ -32,45 +33,42 @@ namespace Integrity_Checker_MEP
         /// </summary>
         private void InitializeComponent()
         {
-            this.plot_view = new OxyPlot.WindowsForms.PlotView();
+            this.send = new System.Windows.Forms.Button();
             this.model_answer = new System.Windows.Forms.ListBox();
             this.input_text = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // plot_view
+            // send
             // 
-            this.plot_view.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plot_view.Location = new System.Drawing.Point(0, 0);
-            this.plot_view.Name = "plot_view";
-            this.plot_view.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plot_view.Size = new System.Drawing.Size(800, 450);
-            this.plot_view.TabIndex = 0;
-            this.plot_view.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plot_view.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plot_view.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.send.Location = new System.Drawing.Point(835, 462);
+            this.send.Name = "send";
+            this.send.Size = new System.Drawing.Size(103, 126);
+            this.send.TabIndex = 0;
+            this.send.Text = "Send";
             // 
             // model_answer
             // 
             this.model_answer.ItemHeight = 12;
-            this.model_answer.Location = new System.Drawing.Point(0, 380);
+            this.model_answer.Location = new System.Drawing.Point(12, 380);
             this.model_answer.Name = "model_answer";
-            this.model_answer.Size = new System.Drawing.Size(950, 76);
+            this.model_answer.Size = new System.Drawing.Size(926, 76);
             this.model_answer.TabIndex = 0;
             // 
             // input_text
             // 
-            this.input_text.Location = new System.Drawing.Point(0, 462);
+            this.input_text.Location = new System.Drawing.Point(12, 462);
             this.input_text.Multiline = true;
             this.input_text.Name = "input_text";
-            this.input_text.Size = new System.Drawing.Size(950, 138);
+            this.input_text.Size = new System.Drawing.Size(817, 126);
             this.input_text.TabIndex = 1;
-            this.input_text.TextChanged += new System.EventHandler(this.input_text_TextChanged);
+            this.input_text.TextChanged += new System.EventHandler(this.on_click_send_button);
             // 
             // Form_Chat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(950, 600);
+            this.Controls.Add(this.send);
             this.Controls.Add(this.model_answer);
             this.Controls.Add(this.input_text);
             this.Name = "Form_Chat";
@@ -84,6 +82,5 @@ namespace Integrity_Checker_MEP
         private System.Windows.Forms.ListBox model_answer;
         private System.Windows.Forms.TextBox input_text;
         private System.Windows.Forms.Button send;
-        private PlotView plot_view;
     }
 }

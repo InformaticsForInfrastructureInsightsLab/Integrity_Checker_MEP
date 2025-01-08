@@ -16,11 +16,6 @@ using Autodesk.Navisworks.Api;
 using Color = Autodesk.Navisworks.Api.Color;
 using ListviewTest;
 using Integrity_Checker_MEP;
-using ComApi = Autodesk.Navisworks.Api.Interop.ComApi;
-using ComApiBridge = Autodesk.Navisworks.Api.ComApi.ComApiBridge;
-using Autodesk.Navisworks.Api.ComApi;
-using Autodesk.Navisworks.Api.Interop;
-using Autodesk.Navisworks.Api.Interop.ComApi;
 using System.Diagnostics;
 
 namespace ClashTest2
@@ -33,6 +28,8 @@ namespace ClashTest2
         List<ClashData> dataHardList = new List<ClashData>();
         List<ClashData> dataSoftList = new List<ClashData>();
         List<ClashData> dataNullList = new List<ClashData>();
+
+        Form_Chat chat;
 
         // enum used for the header of columns in ListView
         // When header is changed, change the enum and add from designer
@@ -457,7 +454,7 @@ namespace ClashTest2
 
         private void click_btn_load_chat(object sender, EventArgs e)
         {
-            Form_Chat chat = new Form_Chat();
+            chat = new Form_Chat();
             chat.ShowDialog();
         }
 
