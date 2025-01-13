@@ -1,9 +1,10 @@
-﻿using Microsoft.Msagl.Drawing;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Msagl.Drawing;
+using Microsoft.Msagl.GraphViewerGdi;
 
 namespace Integrity_Checker_MEP
 {
@@ -14,12 +15,6 @@ namespace Integrity_Checker_MEP
         public Form_Chat()
         {
             InitializeComponent();
-            Graph graph = new Graph();
-        }
-
-        private void input_text_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private async void on_click_send_button(object sender, EventArgs e)

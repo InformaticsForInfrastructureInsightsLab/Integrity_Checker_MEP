@@ -452,10 +452,15 @@ namespace ClashTest2
             });
         }
 
-        private void click_btn_load_chat(object sender, EventArgs e)
+        private async void click_btn_load_chat(object sender, EventArgs e)
         {
-            chat = new Form_Chat();
-            chat.ShowDialog();
+            await Task.Run(() =>
+            {
+                // 그래프 생성 및 렌더링 (MSAGL, QuickGraph 등)
+                chat = new Form_Chat();
+                chat.ShowDialog();
+            });
+            
         }
 
         #endregion
