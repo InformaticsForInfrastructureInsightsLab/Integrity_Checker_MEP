@@ -30,7 +30,7 @@ namespace ClashTest2
         List<ClashData> dataSoftList = new List<ClashData>();
         List<ClashData> dataNullList = new List<ClashData>();
 
-        Form_Chat chat;
+        Chat chat;
 
         // enum used for the header of columns in ListView
         // When header is changed, change the enum and add from designer
@@ -444,22 +444,11 @@ namespace ClashTest2
             }
         }
 
-        private void click_btn_show_graph(object sender, EventArgs e)
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = "http://117.17.196.59:7474/browser/",
-                UseShellExecute = true // 기본 브라우저에서 실행
-            });
-        }
-
         private void click_btn_load_chat(object sender, EventArgs e)
         {
-            ShowMyWindow();            
+            chat = new Chat();
+            Chat.ShowMyWindow();
         }
-
-        [DllImport("Dll1.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ShowMyWindow();
         #endregion
 
         #region Navisworks

@@ -138,14 +138,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat.cs" />
     <Compile Include="ClashChecker.cs" />
     <Compile Include="ClashData.cs" />
-    <Compile Include="Forms\Form_Chat.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Form_Chat.Designer.cs">
-      <DependentUpon>Form_Chat.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\IFCLoad.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -202,9 +197,6 @@
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\Form_Chat.resx">
-      <DependentUpon>Form_Chat.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\form_ImageOption.resx">
       <DependentUpon>form_ImageOption.cs</DependentUpon>
     </EmbeddedResource>
