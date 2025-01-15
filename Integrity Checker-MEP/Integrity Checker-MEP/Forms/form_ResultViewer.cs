@@ -17,6 +17,7 @@ using Color = Autodesk.Navisworks.Api.Color;
 using ListviewTest;
 using Integrity_Checker_MEP;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ClashTest2
 {
@@ -452,17 +453,13 @@ namespace ClashTest2
             });
         }
 
-        private async void click_btn_load_chat(object sender, EventArgs e)
+        private void click_btn_load_chat(object sender, EventArgs e)
         {
-            await Task.Run(() =>
-            {
-                // 그래프 생성 및 렌더링 (MSAGL, QuickGraph 등)
-                chat = new Form_Chat();
-                chat.ShowDialog();
-            });
-            
+            ShowMyWindow();            
         }
 
+        [DllImport("Dll1.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ShowMyWindow();
         #endregion
 
         #region Navisworks

@@ -59,6 +59,7 @@ namespace Integrity_Checker_MEP
             this.input_text.Name = "input_text";
             this.input_text.Size = new System.Drawing.Size(817, 126);
             this.input_text.TabIndex = 1;
+            this.input_text.TextChanged += this.user_writing;
             // 
             // Form_Chat
             // 

@@ -528,13 +528,7 @@ namespace Integrity_Checker_MEP {
                         catch {
                             temp11 = "";
                         }
-                        if (temp11.Contains("IfcStair")) {
-                            if (form_setting.export_UselessClash) {
-                                List_uselessClashes.Add(nwissue);
-                                List_uselessReasons.Add("[1]복합부재-IfcStair");
-                            }
-                            continue;
-                        }
+                        
                         //if (temp11.Contains("IfcPipeFitting")) {
                         //    if (form_setting.export_UselessClash) {
                         //        List_uselessClashes.Add(nwissue);
@@ -593,10 +587,10 @@ namespace Integrity_Checker_MEP {
                         catch {
                             temp22 = "";
                         }
-                        if (temp22.Contains("IfcStair")) {
+                        if (temp11.Contains("IfcStair") && temp22.Contains("IfcStair")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add((nwissue));
-                                List_uselessReasons.Add("[2]복합부재-IfcStair");
+                                List_uselessReasons.Add("복합부재-IfcStair");
                             }
                             continue;
                         }

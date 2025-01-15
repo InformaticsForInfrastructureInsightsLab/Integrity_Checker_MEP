@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Net.Http;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Msagl.Drawing;
-using Microsoft.Msagl.GraphViewerGdi;
 
 namespace Integrity_Checker_MEP
 {
@@ -52,6 +51,11 @@ namespace Integrity_Checker_MEP
 
             // 응답 데이터 읽기
             return await response.Content.ReadAsStringAsync();
+        }
+
+        private void user_writing(object sender, EventArgs e) 
+        { 
+
         }
     }
 }
