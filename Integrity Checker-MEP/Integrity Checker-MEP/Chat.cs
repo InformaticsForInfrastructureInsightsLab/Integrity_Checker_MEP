@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Integrity_Checker_MEP
 {
@@ -13,32 +15,36 @@ namespace Integrity_Checker_MEP
         #region delegate
         // C++ 콜백 함수 델리게이트 정의
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate void CallbackDelegate(string message);
+        private delegate void CallbackDelegate();
         #endregion
 
         #region dllimport
         // DLL 함수 선언
         [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
         private static extern void RegisterCallback(CallbackDelegate callback);
+        
+        [DllImport("Dll1.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
+        private static extern IntPtr ForwardQuestion();
 
-        [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
-        private static extern void TriggerEvent();
-
-        [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
-        private static extern void ForwardAnswer(string answer);
+        [DllImport("Dll1.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
+        private static extern void ForwardAnswer([MarshalAs(UnmanagedType.LPWStr)] string answer);
 
         [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern void ShowMyWindow();
         #endregion
 
+        CallbackDelegate callback;
+
         public Chat()
         {   // 콜백 등록
-            CallbackDelegate callback = new CallbackDelegate(ReceiveMessageFromCpp);
+            callback = new CallbackDelegate(ReceiveMessageFromCpp);
             RegisterCallback(callback);
         }
 
-        private void ReceiveMessageFromCpp(string message)
+        private void ReceiveMessageFromCpp()
         {
+            IntPtr LPmessage = ForwardQuestion();
+            string message = Marshal.PtrToStringUni(LPmessage);
             Question(message);
         }
 
@@ -47,13 +53,16 @@ namespace Integrity_Checker_MEP
             using (HttpClient client = new HttpClient())
             {
                 string url = "http://117.17.196.59:1131/question";
-                var data = new StringContent("{\"user_request\":" + message + "}", Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(url, data);
+                var data = new { user_question = message };
+                string jsonData = JsonConvert.SerializeObject(data);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    ForwardAnswer(responseBody);
+                    ForwardAnswer(responseBody.Replace("\n", "\r\n"));
                 }
                 else
                 {
