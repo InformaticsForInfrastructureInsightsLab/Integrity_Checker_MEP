@@ -27,7 +27,7 @@ namespace Integrity_Checker_MEP
         private static extern IntPtr ForwardQuestion();
 
         [DllImport("Dll1.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
-        private static extern void ForwardAnswer([MarshalAs(UnmanagedType.LPWStr)] string answer);
+        private static extern void ForwardAnswer([MarshalAs(UnmanagedType.LPWStr)] string result, [MarshalAs(UnmanagedType.LPWStr)] string schema);
 
         [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern void ShowMyWindow();
@@ -58,17 +58,30 @@ namespace Integrity_Checker_MEP
                 string jsonData = JsonConvert.SerializeObject(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(url, content);
+                HttpResponseMessage response = await client.PostAsync(url, content);               
+               
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    ForwardAnswer(responseBody.Replace("\n", "\r\n"));
+                    Response answer = JsonConvert.DeserializeObject<Response>(responseBody);
+
+                    string context = answer.context;
+                    context = context.Replace("\n", ",");
+                    context = "["+context+"]";
+
+                    ForwardAnswer(answer.result.Replace("\n", "\r\n"), context);
                 }
                 else
                 {
-                    ForwardAnswer($"Error: {response.StatusCode}");
+                    ForwardAnswer($"Error: {response.StatusCode}", "");
                 }
             }
         }
+    }
+
+    class Response
+    {
+        public string result;
+        public string context;
     }
 }
