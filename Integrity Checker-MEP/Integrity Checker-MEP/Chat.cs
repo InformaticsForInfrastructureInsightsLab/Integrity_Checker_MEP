@@ -27,6 +27,9 @@ namespace Integrity_Checker_MEP
         private static extern IntPtr ForwardQuestion();
 
         [DllImport("Dll1.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
+        private static extern IntPtr ForwardPrevContext();
+
+        [DllImport("Dll1.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         private static extern void ForwardAnswer([MarshalAs(UnmanagedType.LPWStr)] string result, [MarshalAs(UnmanagedType.LPWStr)] string schema);
 
         [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
@@ -44,17 +47,19 @@ namespace Integrity_Checker_MEP
         private void ReceiveMessageFromCpp()
         {
             IntPtr LPmessage = ForwardQuestion();
+            IntPtr LPprevContext = ForwardPrevContext();
             string message = Marshal.PtrToStringUni(LPmessage);
-            Question(message);
+            string prevContext = Marshal.PtrToStringUni(LPprevContext);
+            Question(message, prevContext);
         }
 
-        private async void Question(string message)
+        private async void Question(string message, string prevContext)
         {
             using (HttpClient client = new HttpClient())
             {
                 string url = "http://117.17.196.59:1131/question";
 
-                var data = new { user_question = message };
+                var data = new { user_question = message, prev_context = prevContext == "" ? "None" : prevContext };
                 string jsonData = JsonConvert.SerializeObject(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
@@ -67,7 +72,7 @@ namespace Integrity_Checker_MEP
 
                     string context = answer.context;
                     context = context.Replace("\n", ",");
-                    context = "["+context+"]";
+                    context = "[" + context + "]";
 
                     ForwardAnswer(answer.result.Replace("\n", "\r\n"), context);
                 }
