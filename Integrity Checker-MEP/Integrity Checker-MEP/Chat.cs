@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Autodesk.Navisworks.Api;
+using System.Windows.Controls;
+using ClashTest2;
 
 namespace Integrity_Checker_MEP
 {
@@ -96,6 +99,8 @@ namespace Integrity_Checker_MEP
         private void FindElement([MarshalAs(UnmanagedType.LPWStr)] string guid)
         {
             MessageBox.Show(guid, "guid", MessageBoxButtons.OK);
+            form_ResultViewer rv = new form_ResultViewer();
+            rv.SelectClash(guid, guid);
         }
     }
 
