@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Integrity_Checker_MEP
 {
@@ -16,13 +17,17 @@ namespace Integrity_Checker_MEP
         // C++ 콜백 함수 델리게이트 정의
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void CallbackDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate void GUIDDelegate([MarshalAs(UnmanagedType.LPWStr)] string guid);
         #endregion
 
         #region dllimport
         // DLL 함수 선언
         [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
         private static extern void RegisterCallback(CallbackDelegate callback);
-        
+        [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
+        private static extern void RegisterGUIDExportFunc(GUIDDelegate guidExport);
+
         [DllImport("Dll1.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr ForwardQuestion();
 
@@ -37,11 +42,15 @@ namespace Integrity_Checker_MEP
         #endregion
 
         CallbackDelegate callback;
+        GUIDDelegate guidExport;
 
         public Chat()
         {   // 콜백 등록
             callback = new CallbackDelegate(ReceiveMessageFromCpp);
             RegisterCallback(callback);
+
+            guidExport = new GUIDDelegate(FindElement);
+            RegisterGUIDExportFunc(guidExport);
         }
 
         private void ReceiveMessageFromCpp()
@@ -63,24 +72,30 @@ namespace Integrity_Checker_MEP
                 string jsonData = JsonConvert.SerializeObject(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(url, content);               
-               
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                
                 if (response.IsSuccessStatusCode)
                 {
+                    MessageBox.Show("success", "guid", MessageBoxButtons.OK);
                     string responseBody = await response.Content.ReadAsStringAsync();
                     Response answer = JsonConvert.DeserializeObject<Response>(responseBody);
 
                     string context = answer.context;
                     context = context.Replace("\n", ",");
-                    context = "[" + context + "]";
 
                     ForwardAnswer(answer.result.Replace("\n", "\r\n"), context);
                 }
                 else
                 {
-                    ForwardAnswer($"Error: {response.StatusCode}", "");
+                    string context = File.ReadAllText("C://objectinfo/context.json");
+                    ForwardAnswer($"Error: {response.StatusCode}", context);
                 }
             }
+        }
+
+        private void FindElement([MarshalAs(UnmanagedType.LPWStr)] string guid)
+        {
+            MessageBox.Show(guid, "guid", MessageBoxButtons.OK);
         }
     }
 
