@@ -21,7 +21,7 @@ namespace Integrity_Checker_MEP
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate void CallbackDelegate();
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate void GUIDDelegate([MarshalAs(UnmanagedType.LPWStr)] string guid);
+        private delegate void GUIDDelegate([MarshalAs(UnmanagedType.LPWStr)] string guid1, [MarshalAs(UnmanagedType.LPWStr)] string guid2);
         #endregion
 
         #region dllimport
@@ -79,28 +79,30 @@ namespace Integrity_Checker_MEP
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("success", "guid", MessageBoxButtons.OK);
+                    MessageBox.Show("success", "notify", MessageBoxButtons.OK);
                     string responseBody = await response.Content.ReadAsStringAsync();
                     Response answer = JsonConvert.DeserializeObject<Response>(responseBody);
 
                     string context = answer.context;
                     context = context.Replace("\n", ",");
+                    context = "["+context+"]";
 
                     ForwardAnswer(answer.result.Replace("\n", "\r\n"), context);
                 }
                 else
                 {
                     string context = File.ReadAllText("C://objectinfo/context.json");
-                    ForwardAnswer($"Error: {response.StatusCode}", context);
+                    ForwardAnswer($"Error: {response.StatusCode}", null);
                 }
             }
         }
 
-        private void FindElement([MarshalAs(UnmanagedType.LPWStr)] string guid)
+        private void FindElement([MarshalAs(UnmanagedType.LPWStr)] string guid1, [MarshalAs(UnmanagedType.LPWStr)] string guid2)
         {
-            MessageBox.Show(guid, "guid", MessageBoxButtons.OK);
+            MessageBox.Show(guid1+"/"+guid2, "guid", MessageBoxButtons.OK);
             form_ResultViewer rv = new form_ResultViewer();
-            rv.SelectClash(guid, guid);
+            rv.trans = true;
+            rv.SelectClash(guid1, guid2);
         }
     }
 

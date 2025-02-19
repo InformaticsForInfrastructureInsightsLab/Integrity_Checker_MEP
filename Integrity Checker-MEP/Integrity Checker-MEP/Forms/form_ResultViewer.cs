@@ -30,8 +30,6 @@ namespace ClashTest2
         List<ClashData> dataSoftList = new List<ClashData>();
         List<ClashData> dataNullList = new List<ClashData>();
 
-        Chat chat;
-
         // enum used for the header of columns in ListView
         // When header is changed, change the enum and add from designer
         enum Header
@@ -446,7 +444,7 @@ namespace ClashTest2
 
         private void click_btn_load_chat(object sender, EventArgs e)
         {
-            chat = new Chat();
+            Chat chat = new Chat();
             Chat.ShowMyWindow();
         }
         #endregion
@@ -455,8 +453,8 @@ namespace ClashTest2
 
         public Document doc;
         Color[] colors = { Color.Green, Color.Red }; //부재에 칠할 색
-        bool trans = false;
-        bool hide = false;
+        public bool trans = false;
+        public bool hide = false;
         ModelItemCollection invertItemCollection = new ModelItemCollection(); // 선택 부재 외 나머지 부재
 
         /// <summary>
