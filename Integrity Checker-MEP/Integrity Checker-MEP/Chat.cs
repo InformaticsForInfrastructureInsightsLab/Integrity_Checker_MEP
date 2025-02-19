@@ -87,6 +87,8 @@ namespace Integrity_Checker_MEP
                     context = context.Replace("\n", ",");
                     context = "["+context+"]";
 
+                    File.WriteAllText("C://objectinfo/context.json", context);
+
                     ForwardAnswer(answer.result.Replace("\n", "\r\n"), context);
                 }
                 else
