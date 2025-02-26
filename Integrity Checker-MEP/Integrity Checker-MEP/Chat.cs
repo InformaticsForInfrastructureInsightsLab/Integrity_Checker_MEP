@@ -79,17 +79,18 @@ namespace Integrity_Checker_MEP
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("success", "notify", MessageBoxButtons.OK);
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    Response answer = JsonConvert.DeserializeObject<Response>(responseBody);
-
-                    string context = answer.context;
-                    context = context.Replace("\n", ",");
-                    context = "["+context+"]";
-
-                    File.WriteAllText("C://objectinfo/context.json", context);
-
-                    ForwardAnswer(answer.result.Replace("\n", "\r\n"), context);
+                    try
+                    {
+                        Response answer = JsonConvert.DeserializeObject<Response>(responseBody);
+                        File.WriteAllText("C://objectinfo/context.json", answer.context);
+                        MessageBox.Show("success", "notify", MessageBoxButtons.OK);
+                        ForwardAnswer(answer.result.Replace("\n", "\r\n"), String.Copy(answer.context));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "error", MessageBoxButtons.OK);
+                    }
                 }
                 else
                 {
