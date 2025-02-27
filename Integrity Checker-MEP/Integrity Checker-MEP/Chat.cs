@@ -94,8 +94,16 @@ namespace Integrity_Checker_MEP
                 }
                 else
                 {
-                    string context = File.ReadAllText("C://objectinfo/context.json");
-                    ForwardAnswer($"Error: {response.StatusCode}", null);
+                    try
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        BadResponse answer = JsonConvert.DeserializeObject<BadResponse>(responseBody);
+                        ForwardAnswer(answer.error, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "error", MessageBoxButtons.OK);
+                    }
                 }
             }
         }
@@ -113,5 +121,10 @@ namespace Integrity_Checker_MEP
     {
         public string result;
         public string context;
+    }
+
+    class BadResponse
+    {
+        public string error;
     }
 }
