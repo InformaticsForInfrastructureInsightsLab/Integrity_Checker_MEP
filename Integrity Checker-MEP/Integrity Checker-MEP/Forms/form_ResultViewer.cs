@@ -18,6 +18,7 @@ using ListviewTest;
 using Integrity_Checker_MEP;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Integrity_Checker_MEP.Forms;
 
 namespace ClashTest2
 {
@@ -25,7 +26,7 @@ namespace ClashTest2
     {
 
         // List for data
-        List<ClashData> dataList = new List<ClashData>();
+        public List<ClashData> dataList = new List<ClashData>();
         List<ClashData> dataHardList = new List<ClashData>();
         List<ClashData> dataSoftList = new List<ClashData>();
         List<ClashData> dataNullList = new List<ClashData>();
@@ -57,9 +58,9 @@ namespace ClashTest2
         private bool[] headerBool;
 
         // number of each result
-        private int major_hard = 0, major_soft = 0;
-        private int medium_hard = 0, medium_soft = 0;
-        private int minor_hard = 0, minor_soft = 0;
+        public int major_hard = 0, major_soft = 0;
+        public int medium_hard = 0, medium_soft = 0;
+        public int minor_hard = 0, minor_soft = 0;
 
         // string for 2 selected guid
         private string guid1;
@@ -446,6 +447,12 @@ namespace ClashTest2
         {
             Chat chat = new Chat();
             Chat.ShowMyWindow();
+        }
+
+        private void click_btn_dashboard(object sender, EventArgs e)
+        {
+            Form_Dashboard dashboard = new Form_Dashboard();
+            dashboard.ShowDialog();
         }
         #endregion
 

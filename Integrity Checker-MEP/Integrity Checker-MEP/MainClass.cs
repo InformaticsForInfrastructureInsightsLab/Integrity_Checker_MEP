@@ -16,8 +16,8 @@ namespace Integrity_Checker_MEP
     [Command("Result_Receiver", Icon = "2_16.png", LargeIcon = "2_32.png")]
     public class MainClass : CommandHandlerPlugin
     {
-        private ClashChecker clashChecker;
-        private form_ResultViewer rv;
+        public static ClashChecker clashChecker;
+        public static form_ResultViewer rv;
 
         public override int ExecuteCommand(string name, params string[] parameters)
         {

@@ -36,6 +36,7 @@
             this.btn_Download = new System.Windows.Forms.Button();
             this.btn_SelectHeader = new System.Windows.Forms.Button();
             this.btn_load_chat = new System.Windows.Forms.Button();
+            this.btn_load_dashboard = new System.Windows.Forms.Button();
             this.btn_Item1 = new System.Windows.Forms.Button();
             this.btn_item2 = new System.Windows.Forms.Button();
             this.majorHard = new System.Windows.Forms.Label();
@@ -147,7 +148,7 @@
             this.btn_SelectHeader.Text = "Select header";
             this.btn_SelectHeader.UseVisualStyleBackColor = true;
             this.btn_SelectHeader.Click += new System.EventHandler(this.click_btn_SelectHeader);
-            //
+            // 
             // btn_load_chat
             // 
             this.btn_load_chat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -158,6 +159,17 @@
             this.btn_load_chat.Text = "Load AI Chat";
             this.btn_load_chat.UseVisualStyleBackColor = true;
             this.btn_load_chat.Click += new System.EventHandler(this.click_btn_load_chat);
+            // 
+            // btn_load_dashboard
+            // 
+            this.btn_load_dashboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_load_dashboard.Location = new System.Drawing.Point(658, 295);
+            this.btn_load_dashboard.Name = "btn_load_dashboard";
+            this.btn_load_dashboard.Size = new System.Drawing.Size(94, 23);
+            this.btn_load_dashboard.TabIndex = 24;
+            this.btn_load_dashboard.Text = "Dashboard";
+            this.btn_load_dashboard.UseVisualStyleBackColor = true;
+            this.btn_load_dashboard.Click += new System.EventHandler(this.click_btn_dashboard);
             // 
             // btn_Item1
             // 
@@ -474,6 +486,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(764, 553);
+            this.Controls.Add(this.btn_load_dashboard);
             this.Controls.Add(this.folv);
             this.Controls.Add(this.btn_Screenshot);
             this.Controls.Add(this.rdo_none);
@@ -514,6 +527,7 @@
         private System.Windows.Forms.Button btn_Item1;
         private System.Windows.Forms.Button btn_item2;
         private System.Windows.Forms.Button btn_load_chat;
+        private System.Windows.Forms.Button btn_load_dashboard;
         private System.Windows.Forms.Label majorHard;
         private System.Windows.Forms.Label majorSoft;
         private System.Windows.Forms.Label mediumHard;
