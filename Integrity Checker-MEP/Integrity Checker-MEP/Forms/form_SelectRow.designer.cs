@@ -58,6 +58,7 @@ namespace ClashTest2
                 "HardClashType",
                 "SoftClashType",
                 "Severity",
+                "Adjusted Severity",
                 "Clearance",
                 "MovabilityResult",
                 "MovableSpace",

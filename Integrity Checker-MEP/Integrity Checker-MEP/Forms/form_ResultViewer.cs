@@ -43,6 +43,7 @@ namespace ClashTest2
             HardClashType,
             SoftClashType,
             Severity,
+            Adjusted_Severity,
             Clearance,
             MovabilityResult,
             MovablSpace,
@@ -139,7 +140,7 @@ namespace ClashTest2
                 if (clash.HardClashType == "   ")
                 {
                     dataSoftList.Add(clash);
-                    switch(clash.Severity)
+                    switch(clash.Adjusted_Severity)
                     {
                         case "Major":
                             major_soft++;  break;
@@ -152,7 +153,7 @@ namespace ClashTest2
                 else if (clash.SoftClashType == "   ")
                 {
                     dataHardList.Add(clash);
-                    switch (clash.Severity)
+                    switch (clash.Adjusted_Severity)
                     {
                         case "Major":
                             major_hard++; break;
@@ -196,10 +197,10 @@ namespace ClashTest2
                 addDataToList();
 
                 // Only group by severity -> if canceled can be grouped by other headers
-                folv.AlwaysGroupByColumn = Severity;
+                folv.AlwaysGroupByColumn = Adjusted_Severity;
                 // MVC pattern -> check objectListView 
                 folv.SetObjects(dataList);
-                folv.BuildGroups(Severity, SortOrder.None);
+                folv.BuildGroups(Adjusted_Severity, SortOrder.None);
 
                 tog_Hard.Checked = true;
                 tog_Soft.Checked = true;

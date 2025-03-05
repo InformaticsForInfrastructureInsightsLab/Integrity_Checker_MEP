@@ -57,6 +57,7 @@
             this.HardClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.SoftClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Adjusted_Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -316,6 +317,7 @@
             this.folv.AllColumns.Add(this.HardClashType);
             this.folv.AllColumns.Add(this.SoftClashType);
             this.folv.AllColumns.Add(this.Severity);
+            this.folv.AllColumns.Add(this.Adjusted_Severity);
             this.folv.AllColumns.Add(this.Clearance);
             this.folv.AllColumns.Add(this.MovabilityValue);
             this.folv.AllColumns.Add(this.MovabilityResult);
@@ -338,6 +340,7 @@
             this.HardClashType,
             this.SoftClashType,
             this.Severity,
+            this.Adjusted_Severity,
             this.Clearance,
             this.MovabilityResult,
             this.MovabilityValue,
@@ -410,6 +413,12 @@
             this.Severity.AspectName = "Severity";
             this.Severity.Text = "Severity";
             this.Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // Adjusted_Severity
+            // 
+            this.Adjusted_Severity.AspectName = "Adjusted_Severity";
+            this.Adjusted_Severity.Text = "Adjusted Severity";
+            this.Adjusted_Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Clearance
             // 
@@ -548,6 +557,7 @@
         private BrightIdeasSoftware.OLVColumn HardClashType;
         private BrightIdeasSoftware.OLVColumn SoftClashType;
         private BrightIdeasSoftware.OLVColumn Severity;
+        private BrightIdeasSoftware.OLVColumn Adjusted_Severity;
         private BrightIdeasSoftware.OLVColumn Clearance;
         private BrightIdeasSoftware.OLVColumn MovabilityResult;
         private BrightIdeasSoftware.OLVColumn MovableSpace;

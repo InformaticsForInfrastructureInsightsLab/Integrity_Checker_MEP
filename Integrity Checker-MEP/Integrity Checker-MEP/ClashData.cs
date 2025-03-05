@@ -16,6 +16,7 @@ namespace Integrity_Checker_MEP
         public string HardClashType;
         public string SoftClashType;
         public string Severity;
+        public string Adjusted_Severity;
         public string Clearance;
         public string MovabilityResult;
         public string MovableSpace;
@@ -35,16 +36,17 @@ namespace Integrity_Checker_MEP
             Topology = stringdata[4];
             HardClashType = stringdata[5];
             SoftClashType = stringdata[6];
-            Severity = stringdata[7];
-            Clearance = stringdata[8];
-            MovabilityResult = stringdata[9];
-            MovableSpace = stringdata[10];
-            MovableDistance = stringdata[11];
-            Offset = stringdata[12];
-            Penetration = stringdata[13];
-            ABS_Volume_Diff = stringdata[14];
-            ABS_Volume_SUM = stringdata[15];
-            ClashVolume = stringdata[16];
+            Adjusted_Severity = stringdata[7];
+            Severity = stringdata[8];
+            Clearance = stringdata[9];
+            MovabilityResult = stringdata[10];
+            MovableSpace = stringdata[11];
+            MovableDistance = stringdata[12];
+            Offset = stringdata[13];
+            Penetration = stringdata[14];
+            ABS_Volume_Diff = stringdata[15];
+            ABS_Volume_SUM = stringdata[16];
+            ClashVolume = stringdata[17];
         }
     }
 }

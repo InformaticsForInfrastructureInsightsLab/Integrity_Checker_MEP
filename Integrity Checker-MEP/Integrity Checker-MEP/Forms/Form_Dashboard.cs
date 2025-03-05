@@ -17,7 +17,7 @@ namespace Integrity_Checker_MEP.Forms
 {
     public partial class Form_Dashboard : Form
     {
-        int[,,] clashMatrix = new int[6, 6, 3];
+        int[,,] clashMatrix = new int[3,6,6];
 
         form_ResultViewer rv = MainClass.rv;
 
@@ -41,13 +41,12 @@ namespace Integrity_Checker_MEP.Forms
                 Dock = DockStyle.Fill
             };
 
+            FillMatrix();
             var barPlot = new PlotView
             {
                 Model = CreateBarChart(),
                 Dock = DockStyle.Fill
             };
-
-            FillMatrix();
 
             tableLayout.Controls.Add(piePlot, 0, 0);
             tableLayout.Controls.Add(barPlot, 1, 0);
@@ -93,7 +92,7 @@ namespace Integrity_Checker_MEP.Forms
                 if (severity == -1)
                     continue;
 
-                clashMatrix[model1,model2,severity]++;
+                clashMatrix[severity, model1, model2]++;
             }
         }
 
@@ -135,31 +134,44 @@ namespace Integrity_Checker_MEP.Forms
         {
             var model = new PlotModel { Title = "Clash Status" };
 
+            string[] modelNames = { "Arch", "COMM", "ELEC", "FIRE", "MECH", "Str" };
+
             // X축
             var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
-            categoryAxis.Labels.Add("A");
-            categoryAxis.Labels.Add("B");
-            categoryAxis.Labels.Add("C");
+
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = i; j < 6; j++)
+                {
+                    if (clashMatrix[0, i, j] + clashMatrix[1, i, j] + clashMatrix[2, i, j] == 0)
+                        continue;
+                    categoryAxis.Labels.Add(modelNames[i] + "-" + modelNames[j]);
+                }
+            }
+
             model.Axes.Add(categoryAxis);
 
             // Y축
-            var valueAxis = new LinearAxis { Position = AxisPosition.Bottom, Minimum = 0, Maximum = 60 };
+            var valueAxis = new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                MinimumPadding = 0,
+                MaximumPadding = 0.1
+            };
             model.Axes.Add(valueAxis);
 
-            // 막대 그래프 데이터 추가
-            var barSeries = new BarSeries
+            for (int i = 0; i < 6; i++)
             {
-                FillColor = OxyColors.DarkBlue,
-                BarWidth = 10, // 막대 너비 조정
-                BaseValue = 0 // 0부터 시작하도록 설정
-            };
+                for (int j = i; j < 6; j++)
+                {
+                    var series = new BarSeries { Title = modelNames[i] + "-" + modelNames[j], IsStacked = true };
+                    series.Items.Add(new BarItem { Value = clashMatrix[2, i, j], Color = OxyColors.Blue });
+                    series.Items.Add(new BarItem { Value = clashMatrix[1, i, j], Color = OxyColors.Green });
+                    series.Items.Add(new BarItem { Value = clashMatrix[0, i, j], Color = OxyColors.Red });
+                    model.Series.Add(series);
+                }
+            }
 
-            // X, Y값을 서로 반전시켜 세로 막대그래프처럼 보이게 함
-            barSeries.Items.Add(new BarItem { Value = 30 });
-            barSeries.Items.Add(new BarItem { Value = 20 });
-            barSeries.Items.Add(new BarItem { Value = 50 });
-
-            model.Series.Add(barSeries);
             return model;
         }
     }
