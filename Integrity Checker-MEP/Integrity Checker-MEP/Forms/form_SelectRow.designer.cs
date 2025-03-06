@@ -53,21 +53,26 @@ namespace ClashTest2
                 "Element1Guid",
                 "Element2Guid",
                 "Type",
-                "MovabilityValue",
                 "Topology",
                 "HardClashType",
                 "SoftClashType",
                 "Severity",
                 "Adjusted Severity",
                 "Clearance",
-                "MovabilityResult",
-                "MovableSpace",
-                "MovableDistance",
                 "Offset",
                 "Penetration",
                 "ABS_Volume_Diff",
                 "ABS_Volume_SUM",
-                "ClashVolume"
+                "ClashVolume",
+                "MovabilityResult",
+                "MovableSpace",
+                "MovableDistance",
+                "MovabilityValue_X_P",
+                "MovabilityValue_X_N",
+                "MovabilityValue_Y_P",
+                "MovabilityValue_Y_N",
+                "MovabilityValue_Z_P",
+                "MovabilityValue_Z_N"
             });
             this.checkedListBox1.Location = new System.Drawing.Point(2, 3);
             this.checkedListBox1.Name = "checkedListBox1";

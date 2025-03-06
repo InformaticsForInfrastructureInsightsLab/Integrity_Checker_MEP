@@ -209,6 +209,9 @@
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\Form_Dashboard.resx">
+      <DependentUpon>Form_Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\form_ImageOption.resx">
       <DependentUpon>form_ImageOption.cs</DependentUpon>
     </EmbeddedResource>

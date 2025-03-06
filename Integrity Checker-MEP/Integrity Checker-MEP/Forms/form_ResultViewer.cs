@@ -38,21 +38,26 @@ namespace ClashTest2
             Element1Guid,
             Element2Guid,
             Type,
-            MovabilityValue,
             Topology,
             HardClashType,
             SoftClashType,
             Severity,
             Adjusted_Severity,
             Clearance,
-            MovabilityResult,
-            MovablSpace,
-            MovableDistance,
             Offset,
             Penetration,
             ABS_Volume_Diff,
             ABS_Volume_SUM,
-            ClashVolume
+            ClashVolume,
+            MovabilityResult,
+            MovablSpace,
+            MovableDistance,
+            MovabilityValue_X_P,
+            MovabilityValue_X_N,
+            MovabilityValue_Y_P,
+            MovabilityValue_Y_N,
+            MovabilityValue_Z_P,
+            MovabilityValue_Z_N
         }
 
         // bool for checked column header

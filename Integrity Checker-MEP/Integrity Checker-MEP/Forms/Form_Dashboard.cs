@@ -23,14 +23,12 @@ namespace Integrity_Checker_MEP.Forms
 
         public Form_Dashboard()
         {
-            this.Size = new System.Drawing.Size(800, 600);
             InitializeComponent();
 
             // TableLayoutPanel 설정 (2개 열, 1개 행)
             var tableLayout = new TableLayoutPanel
             {
-                Dock = DockStyle.Top,
-                Height = 500,
+                Dock = DockStyle.Fill,
                 ColumnCount = 2,
                 RowCount = 1
             };

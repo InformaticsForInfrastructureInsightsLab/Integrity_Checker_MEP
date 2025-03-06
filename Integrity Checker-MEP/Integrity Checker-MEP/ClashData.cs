@@ -26,27 +26,37 @@ namespace Integrity_Checker_MEP
         public string ABS_Volume_Diff;
         public string ABS_Volume_SUM;
         public string ClashVolume;
-
+        public string MovabilityValue_X_P;
+        public string MovabilityValue_X_N;
+        public string MovabilityValue_Y_P;
+        public string MovabilityValue_Y_N;
+        public string MovabilityValue_Z_P;
+        public string MovabilityValue_Z_N;
 
         public ClashData(string[] stringdata) {
             Element1Guid = stringdata[0];
             Element2Guid = stringdata[1];
             Type = stringdata[2];
-            MovabilityValue = stringdata[3];
-            Topology = stringdata[4];
-            HardClashType = stringdata[5];
-            SoftClashType = stringdata[6];
-            Adjusted_Severity = stringdata[7];
-            Severity = stringdata[8];
-            Clearance = stringdata[9];
-            MovabilityResult = stringdata[10];
-            MovableSpace = stringdata[11];
-            MovableDistance = stringdata[12];
-            Offset = stringdata[13];
-            Penetration = stringdata[14];
-            ABS_Volume_Diff = stringdata[15];
-            ABS_Volume_SUM = stringdata[16];
-            ClashVolume = stringdata[17];
+            Topology = stringdata[3];
+            HardClashType = stringdata[4];
+            SoftClashType = stringdata[5];
+            Adjusted_Severity = stringdata[6];
+            Severity = stringdata[7];
+            Clearance = stringdata[8];
+            Offset = stringdata[9];
+            Penetration = stringdata[10];
+            ABS_Volume_Diff = stringdata[11];
+            ABS_Volume_SUM = stringdata[12];
+            ClashVolume = stringdata[13];
+            MovabilityResult = stringdata[14];
+            MovableSpace = stringdata[15];
+            MovableDistance = stringdata[16];
+            MovabilityValue_X_P = stringdata[17];
+            MovabilityValue_X_N = stringdata[18];
+            MovabilityValue_Y_P = stringdata[19];
+            MovabilityValue_Y_N = stringdata[20];
+            MovabilityValue_Z_P = stringdata[21];
+            MovabilityValue_Z_N = stringdata[22];
         }
     }
 }
