@@ -137,7 +137,7 @@ namespace ClashTest2
 
             foreach (ClashData clash in dataList)
             {
-                if (clash.HardClashType == "   ")
+                if (clash.Type == "Soft")
                 {
                     dataSoftList.Add(clash);
                     switch(clash.Adjusted_Severity)
@@ -150,7 +150,7 @@ namespace ClashTest2
                             minor_soft++; break;
                     }
                 }
-                else if (clash.SoftClashType == "   ")
+                else if (clash.Type == "Hard")
                 {
                     dataHardList.Add(clash);
                     switch (clash.Adjusted_Severity)
@@ -365,7 +365,6 @@ namespace ClashTest2
                 }
                 Element2Guid.IsVisible = headerBool[(int)Header.Element2Guid];
                 Type.IsVisible = headerBool[(int)Header.Type];
-                MovabilityValue.IsVisible = headerBool[(int)Header.Severity];
                 Topology.IsVisible = headerBool[(int)Header.Topology];
                 HardClashType.IsVisible = headerBool[(int)Header.HardClashType];
                 SoftClashType.IsVisible = headerBool[(int)Header.SoftClashType];
@@ -453,7 +452,7 @@ namespace ClashTest2
         private void click_btn_dashboard(object sender, EventArgs e)
         {
             Form_Dashboard dashboard = new Form_Dashboard();
-            dashboard.ShowDialog();
+            dashboard.Show();
         }
         #endregion
 

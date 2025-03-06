@@ -351,7 +351,18 @@ namespace Integrity_Checker_MEP {
                     int i = modelDict[nameA];
                     int j = modelDict[nameB];
                     string testName = $"{nameA}-{nameB}_{testTypeName}";
-                    NewClashTest(testName, 50f, testType, i, j);
+
+                    if ((nameA == "Arch" && nameB == "Arch") ||
+                        (nameA=="Arch" && nameB == "Str" ) || 
+                        (nameA=="Str" && nameB=="Str"))
+                    {
+                        NewClashTest(testName, 0f,testType, i, j);
+                    }
+                    else
+                    {
+                         NewClashTest(testName, 50f, testType, i, j);
+                    }
+   
                 }
             }
         }
@@ -506,13 +517,15 @@ namespace Integrity_Checker_MEP {
                         //    }
                         //    continue;
                         //}
-                        //if (temp1.Contains("IfcPipeFitting")) {
-                        //    if (form_setting.export_UselessClash) {
-                        //        List_uselessClashes.Add(nwissue);
-                        //        List_uselessReasons.Add("[1]IfcPipeFitting");
-                        //    }
-                        //    continue;
-                        //}
+                        if (temp1.Contains("IfcPipeFitting"))
+                        {
+                            if (form_setting.export_UselessClash)
+                            {
+                                List_uselessClashes.Add(nwissue);
+                                List_uselessReasons.Add("[1]IfcPipeFitting");
+                            }
+                            continue;
+                        }
                         if (temp1.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
@@ -528,14 +541,16 @@ namespace Integrity_Checker_MEP {
                         catch {
                             temp11 = "";
                         }
-                        
-                        //if (temp11.Contains("IfcPipeFitting")) {
-                        //    if (form_setting.export_UselessClash) {
-                        //        List_uselessClashes.Add(nwissue);
-                        //        List_uselessReasons.Add("[1]IfcPipeFitting");
-                        //    }
-                        //    continue;
-                        //}
+
+                        if (temp11.Contains("IfcPipeFitting"))
+                        {
+                            if (form_setting.export_UselessClash)
+                            {
+                                List_uselessClashes.Add(nwissue);
+                                List_uselessReasons.Add("[1]IfcPipeFitting");
+                            }
+                            continue;
+                        }
                         if (temp11.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
@@ -566,13 +581,15 @@ namespace Integrity_Checker_MEP {
                         //    }
                         //    continue;
                         //}
-                        //if (temp2.Contains("IfcPipeFitting")) {
-                        //    if (form_setting.export_UselessClash) {
-                        //        List_uselessClashes.Add(nwissue);
-                        //        List_uselessReasons.Add("[2]IfcPipeFitting");
-                        //    }
-                        //    continue;
-                        //}
+                        if (temp2.Contains("IfcPipeFitting"))
+                        {
+                            if (form_setting.export_UselessClash)
+                            {
+                                List_uselessClashes.Add(nwissue);
+                                List_uselessReasons.Add("[2]IfcPipeFitting");
+                            }
+                            continue;
+                        }
                         if (temp2.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);
@@ -594,13 +611,15 @@ namespace Integrity_Checker_MEP {
                             }
                             continue;
                         }
-                        //if (temp22.Contains("IfcPipeFitting")) {
-                        //    if (form_setting.export_UselessClash) {
-                        //        List_uselessClashes.Add(nwissue);
-                        //        List_uselessReasons.Add("[2]IfcPipeFitting");
-                        //    }
-                        //    continue;
-                        //}
+                        if (temp22.Contains("IfcPipeFitting"))
+                        {
+                            if (form_setting.export_UselessClash)
+                            {
+                                List_uselessClashes.Add(nwissue);
+                                List_uselessReasons.Add("[2]IfcPipeFitting");
+                            }
+                            continue;
+                        }
                         if (temp22.Contains("IfcValve")) {
                             if (form_setting.export_UselessClash) {
                                 List_uselessClashes.Add(nwissue);

@@ -23,12 +23,14 @@ namespace Integrity_Checker_MEP.Forms
 
         public Form_Dashboard()
         {
+            this.Size = new System.Drawing.Size(800, 600);
             InitializeComponent();
 
             // TableLayoutPanel 설정 (2개 열, 1개 행)
             var tableLayout = new TableLayoutPanel
             {
-                Dock = DockStyle.Fill,
+                Dock = DockStyle.Top,
+                Height = 500,
                 ColumnCount = 2,
                 RowCount = 1
             };
@@ -68,9 +70,9 @@ namespace Integrity_Checker_MEP.Forms
             };
 
             // 데이터 추가
-            pieSeries.Slices.Add(new PieSlice("Hard", rv.major_hard + rv.major_soft) { Fill = OxyColors.Red }); //하드
-            pieSeries.Slices.Add(new PieSlice("Medium", rv.medium_hard + rv.medium_soft) { Fill = OxyColors.Yellow }); //미디움
-            pieSeries.Slices.Add(new PieSlice("Minor", rv.minor_hard + rv.minor_soft) { Fill = OxyColors.Purple }); //마이너
+            pieSeries.Slices.Add(new PieSlice("Major", rv.major_hard + rv.major_soft) { Fill = OxyColors.Red }); //하드
+            pieSeries.Slices.Add(new PieSlice("Medium", rv.medium_hard + rv.medium_soft) { Fill = OxyColors.Green }); //미디움
+            pieSeries.Slices.Add(new PieSlice("Minor", rv.minor_hard + rv.minor_soft) { Fill = OxyColors.Blue }); //마이너
 
             model.Series.Add(pieSeries);
             return model;
@@ -88,7 +90,7 @@ namespace Integrity_Checker_MEP.Forms
                 if (model1 == -1 || model2 == -1) 
                     continue;
 
-                int severity = MapSeverity(cd.Severity);
+                int severity = MapSeverity(cd.Adjusted_Severity);
                 if (severity == -1)
                     continue;
 
@@ -139,6 +141,10 @@ namespace Integrity_Checker_MEP.Forms
             // X축
             var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
 
+            List<BarItem> minor = new List<BarItem>();
+            List<BarItem> medium = new List<BarItem>();
+            List<BarItem> major = new List<BarItem>();
+
             for (int i = 0; i < 6; i++)
             {
                 for (int j = i; j < 6; j++)
@@ -146,6 +152,10 @@ namespace Integrity_Checker_MEP.Forms
                     if (clashMatrix[0, i, j] + clashMatrix[1, i, j] + clashMatrix[2, i, j] == 0)
                         continue;
                     categoryAxis.Labels.Add(modelNames[i] + "-" + modelNames[j]);
+
+                    minor.Add(new BarItem { Value = clashMatrix[0, i, j], Color = OxyColors.Blue });
+                    medium.Add(new BarItem { Value = clashMatrix[1, i, j], Color = OxyColors.Green });
+                    major.Add(new BarItem { Value = clashMatrix[2, i, j], Color = OxyColors.Red });
                 }
             }
 
@@ -160,17 +170,17 @@ namespace Integrity_Checker_MEP.Forms
             };
             model.Axes.Add(valueAxis);
 
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = i; j < 6; j++)
-                {
-                    var series = new BarSeries { Title = modelNames[i] + "-" + modelNames[j], IsStacked = true };
-                    series.Items.Add(new BarItem { Value = clashMatrix[2, i, j], Color = OxyColors.Blue });
-                    series.Items.Add(new BarItem { Value = clashMatrix[1, i, j], Color = OxyColors.Green });
-                    series.Items.Add(new BarItem { Value = clashMatrix[0, i, j], Color = OxyColors.Red });
-                    model.Series.Add(series);
-                }
-            }
+            var minorSeries = new BarSeries {  Title = "minor", IsStacked = true };
+            var mediumSeries = new BarSeries { Title = "medium", IsStacked = true };
+            var majorSeries = new BarSeries { Title = "major", IsStacked = true };
+
+            minorSeries.Items.AddRange(minor);
+            mediumSeries.Items.AddRange(medium);
+            majorSeries.Items.AddRange(major);
+
+            model.Series.Add(majorSeries);
+            model.Series.Add(mediumSeries);
+            model.Series.Add(minorSeries);
 
             return model;
         }
