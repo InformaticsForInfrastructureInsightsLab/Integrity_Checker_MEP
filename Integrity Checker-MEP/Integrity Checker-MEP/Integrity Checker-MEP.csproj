@@ -147,6 +147,9 @@
     <Compile Include="Chat.cs" />
     <Compile Include="ClashChecker.cs" />
     <Compile Include="ClashData.cs" />
+    <Compile Include="Dashboard\DashboardBarchart.cs" />
+    <Compile Include="Dashboard\DashboardPieChart.cs" />
+    <Compile Include="Dashboard\DashboardUtils.cs" />
     <Compile Include="Forms\Form_Dashboard.cs">
       <SubType>Form</SubType>
     </Compile>

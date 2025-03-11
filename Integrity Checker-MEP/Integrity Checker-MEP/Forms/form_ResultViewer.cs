@@ -63,10 +63,15 @@ namespace ClashTest2
         // bool for checked column header
         private bool[] headerBool;
 
-        // number of each result
+        // number of each result - adjusted
         public int major_hard = 0, major_soft = 0;
         public int medium_hard = 0, medium_soft = 0;
         public int minor_hard = 0, minor_soft = 0;
+
+        // number of each result - origin
+        public int major_hard_origin = 0, major_soft_origin = 0;
+        public int medium_hard_origin = 0, medium_soft_origin = 0;
+        public int minor_hard_origin = 0, minor_soft_origin = 0;
 
         // string for 2 selected guid
         private string guid1;
@@ -166,6 +171,31 @@ namespace ClashTest2
                             medium_hard++; break;
                         case "Minor":
                             minor_hard++; break;
+                    }
+                }
+
+                if (clash.Type == "Soft")
+                {
+                    switch (clash.Severity)
+                    {
+                        case "Major":
+                            major_soft_origin++; break;
+                        case "Medium":
+                            medium_soft_origin++; break;
+                        case "Minor":
+                            minor_soft_origin++; break;
+                    }
+                }
+                else if (clash.Type == "Hard")
+                {
+                    switch (clash.Severity)
+                    {
+                        case "Major":
+                            major_hard_origin++; break;
+                        case "Medium":
+                            medium_hard_origin++; break;
+                        case "Minor":
+                            minor_hard_origin++; break;
                     }
                 }
             }
