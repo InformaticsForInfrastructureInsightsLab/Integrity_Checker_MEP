@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ClashTest2;
 using OxyPlot;
 using OxyPlot.Axes;
+using OxyPlot.Legends;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 
@@ -17,8 +18,8 @@ namespace Integrity_Checker_MEP.Forms
 {
     public partial class Form_Dashboard : Form
     {
-        int[,,] clashMatrix = new int[3,6,6];
-
+        int[,,] clashMatrixAdjusted = new int[3,6,6];
+        int[,,] clashMatrixOrigin = new int[3,6,6];
         form_ResultViewer rv = MainClass.rv;
 
         public Form_Dashboard()
@@ -41,7 +42,7 @@ namespace Integrity_Checker_MEP.Forms
                 Dock = DockStyle.Fill
             };
 
-            FillMatrix();
+            FillMatrixAdjusted();
             var barPlot = new PlotView
             {
                 Model = CreateBarChart(),
@@ -76,7 +77,7 @@ namespace Integrity_Checker_MEP.Forms
             return model;
         }
 
-        private void FillMatrix()
+        private void FillMatrixAdjusted()
         {
             foreach(ClashData cd in rv.dataList)
             {
@@ -92,7 +93,27 @@ namespace Integrity_Checker_MEP.Forms
                 if (severity == -1)
                     continue;
 
-                clashMatrix[severity, model1, model2]++;
+                clashMatrixAdjusted[severity, model1, model2]++;
+            }
+        }
+
+        private void FillMatrixOrigin()
+        {
+            foreach (ClashData cd in rv.dataList)
+            {
+                string[] model = cd.HardClashType.Split('-');
+                Array.Sort(model);
+
+                int model1 = MapModel(model[0]);
+                int model2 = MapModel(model[1]);
+                if (model1 == -1 || model2 == -1)
+                    continue;
+
+                int severity = MapSeverity(cd.Severity);
+                if (severity == -1)
+                    continue;
+
+                clashMatrixOrigin[severity, model1, model2]++;
             }
         }
 
@@ -133,6 +154,15 @@ namespace Integrity_Checker_MEP.Forms
         private PlotModel CreateBarChart()
         {
             var model = new PlotModel { Title = "Clash Status" };
+            // 범례 객체 생성 및 설정
+            var legend = new Legend
+            {
+                LegendPlacement = LegendPlacement.Outside,
+                LegendPosition = LegendPosition.TopRight,
+                LegendOrientation = LegendOrientation.Vertical,
+                LegendBorderThickness = 1
+            };
+            model.Legends.Add(legend);
 
             string[] modelNames = { "Arch", "COMM", "ELEC", "FIRE", "MECH", "Str" };
 
@@ -147,13 +177,13 @@ namespace Integrity_Checker_MEP.Forms
             {
                 for (int j = i; j < 6; j++)
                 {
-                    if (clashMatrix[0, i, j] + clashMatrix[1, i, j] + clashMatrix[2, i, j] == 0)
+                    if (clashMatrixAdjusted[0, i, j] + clashMatrixAdjusted[1, i, j] + clashMatrixAdjusted[2, i, j] == 0)
                         continue;
                     categoryAxis.Labels.Add(modelNames[i] + "-" + modelNames[j]);
 
-                    minor.Add(new BarItem { Value = clashMatrix[0, i, j], Color = OxyColors.Blue });
-                    medium.Add(new BarItem { Value = clashMatrix[1, i, j], Color = OxyColors.Green });
-                    major.Add(new BarItem { Value = clashMatrix[2, i, j], Color = OxyColors.Red });
+                    minor.Add(new BarItem { Value = clashMatrixAdjusted[0, i, j] });
+                    medium.Add(new BarItem { Value = clashMatrixAdjusted[1, i, j] });
+                    major.Add(new BarItem { Value = clashMatrixAdjusted[2, i, j] });
                 }
             }
 
@@ -168,9 +198,9 @@ namespace Integrity_Checker_MEP.Forms
             };
             model.Axes.Add(valueAxis);
 
-            var minorSeries = new BarSeries {  Title = "minor", IsStacked = true };
-            var mediumSeries = new BarSeries { Title = "medium", IsStacked = true };
-            var majorSeries = new BarSeries { Title = "major", IsStacked = true };
+            var minorSeries = new BarSeries {  Title = "minor", IsStacked = true, FillColor = OxyColors.Blue };
+            var mediumSeries = new BarSeries { Title = "medium", IsStacked = true, FillColor = OxyColors.Green };
+            var majorSeries = new BarSeries { Title = "major", IsStacked = true, FillColor = OxyColors.Red };
 
             minorSeries.Items.AddRange(minor);
             mediumSeries.Items.AddRange(medium);
