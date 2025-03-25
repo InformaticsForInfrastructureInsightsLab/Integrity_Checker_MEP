@@ -28,12 +28,16 @@ namespace Integrity_Checker_MEP.Forms
 
         public Form_Dashboard()
         {
+            InitializeComponent();
+            DashboardTab();
+        }
+
+        private void DashboardTab()
+        {
             bar_adj = new DashboardBarchart_Adj(rv);
             bar_origin = new DashboardBarchart_Origin(rv);
             pie_adj = new DashboardPieChart_Adj();
             pie_origin = new DashboardPieChart_Origin();
-
-            InitializeComponent();
 
             var piePlot = new PlotView
             {
