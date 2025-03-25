@@ -52,7 +52,6 @@ namespace Integrity_Checker_MEP.Forms
             // 
             // radio_adj
             // 
-            this.radio_adj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.radio_adj.AutoSize = true;
             this.radio_adj.Checked = true;
             this.radio_adj.Location = new System.Drawing.Point(10, 10);
@@ -62,8 +61,7 @@ namespace Integrity_Checker_MEP.Forms
             this.radio_adj.UseVisualStyleBackColor = true;
             // 
             // radio_origin
-            // 
-            this.radio_origin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //
             this.radio_origin.AutoSize = true;
             this.radio_origin.Location = new System.Drawing.Point(10, 30);
             this.radio_origin.Name = "radio_origin";
@@ -106,13 +104,13 @@ namespace Integrity_Checker_MEP.Forms
             //
             // Elem2Type
             //
-            this.Elem2Type.AspectName = "Elem2Type";
+            this.Elem2Type.AspectName = "Element2Type";
             this.Elem2Type.Text = "Element2 Type";
             this.Elem2Type.Width = 100;
             //
             // Elem1Guid
             //
-            this.Elem1Guid.AspectName = "Element1GUID";
+            this.Elem1Guid.AspectName = "Element1Guid";
             this.Elem1Guid.Text = "Element1 GUID";
             this.Elem1Guid.Width = 100;
             //
@@ -137,6 +135,7 @@ namespace Integrity_Checker_MEP.Forms
             // folv
             //
             this.folv.Dock = DockStyle.Fill;
+            this.folv.UseCellFormatEvents = true;
             this.folv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Elem1Type, this.Elem2Type, this.Elem1Guid, this.Elem2Guid, this.Severity, this.Adjusted_Severity});
             this.folv.AllColumns.Add(this.Elem1Type);

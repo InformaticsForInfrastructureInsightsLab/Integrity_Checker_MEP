@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using ClashTest2;
 using OxyPlot.WindowsForms;
@@ -84,6 +85,24 @@ namespace Integrity_Checker_MEP.Forms
 
         private void AdjustmentTab()
         {
+            folv.FormatCell += (sender, args) =>
+            {
+                if (args.Column.Text == "Severity" || args.Column.Text == "Adjusted Severity")
+                {
+                    switch (args.CellValue?.ToString())
+                    {
+                        case "Major":
+                            args.SubItem.ForeColor = Color.Red;
+                            break;
+                        case "Medium":
+                            args.SubItem.ForeColor = Color.Green;
+                            break;
+                        case "Minor":
+                            args.SubItem.ForeColor = Color.Blue;
+                            break;
+                    }
+                }
+            };
             folv.SetObjects(MainClass.rv.dataList);
         }
     }

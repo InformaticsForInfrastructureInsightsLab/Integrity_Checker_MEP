@@ -32,6 +32,8 @@ namespace Integrity_Checker_MEP
         public string MovabilityValue_Y_N;
         public string MovabilityValue_Z_P;
         public string MovabilityValue_Z_N;
+        public string Element1Type;
+        public string Element2Type;
 
         public ClashData(string[] stringdata) {
             Element1Guid = stringdata[0];
@@ -57,6 +59,8 @@ namespace Integrity_Checker_MEP
             MovabilityValue_Y_N = stringdata[20];
             MovabilityValue_Z_P = stringdata[21];
             MovabilityValue_Z_N = stringdata[22];
+            Element1Type = stringdata[23];
+            Element2Type = stringdata[24];
         }
     }
 }

@@ -220,7 +220,7 @@ namespace ClashTest2
                 string path = "C:\\objectinfo\\ResultFile.csv";
                 StreamReader file = new StreamReader(path);
                 string firstLine = file.ReadLine();
-                string[] header = firstLine.Split(',');
+                string[] header = firstLine.Split(',').Skip(0).Take(folv.Columns.Count).ToArray();
 
                 SelectHeader selectHeader = new SelectHeader();
                 selectHeader.initializeHeaderBool(header.Length);
