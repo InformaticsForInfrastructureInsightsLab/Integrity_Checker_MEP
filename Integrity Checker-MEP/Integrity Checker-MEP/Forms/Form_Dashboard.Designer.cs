@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using BrightIdeasSoftware;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace Integrity_Checker_MEP.Forms
@@ -34,8 +35,15 @@ namespace Integrity_Checker_MEP.Forms
             this.radio_adj = new System.Windows.Forms.RadioButton();
             this.radio_origin = new System.Windows.Forms.RadioButton();
             this.tabControlMain = new System.Windows.Forms.TabControl();
-            this.tabDashboard = new System.Windows.Forms.TabPage();
             this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.tabDashboard = new System.Windows.Forms.TabPage();
+            this.folv = new BrightIdeasSoftware.FastObjectListView();
+            this.Elem1Type = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem2Type = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem1Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Elem2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Adjusted_Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tabAdjustment = new System.Windows.Forms.TabPage();
             this.tabControlMain.SuspendLayout();
             this.tabDashboard.SuspendLayout();
@@ -63,18 +71,7 @@ namespace Integrity_Checker_MEP.Forms
             this.radio_origin.TabIndex = 21;
             this.radio_origin.Text = "조정되지 않은 심각도";
             this.radio_origin.UseVisualStyleBackColor = true;
-            this.radio_origin.CheckedChanged += new System.EventHandler(this.RadioChanged);
-            // 
-            // tabControlMain
-            // 
-            this.tabControlMain.Controls.Add(this.tabDashboard);
-            this.tabControlMain.Controls.Add(this.tabAdjustment);
-            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 0);
-            this.tabControlMain.Name = "tabControlMain";
-            this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(1200, 600);
-            this.tabControlMain.TabIndex = 0;
+            this.radio_origin.CheckedChanged += new System.EventHandler(this.RadioChanged);            
             // 
             // tableLayout
             // 
@@ -97,17 +94,77 @@ namespace Integrity_Checker_MEP.Forms
             this.tabDashboard.Controls.Add(this.radio_origin);
             this.tabDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabDashboard.Name = "tabDashboard";
-            this.tabDashboard.Size = new System.Drawing.Size(1192, 574);
+            this.tabAdjustment.Dock = DockStyle.Fill;
             this.tabDashboard.TabIndex = 0;
             this.tabDashboard.Text = "심각도 대시보드";
+            //
+            // Elem1Type
+            //
+            this.Elem1Type.AspectName = "Element1Type";
+            this.Elem1Type.Text = "Element1 Type";
+            this.Elem1Type.Width = 100;
+            //
+            // Elem2Type
+            //
+            this.Elem2Type.AspectName = "Elem2Type";
+            this.Elem2Type.Text = "Element2 Type";
+            this.Elem2Type.Width = 100;
+            //
+            // Elem1Guid
+            //
+            this.Elem1Guid.AspectName = "Element1GUID";
+            this.Elem1Guid.Text = "Element1 GUID";
+            this.Elem1Guid.Width = 100;
+            //
+            // Elem2Guid
+            //
+            this.Elem2Guid.AspectName = "Element2Guid";
+            this.Elem2Guid.Text = "Element2 GUID";
+            this.Elem2Guid.Width = 100;
+            //
+            // Severity
+            //
+            this.Severity.AspectName = "Severity";
+            this.Severity.Text = "Severity";
+            this.Severity.Width = 100;
+            //
+            // Adjusted_Severity
+            //
+            this.Adjusted_Severity.AspectName = "Adjusted_Severity";
+            this.Adjusted_Severity.Text = "Adjusted Severity";
+            this.Adjusted_Severity.Width = 100;
+            //
+            // folv
+            //
+            this.folv.Dock = DockStyle.Fill;
+            this.folv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Elem1Type, this.Elem2Type, this.Elem1Guid, this.Elem2Guid, this.Severity, this.Adjusted_Severity});
+            this.folv.AllColumns.Add(this.Elem1Type);
+            this.folv.AllColumns.Add(this.Elem2Type);
+            this.folv.AllColumns.Add(this.Elem1Guid);
+            this.folv.AllColumns.Add(this.Elem2Guid);
+            this.folv.AllColumns.Add(this.Severity);
+            this.folv.AllColumns.Add(this.Adjusted_Severity);
             // 
             // tabAdjustment
             // 
+            this.tabAdjustment.Controls.Add(this.folv);
             this.tabAdjustment.Location = new System.Drawing.Point(4, 22);
             this.tabAdjustment.Name = "tabAdjustment";
-            this.tabAdjustment.Size = new System.Drawing.Size(192, 74);
+            this.tabAdjustment.Dock = DockStyle.Fill;
             this.tabAdjustment.TabIndex = 1;
             this.tabAdjustment.Text = "심각도 조정 종류";
+            // 
+            // tabControlMain
+            // 
+            this.tabControlMain.Controls.Add(this.tabDashboard);
+            this.tabControlMain.Controls.Add(this.tabAdjustment);
+            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlMain.Location = new System.Drawing.Point(0, 0);
+            this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.SelectedIndex = 0;
+            this.tabControlMain.Size = new System.Drawing.Size(1200, 600);
+            this.tabControlMain.TabIndex = 0;
             // 
             // Form_Dashboard
             // 
@@ -131,5 +188,13 @@ namespace Integrity_Checker_MEP.Forms
         private System.Windows.Forms.RadioButton radio_adj;
         private System.Windows.Forms.RadioButton radio_origin;
         private TableLayoutPanel tableLayout;
+
+        private FastObjectListView folv;
+        private BrightIdeasSoftware.OLVColumn Elem1Type;
+        private BrightIdeasSoftware.OLVColumn Elem2Type;
+        private BrightIdeasSoftware.OLVColumn Elem1Guid;
+        private BrightIdeasSoftware.OLVColumn Elem2Guid;
+        private BrightIdeasSoftware.OLVColumn Severity;
+        private BrightIdeasSoftware.OLVColumn Adjusted_Severity;
     }
 }

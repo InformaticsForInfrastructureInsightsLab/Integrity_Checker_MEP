@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClashTest2;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Legends;
-using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 
 namespace Integrity_Checker_MEP.Forms
@@ -30,6 +19,7 @@ namespace Integrity_Checker_MEP.Forms
         {
             InitializeComponent();
             DashboardTab();
+            AdjustmentTab();
         }
 
         private void DashboardTab()
@@ -54,7 +44,7 @@ namespace Integrity_Checker_MEP.Forms
             tableLayout.Controls.Add(piePlot, 0, 0);
             tableLayout.Controls.Add(barPlot, 1, 0);
 
-            this.Controls.Add(tableLayout);
+            this.tabDashboard.Controls.Add(tableLayout);
         }
 
         private void RadioChanged(object sender, EventArgs e)
@@ -90,6 +80,11 @@ namespace Integrity_Checker_MEP.Forms
                 tableLayout.Controls.Add(piePlot, 0, 0);
                 tableLayout.Controls.Add(barPlot, 1, 0);
             }
+        }
+
+        private void AdjustmentTab()
+        {
+            folv.SetObjects(MainClass.rv.dataList);
         }
     }
 }
