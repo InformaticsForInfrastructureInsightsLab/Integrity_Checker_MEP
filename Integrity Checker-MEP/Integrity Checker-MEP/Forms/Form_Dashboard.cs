@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using ClashTest2;
 using OxyPlot.WindowsForms;
@@ -103,7 +104,8 @@ namespace Integrity_Checker_MEP.Forms
                     }
                 }
             };
-            folv.SetObjects(MainClass.rv.dataList);
+            folv.SetObjects(MainClass.rv.dataList.Where(
+                item=> item.Severity != item.Adjusted_Severity).ToList());
         }
     }
 }
