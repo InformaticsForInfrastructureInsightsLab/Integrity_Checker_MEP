@@ -104,8 +104,9 @@ namespace Integrity_Checker_MEP.Forms
                     }
                 }
             };
-            folv.SetObjects(MainClass.rv.dataList.Where(
-                item=> item.Severity != item.Adjusted_Severity).ToList());
+            folv.SetObjects(MainClass.rv.dataList
+                .Where(item=> item.Severity != item.Adjusted_Severity)
+                .ToList());
         }
     }
 }
