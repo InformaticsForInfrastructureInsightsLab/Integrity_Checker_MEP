@@ -104,6 +104,23 @@ namespace Integrity_Checker_MEP.Forms
                     }
                 }
             };
+
+            folv.FormatCell += (sender, args) =>
+            {
+                if (args.Column.Text == "MovabilityResult")
+                {
+                    switch (args.CellValue?.ToString())
+                    {
+                        case "False":
+                            args.SubItem.ForeColor = Color.Red;
+                            break;
+                        case "True":
+                            args.SubItem.ForeColor = Color.Blue;
+                            break;
+                    }
+                }
+            };
+
             folv.SetObjects(MainClass.rv.dataList
                 .Where(item=> item.Severity != item.Adjusted_Severity)
                 .ToList());
