@@ -44,20 +44,20 @@ namespace Integrity_Checker_MEP.Forms
             this.Elem2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Adjusted_Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.tabControlMain.SuspendLayout();
+            this.tabDashboard.SuspendLayout();
             this.tabAdjustment.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.folv)).BeginInit();
-            this.tableLayout.SuspendLayout();
             this.SuspendLayout();
             // 
             // radio_adj
             // 
             this.radio_adj.AutoSize = true;
             this.radio_adj.Checked = true;
-            this.radio_adj.Location = new System.Drawing.Point(599, 3);
+            this.radio_adj.Location = new System.Drawing.Point(3, 25);
             this.radio_adj.Name = "radio_adj";
             this.radio_adj.Size = new System.Drawing.Size(99, 16);
             this.radio_adj.TabIndex = 0;
@@ -89,6 +89,8 @@ namespace Integrity_Checker_MEP.Forms
             // 
             // tabDashboard
             // 
+            this.tabDashboard.Controls.Add(this.radio_origin);
+            this.tabDashboard.Controls.Add(this.radio_adj);
             this.tabDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabDashboard.Name = "tabDashboard";
             this.tabDashboard.Size = new System.Drawing.Size(1192, 574);
@@ -174,21 +176,6 @@ namespace Integrity_Checker_MEP.Forms
             this.Adjusted_Severity.Text = "Adjusted Severity";
             this.Adjusted_Severity.Width = 100;
             // 
-            // tableLayout
-            // 
-            this.tableLayout.ColumnCount = 2;
-            this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayout.Controls.Add(this.radio_adj, 1, 0);
-            this.tableLayout.Controls.Add(this.radio_origin, 0, 0);
-            this.tableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayout.Location = new System.Drawing.Point(0, 0);
-            this.tableLayout.Name = "tableLayout";
-            this.tableLayout.RowCount = 1;
-            this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayout.Size = new System.Drawing.Size(1192, 574);
-            this.tableLayout.TabIndex = 23;
-            // 
             // olvColumn1
             // 
             this.olvColumn1.AspectName = "Penetration";
@@ -201,6 +188,19 @@ namespace Integrity_Checker_MEP.Forms
             this.olvColumn2.Text = "MovabilityResult";
             this.olvColumn2.Width = 125;
             // 
+            // tableLayout
+            // 
+            this.tableLayout.ColumnCount = 2;
+            this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayout.Location = new System.Drawing.Point(0, 0);
+            this.tableLayout.Name = "tableLayout";
+            this.tableLayout.RowCount = 1;
+            this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayout.Size = new System.Drawing.Size(1192, 574);
+            this.tableLayout.TabIndex = 23;
+            // 
             // Form_Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -210,10 +210,10 @@ namespace Integrity_Checker_MEP.Forms
             this.Name = "Form_Dashboard";
             this.Text = "Form_Dashboard";
             this.tabControlMain.ResumeLayout(false);
+            this.tabDashboard.ResumeLayout(false);
+            this.tabDashboard.PerformLayout();
             this.tabAdjustment.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.folv)).EndInit();
-            this.tableLayout.ResumeLayout(false);
-            this.tableLayout.PerformLayout();
             this.ResumeLayout(false);
 
         }
