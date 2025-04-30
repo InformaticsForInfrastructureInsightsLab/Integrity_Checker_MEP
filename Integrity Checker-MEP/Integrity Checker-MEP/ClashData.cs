@@ -13,8 +13,7 @@ namespace Integrity_Checker_MEP
         public string Type;
         public string MovabilityValue;
         public string Topology;
-        public string HardClashType;
-        public string SoftClashType;
+        public string ClashType;
         public string Severity;
         public string Adjusted_Severity;
         public string Clearance;
@@ -40,27 +39,26 @@ namespace Integrity_Checker_MEP
             Element2Guid = stringdata[1];
             Type = stringdata[2];
             Topology = stringdata[3];
-            HardClashType = stringdata[4];
-            SoftClashType = stringdata[5];
-            Adjusted_Severity = stringdata[6];
-            Severity = stringdata[7];
-            Clearance = stringdata[8];
-            Offset = stringdata[9];
-            Penetration = stringdata[10];
-            ABS_Volume_Diff = stringdata[11];
-            ABS_Volume_SUM = stringdata[12];
-            ClashVolume = stringdata[13];
-            MovabilityResult = stringdata[14];
-            MovableSpace = stringdata[15];
-            MovableDistance = stringdata[16];
-            MovabilityValue_X_P = stringdata[17];
-            MovabilityValue_X_N = stringdata[18];
-            MovabilityValue_Y_P = stringdata[19];
-            MovabilityValue_Y_N = stringdata[20];
-            MovabilityValue_Z_P = stringdata[21];
-            MovabilityValue_Z_N = stringdata[22];
-            Element1Type = stringdata[23];
-            Element2Type = stringdata[24];
+            ClashType = stringdata[4];
+            Adjusted_Severity = stringdata[5];
+            Severity = stringdata[6];
+            Clearance = stringdata[7];
+            Offset = stringdata[8];
+            Penetration = stringdata[9];
+            ABS_Volume_Diff = stringdata[10];
+            ABS_Volume_SUM = stringdata[11];
+            ClashVolume = stringdata[12];
+            MovabilityResult = stringdata[13];
+            MovableSpace = stringdata[14];
+            MovableDistance = stringdata[15];
+            MovabilityValue_X_P = stringdata[16];
+            MovabilityValue_X_N = stringdata[17];
+            MovabilityValue_Y_P = stringdata[18];
+            MovabilityValue_Y_N = stringdata[19];
+            MovabilityValue_Z_P = stringdata[20];
+            MovabilityValue_Z_N = stringdata[21];
+            Element1Type = stringdata[22];
+            Element2Type = stringdata[23];
         }
     }
 }

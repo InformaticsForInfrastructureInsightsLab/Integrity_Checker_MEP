@@ -39,8 +39,7 @@ namespace ClashTest2
             Element2Guid,
             Type,
             Topology,
-            HardClashType,
-            SoftClashType,
+            ClashType,
             Severity,
             Adjusted_Severity,
             Clearance,
@@ -401,8 +400,7 @@ namespace ClashTest2
                 Element2Guid.IsVisible = headerBool[(int)Header.Element2Guid];
                 Type.IsVisible = headerBool[(int)Header.Type];
                 Topology.IsVisible = headerBool[(int)Header.Topology];
-                HardClashType.IsVisible = headerBool[(int)Header.HardClashType];
-                SoftClashType.IsVisible = headerBool[(int)Header.SoftClashType];
+                ClashType.IsVisible = headerBool[(int)Header.ClashType];
                 Severity.IsVisible = headerBool[(int)Header.Severity];
                 Clearance.IsVisible = headerBool[(int)Header.Clearance];
                 MovabilityResult.IsVisible = headerBool[(int)Header.MovabilityResult];
