@@ -94,7 +94,7 @@ namespace Integrity_Checker_MEP
         {
             foreach (ClashData cd in rv.dataList)
             {
-                string[] model = cd.HardClashType.Split('-');
+                string[] model = cd.ClashType.Split('-');
                 Array.Sort(model);
 
                 int model1 = DashboardUtils.MapModel(model[0]);
@@ -122,7 +122,7 @@ namespace Integrity_Checker_MEP
         {
             foreach (ClashData cd in rv.dataList)
             {
-                string[] model = cd.HardClashType.Split('-');
+                string[] model = cd.ClashType.Split('-');
                 Array.Sort(model);
 
                 int model1 = DashboardUtils.MapModel(model[0]);

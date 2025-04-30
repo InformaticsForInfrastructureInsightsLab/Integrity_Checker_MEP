@@ -54,8 +54,7 @@
             this.Element2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Type = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Topology = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.HardClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.SoftClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Adjusted_Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -319,8 +318,7 @@
             this.folv.AllColumns.Add(this.Element2Guid);
             this.folv.AllColumns.Add(this.Type);
             this.folv.AllColumns.Add(this.Topology);
-            this.folv.AllColumns.Add(this.HardClashType);
-            this.folv.AllColumns.Add(this.SoftClashType);
+            this.folv.AllColumns.Add(this.ClashType);
             this.folv.AllColumns.Add(this.Adjusted_Severity);
             this.folv.AllColumns.Add(this.Severity);
             this.folv.AllColumns.Add(this.Clearance);
@@ -347,8 +345,7 @@
             this.Element2Guid,
             this.Type,
             this.Topology,
-            this.HardClashType,
-            this.SoftClashType,
+            this.ClashType,
             this.Adjusted_Severity,
             this.Severity,
             this.Clearance,
@@ -409,18 +406,11 @@
             this.Topology.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Topology.Width = 127;
             // 
-            // HardClashType
-            // 
-            this.HardClashType.AspectName = "HardClashType";
-            this.HardClashType.Text = "hard clash type";
-            this.HardClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.HardClashType.Width = 103;
-            // 
             // SoftClashType
             // 
-            this.SoftClashType.AspectName = "SoftClashType";
-            this.SoftClashType.Text = "soft clash type";
-            this.SoftClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ClashType.AspectName = "ClashType";
+            this.ClashType.Text = "clash type";
+            this.ClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Adjusted_Severity
             // 
@@ -428,7 +418,7 @@
             this.Adjusted_Severity.Text = "Adjusted Severity";
             this.Adjusted_Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            this.SoftClashType.Width = 103;
+            this.ClashType.Width = 103;
             // 
             // Severity
             // 
@@ -604,8 +594,7 @@
         private BrightIdeasSoftware.OLVColumn Element2Guid;
         private BrightIdeasSoftware.OLVColumn Type;
         private BrightIdeasSoftware.OLVColumn Topology;
-        private BrightIdeasSoftware.OLVColumn HardClashType;
-        private BrightIdeasSoftware.OLVColumn SoftClashType;
+        private BrightIdeasSoftware.OLVColumn ClashType;
         private BrightIdeasSoftware.OLVColumn Severity;
         private BrightIdeasSoftware.OLVColumn Adjusted_Severity;
         private BrightIdeasSoftware.OLVColumn Clearance;
