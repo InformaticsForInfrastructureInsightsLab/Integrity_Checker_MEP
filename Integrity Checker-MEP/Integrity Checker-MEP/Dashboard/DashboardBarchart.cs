@@ -15,7 +15,21 @@ namespace Integrity_Checker_MEP
 {
     abstract class DashboardBarchart_Base
     {
-        protected int[,,] clashMatrix = new int[3, 6, 6];
+        protected int[,,] hardClashMatrix = new int[3, 6, 6];
+        protected Dictionary<string, List<int>> softClashDict = new Dictionary<string, List<int>>
+        {
+            { "UnnecessaryMEPElement", new List<int>{ 0,0,0 } },
+            { "DoorClearance",  new List<int>{ 0,0,0 } },
+            { "CeilingHeightCompliance", new List < int > { 0, 0, 0 } },
+            { "MEPPassageAccess", new List < int > { 0, 0, 0 } },
+            { "PipeCeilingClearance", new List < int > { 0, 0, 0 } },
+            { "MEPBelowCeiling", new List < int > { 0, 0, 0 } },
+            { "BeamDuctClearance", new List < int > { 0, 0, 0 } },
+            { "DuctClearance", new List < int > { 0, 0, 0 } },
+            { "DuctPipeClearance", new List < int > { 0, 0, 0 } },
+            { "PipeClearance", new List < int > { 0, 0, 0 } },
+            { "FittingOmission", new List < int > { 0, 0, 0 } },
+        };
         protected Model model;
 
         public abstract void FillMatrix(form_ResultViewer rv);
@@ -41,18 +55,27 @@ namespace Integrity_Checker_MEP
             List<BarItem> medium = new List<BarItem>();
             List<BarItem> major = new List<BarItem>();
 
+            // for hard clash
             for (int i = 0; i < 6; i++)
             {
                 for (int j = i; j < 6; j++)
                 {
-                    if (clashMatrix[0, i, j] + clashMatrix[1, i, j] + clashMatrix[2, i, j] == 0)
+                    if (hardClashMatrix[0, i, j] + hardClashMatrix[1, i, j] + hardClashMatrix[2, i, j] == 0)
                         continue;
                     categoryAxis.Labels.Add(modelNames[i] + "-" + modelNames[j]);
 
-                    minor.Add(new BarItem { Value = clashMatrix[0, i, j] });
-                    medium.Add(new BarItem { Value = clashMatrix[1, i, j] });
-                    major.Add(new BarItem { Value = clashMatrix[2, i, j] });
+                    minor.Add(new BarItem { Value = hardClashMatrix[0, i, j] });
+                    medium.Add(new BarItem { Value = hardClashMatrix[1, i, j] });
+                    major.Add(new BarItem { Value = hardClashMatrix[2, i, j] });
                 }
+            }
+
+            foreach (var soft in softClashDict)
+            {
+                categoryAxis.Labels.Add(soft.Key);
+                minor.Add(new BarItem { Value = soft.Value[0] });
+                medium.Add(new BarItem { Value = soft.Value[1] });
+                major.Add(new BarItem { Value = soft.Value[2] });
             }
 
             model.Axes.Add(categoryAxis);
@@ -94,19 +117,27 @@ namespace Integrity_Checker_MEP
         {
             foreach (ClashData cd in rv.dataList)
             {
-                string[] model = cd.ClashType.Split('-');
-                Array.Sort(model);
+                if (cd.Type == "Hard")
+                {
+                    string[] model = cd.ClashType.Split('-');
+                    Array.Sort(model);
+                    int model1 = DashboardUtils.MapModel(model[0]);
+                    int model2 = DashboardUtils.MapModel(model[1]);
+                    if (model1 == -1 || model2 == -1)
+                        continue;
 
-                int model1 = DashboardUtils.MapModel(model[0]);
-                int model2 = DashboardUtils.MapModel(model[1]);
-                if (model1 == -1 || model2 == -1)
-                    continue;
+                    int severity = DashboardUtils.MapSeverity(cd.Adjusted_Severity);
+                    if (severity == -1)
+                        continue;
 
-                int severity = DashboardUtils.MapSeverity(cd.Adjusted_Severity);
-                if (severity == -1)
-                    continue;
+                    hardClashMatrix[severity, model1, model2]++;
+                }
+                else
+                {
+                    int severity = DashboardUtils.MapSeverity(cd.Adjusted_Severity);
+                    softClashDict[cd.ClashType][severity]++;
+                }
 
-                clashMatrix[severity, model1, model2]++;
             }
         }
     }
@@ -122,19 +153,28 @@ namespace Integrity_Checker_MEP
         {
             foreach (ClashData cd in rv.dataList)
             {
-                string[] model = cd.ClashType.Split('-');
-                Array.Sort(model);
+                if (cd.Type == "Hard")
+                {
+                    string[] model = cd.ClashType.Split('-');
+                    Array.Sort(model);
+                    
+                    int model1 = DashboardUtils.MapModel(model[0]);
+                    int model2 = DashboardUtils.MapModel(model[1]);
+                    if (model1 == -1 || model2 == -1)
+                        continue;
 
-                int model1 = DashboardUtils.MapModel(model[0]);
-                int model2 = DashboardUtils.MapModel(model[1]);
-                if (model1 == -1 || model2 == -1)
-                    continue;
+                    int severity = DashboardUtils.MapSeverity(cd.Severity);
+                    if (severity == -1)
+                        continue;
 
-                int severity = DashboardUtils.MapSeverity(cd.Severity);
-                if (severity == -1)
-                    continue;
-
-                clashMatrix[severity, model1, model2]++;
+                    hardClashMatrix[severity, model1, model2]++;
+                }
+                else
+                {
+                    int severity = DashboardUtils.MapSeverity(cd.Severity);
+                    softClashDict[cd.ClashType][severity]++;
+                }
+                
             }
         }
     }
