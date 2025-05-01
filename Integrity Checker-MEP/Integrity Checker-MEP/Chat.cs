@@ -67,9 +67,45 @@ namespace Integrity_Checker_MEP
 
         private async void Question(string message, string prevContext)
         {
-            string context = File.ReadAllText("C:\\objectinfo\\context.json");
-            MessageBox.Show("success", "notify", MessageBoxButtons.OK);
-            ForwardAnswer("테스트를 위한 브랜치 입니다.", String.Copy(context));
+            using (HttpClient client = new HttpClient())
+            {
+                string url = "http://117.17.196.59:1131/question";
+
+                var data = new { user_question = message, prev_context = prevContext == "" ? "None" : prevContext };
+                string jsonData = JsonConvert.SerializeObject(data);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    try
+                    {
+                        Response answer = JsonConvert.DeserializeObject<Response>(responseBody);
+                        File.WriteAllText("C://objectinfo/context.json", answer.context);
+                        MessageBox.Show("success", "notify", MessageBoxButtons.OK);
+                        ForwardAnswer(answer.result.Replace("\n", "\r\n"), String.Copy(answer.context));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "error", MessageBoxButtons.OK);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        BadResponse answer = JsonConvert.DeserializeObject<BadResponse>(responseBody);
+                        ForwardAnswer(answer.error, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "error", MessageBoxButtons.OK);
+                    }
+                }
+            }
         }
 
         private void FindElement([MarshalAs(UnmanagedType.LPWStr)] string guid1, [MarshalAs(UnmanagedType.LPWStr)] string guid2)
