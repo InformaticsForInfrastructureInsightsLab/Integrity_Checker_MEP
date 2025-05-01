@@ -35,6 +35,8 @@
             this.tog_Soft = new System.Windows.Forms.CheckBox();
             this.btn_Download = new System.Windows.Forms.Button();
             this.btn_SelectHeader = new System.Windows.Forms.Button();
+            this.btn_load_chat = new System.Windows.Forms.Button();
+            this.btn_load_dashboard = new System.Windows.Forms.Button();
             this.btn_Item1 = new System.Windows.Forms.Button();
             this.btn_item2 = new System.Windows.Forms.Button();
             this.majorHard = new System.Windows.Forms.Label();
@@ -51,20 +53,25 @@
             this.Element1Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Element2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Type = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.MovabilityValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Topology = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.HardClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.SoftClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ClashType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Adjusted_Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Clearance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.MovableSpace = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.MovableDistance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Offset = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Penetration = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.ABS_Volume_Diff = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.ABS_Volume_SUM = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.ClashVolume = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovableSpace = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovableDistance = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityValue_X_P = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityValue_X_N = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityValue_Y_P = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityValue_Y_N = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityValue_Z_P = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityValue_Z_N = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.folv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -146,6 +153,28 @@
             this.btn_SelectHeader.Text = "Select header";
             this.btn_SelectHeader.UseVisualStyleBackColor = true;
             this.btn_SelectHeader.Click += new System.EventHandler(this.click_btn_SelectHeader);
+            // 
+            // btn_load_chat
+            // 
+            this.btn_load_chat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_load_chat.Location = new System.Drawing.Point(658, 266);
+            this.btn_load_chat.Name = "btn_load_chat";
+            this.btn_load_chat.Size = new System.Drawing.Size(94, 23);
+            this.btn_load_chat.TabIndex = 9;
+            this.btn_load_chat.Text = "Load AI Chat";
+            this.btn_load_chat.UseVisualStyleBackColor = true;
+            this.btn_load_chat.Click += new System.EventHandler(this.click_btn_load_chat);
+            // 
+            // btn_load_dashboard
+            // 
+            this.btn_load_dashboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_load_dashboard.Location = new System.Drawing.Point(658, 295);
+            this.btn_load_dashboard.Name = "btn_load_dashboard";
+            this.btn_load_dashboard.Size = new System.Drawing.Size(94, 23);
+            this.btn_load_dashboard.TabIndex = 24;
+            this.btn_load_dashboard.Text = "Dashboard";
+            this.btn_load_dashboard.UseVisualStyleBackColor = true;
+            this.btn_load_dashboard.Click += new System.EventHandler(this.click_btn_dashboard);
             // 
             // btn_Item1
             // 
@@ -289,19 +318,24 @@
             this.folv.AllColumns.Add(this.Element2Guid);
             this.folv.AllColumns.Add(this.Type);
             this.folv.AllColumns.Add(this.Topology);
-            this.folv.AllColumns.Add(this.HardClashType);
-            this.folv.AllColumns.Add(this.SoftClashType);
+            this.folv.AllColumns.Add(this.ClashType);
+            this.folv.AllColumns.Add(this.Adjusted_Severity);
             this.folv.AllColumns.Add(this.Severity);
             this.folv.AllColumns.Add(this.Clearance);
-            this.folv.AllColumns.Add(this.MovabilityValue);
-            this.folv.AllColumns.Add(this.MovabilityResult);
-            this.folv.AllColumns.Add(this.MovableSpace);
-            this.folv.AllColumns.Add(this.MovableDistance);
             this.folv.AllColumns.Add(this.Offset);
             this.folv.AllColumns.Add(this.Penetration);
             this.folv.AllColumns.Add(this.ABS_Volume_Diff);
             this.folv.AllColumns.Add(this.ABS_Volume_SUM);
             this.folv.AllColumns.Add(this.ClashVolume);
+            this.folv.AllColumns.Add(this.MovabilityResult);
+            this.folv.AllColumns.Add(this.MovableSpace);
+            this.folv.AllColumns.Add(this.MovableDistance);
+            this.folv.AllColumns.Add(this.MovabilityValue_X_P);
+            this.folv.AllColumns.Add(this.MovabilityValue_X_N);
+            this.folv.AllColumns.Add(this.MovabilityValue_Y_P);
+            this.folv.AllColumns.Add(this.MovabilityValue_Y_N);
+            this.folv.AllColumns.Add(this.MovabilityValue_Z_P);
+            this.folv.AllColumns.Add(this.MovabilityValue_Z_N);
             this.folv.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -311,19 +345,24 @@
             this.Element2Guid,
             this.Type,
             this.Topology,
-            this.HardClashType,
-            this.SoftClashType,
+            this.ClashType,
+            this.Adjusted_Severity,
             this.Severity,
             this.Clearance,
-            this.MovabilityResult,
-            this.MovabilityValue,
-            this.MovableSpace,
-            this.MovableDistance,
             this.Offset,
             this.Penetration,
             this.ABS_Volume_Diff,
             this.ABS_Volume_SUM,
-            this.ClashVolume});
+            this.ClashVolume,
+            this.MovabilityResult,
+            this.MovableSpace,
+            this.MovableDistance,
+            this.MovabilityValue_X_P,
+            this.MovabilityValue_X_N,
+            this.MovabilityValue_Y_P,
+            this.MovabilityValue_Y_N,
+            this.MovabilityValue_Z_P,
+            this.MovabilityValue_Z_N});
             this.folv.Cursor = System.Windows.Forms.Cursors.Default;
             this.folv.FullRowSelect = true;
             this.folv.HideSelection = false;
@@ -360,13 +399,6 @@
             this.Type.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Type.Width = 93;
             // 
-            // MovabilityValue
-            // 
-            this.MovabilityValue.AspectName = "MovabilityValue";
-            this.MovabilityValue.Text = "Movability value";
-            this.MovabilityValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MovabilityValue.Width = 100;
-            // 
             // Topology
             // 
             this.Topology.AspectName = "Topology";
@@ -374,53 +406,31 @@
             this.Topology.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Topology.Width = 127;
             // 
-            // HardClashType
-            // 
-            this.HardClashType.AspectName = "HardClashType";
-            this.HardClashType.Text = "hard clash type";
-            this.HardClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.HardClashType.Width = 103;
-            // 
             // SoftClashType
             // 
-            this.SoftClashType.AspectName = "SoftClashType";
-            this.SoftClashType.Text = "soft clash type";
-            this.SoftClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.SoftClashType.Width = 103;
+            this.ClashType.AspectName = "ClashType";
+            this.ClashType.Text = "clash type";
+            this.ClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // Adjusted_Severity
+            // 
+            this.Adjusted_Severity.AspectName = "Adjusted_Severity";
+            this.Adjusted_Severity.Text = "Adjusted Severity";
+            this.Adjusted_Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            this.ClashType.Width = 103;
             // 
             // Severity
             // 
             this.Severity.AspectName = "Severity";
             this.Severity.Text = "Severity";
             this.Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // Clearance
             // 
             this.Clearance.AspectName = "Clearance";
             this.Clearance.Text = "Clearance";
             this.Clearance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Clearance.Width = 123;
-            // 
-            // MovabilityResult
-            // 
-            this.MovabilityResult.AspectName = "MovabilityResult";
-            this.MovabilityResult.Text = "Movability Result";
-            this.MovabilityResult.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MovabilityResult.Width = 98;
-            // 
-            // Movable_space
-            // 
-            this.MovableSpace.AspectName = "MovableSpace";
-            this.MovableSpace.Text = "MovableSpace";
-            this.MovableSpace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MovableSpace.Width = 98;
-            // 
-            // MovabilityResult
-            // 
-            this.MovableDistance.AspectName = "MovableDistance";
-            this.MovableDistance.Text = "MovableDistance";
-            this.MovableDistance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.MovableDistance.Width = 98;
             // 
             // Offset
             // 
@@ -432,7 +442,7 @@
             // Penetration
             // 
             this.Penetration.AspectName = "Penetration";
-            this.Penetration.Text = "Penetration";
+            this.Penetration.Text = "penetrabilityResult";
             this.Penetration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Penetration.Width = 98;
             // 
@@ -443,25 +453,90 @@
             this.ABS_Volume_Diff.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ABS_Volume_Diff.Width = 98;
             // 
-            // ABS_Volume_Sum
+            // ABS_Volume_SUM
             // 
             this.ABS_Volume_SUM.AspectName = "ABS_Volume_SUM";
             this.ABS_Volume_SUM.Text = "ABS_Volume_SUM";
             this.ABS_Volume_SUM.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ABS_Volume_SUM.Width = 98;
             // 
-            // Clash_Volume
+            // ClashVolume
             // 
             this.ClashVolume.AspectName = "ClashVolume";
             this.ClashVolume.Text = "ClashVolume";
             this.ClashVolume.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ClashVolume.Width = 98;            
+            this.ClashVolume.Width = 98;
+            // 
+            // MovabilityResult
+            // 
+            this.MovabilityResult.AspectName = "MovabilityResult";
+            this.MovabilityResult.Text = "Movability Result";
+            this.MovabilityResult.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityResult.Width = 98;
+            // 
+            // MovableSpace
+            // 
+            this.MovableSpace.AspectName = "MovableSpace";
+            this.MovableSpace.Text = "MovableSpace";
+            this.MovableSpace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovableSpace.Width = 98;
+            // 
+            // MovableDistance
+            // 
+            this.MovableDistance.AspectName = "MovableDistance";
+            this.MovableDistance.Text = "MovableDistance";
+            this.MovableDistance.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovableDistance.Width = 98;
+            // 
+            // MovabilityValue_X_P
+            // 
+            this.MovabilityValue_X_P.AspectName = "MovabilityValue_X_P";
+            this.MovabilityValue_X_P.Text = "MovabilityValue_X_P";
+            this.MovabilityValue_X_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue_X_P.Width = 98;
+            // 
+            // MovabilityValue_X_N
+            // 
+            this.MovabilityValue_X_N.AspectName = "MovabilityValue_X_N";
+            this.MovabilityValue_X_N.Text = "MovabilityValue_X_N";
+            this.MovabilityValue_X_N.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue_X_N.Width = 98;
+            // 
+            // MovabilityValue_Y_P
+            // 
+            this.MovabilityValue_Y_P.AspectName = "MovabilityValue_Y_P";
+            this.MovabilityValue_Y_P.Text = "MovabilityValue_Y_P";
+            this.MovabilityValue_Y_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue_Y_P.Width = 98;
+            // 
+            // MovabilityValue_Y_N
+            // 
+            this.MovabilityValue_Y_N.AspectName = "MovabilityValue_Y_N";
+            this.MovabilityValue_Y_N.Text = "MovabilityValue_Y_N";
+            this.MovabilityValue_Y_N.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue_Y_N.Width = 98;
+            // 
+            // MovabilityValue_Z_P
+            // 
+            this.MovabilityValue_Z_P.AspectName = "MovabilityValue_Z_P";
+            this.MovabilityValue_Z_P.Text = "MovabilityValue_Z_P";
+            this.MovabilityValue_Z_P.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue_Z_P.Width = 98;
+            // 
+            // MovabilityValue_Z_N
+            // 
+            this.MovabilityValue_Z_N.AspectName = "MovabilityValue_Z_N";
+            this.MovabilityValue_Z_N.Text = "MovabilityValue_Z_N";
+            this.MovabilityValue_Z_N.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.MovabilityValue_Z_N.Width = 98;
+
             // 
             // form_ResultViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(764, 553);
+            this.Controls.Add(this.btn_load_dashboard);
             this.Controls.Add(this.folv);
             this.Controls.Add(this.btn_Screenshot);
             this.Controls.Add(this.rdo_none);
@@ -476,6 +551,7 @@
             this.Controls.Add(this.btn_item2);
             this.Controls.Add(this.btn_Item1);
             this.Controls.Add(this.btn_SelectHeader);
+            this.Controls.Add(this.btn_load_chat);
             this.Controls.Add(this.btn_Download);
             this.Controls.Add(this.tog_Soft);
             this.Controls.Add(this.tog_Hard);
@@ -500,6 +576,8 @@
         private System.Windows.Forms.Button btn_SelectHeader;
         private System.Windows.Forms.Button btn_Item1;
         private System.Windows.Forms.Button btn_item2;
+        private System.Windows.Forms.Button btn_load_chat;
+        private System.Windows.Forms.Button btn_load_dashboard;
         private System.Windows.Forms.Label majorHard;
         private System.Windows.Forms.Label majorSoft;
         private System.Windows.Forms.Label mediumHard;
@@ -515,20 +593,25 @@
         private BrightIdeasSoftware.OLVColumn Element1Guid;
         private BrightIdeasSoftware.OLVColumn Element2Guid;
         private BrightIdeasSoftware.OLVColumn Type;
-        private BrightIdeasSoftware.OLVColumn MovabilityValue;
         private BrightIdeasSoftware.OLVColumn Topology;
-        private BrightIdeasSoftware.OLVColumn HardClashType;
-        private BrightIdeasSoftware.OLVColumn SoftClashType;
+        private BrightIdeasSoftware.OLVColumn ClashType;
         private BrightIdeasSoftware.OLVColumn Severity;
+        private BrightIdeasSoftware.OLVColumn Adjusted_Severity;
         private BrightIdeasSoftware.OLVColumn Clearance;
-        private BrightIdeasSoftware.OLVColumn MovabilityResult;
-        private BrightIdeasSoftware.OLVColumn MovableSpace;
-        private BrightIdeasSoftware.OLVColumn MovableDistance;
         private BrightIdeasSoftware.OLVColumn Offset;
         private BrightIdeasSoftware.OLVColumn Penetration;
         private BrightIdeasSoftware.OLVColumn ABS_Volume_Diff;
         private BrightIdeasSoftware.OLVColumn ABS_Volume_SUM;
         private BrightIdeasSoftware.OLVColumn ClashVolume;
+        private BrightIdeasSoftware.OLVColumn MovabilityResult;
+        private BrightIdeasSoftware.OLVColumn MovableSpace;
+        private BrightIdeasSoftware.OLVColumn MovableDistance;
+        private BrightIdeasSoftware.OLVColumn MovabilityValue_X_P;
+        private BrightIdeasSoftware.OLVColumn MovabilityValue_X_N;
+        private BrightIdeasSoftware.OLVColumn MovabilityValue_Y_P;
+        private BrightIdeasSoftware.OLVColumn MovabilityValue_Y_N;
+        private BrightIdeasSoftware.OLVColumn MovabilityValue_Z_P;
+        private BrightIdeasSoftware.OLVColumn MovabilityValue_Z_N;
     }
 }
 

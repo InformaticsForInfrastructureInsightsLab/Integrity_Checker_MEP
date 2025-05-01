@@ -13,9 +13,9 @@ namespace Integrity_Checker_MEP
         public string Type;
         public string MovabilityValue;
         public string Topology;
-        public string HardClashType;
-        public string SoftClashType;
+        public string ClashType;
         public string Severity;
+        public string Adjusted_Severity;
         public string Clearance;
         public string MovabilityResult;
         public string MovableSpace;
@@ -25,26 +25,40 @@ namespace Integrity_Checker_MEP
         public string ABS_Volume_Diff;
         public string ABS_Volume_SUM;
         public string ClashVolume;
-
+        public string MovabilityValue_X_P;
+        public string MovabilityValue_X_N;
+        public string MovabilityValue_Y_P;
+        public string MovabilityValue_Y_N;
+        public string MovabilityValue_Z_P;
+        public string MovabilityValue_Z_N;
+        public string Element1Type;
+        public string Element2Type;
 
         public ClashData(string[] stringdata) {
             Element1Guid = stringdata[0];
             Element2Guid = stringdata[1];
             Type = stringdata[2];
-            MovabilityValue = stringdata[3];
-            Topology = stringdata[4];
-            HardClashType = stringdata[5];
-            SoftClashType = stringdata[6];
-            Severity = stringdata[7];
-            Clearance = stringdata[8];
-            MovabilityResult = stringdata[9];
-            MovableSpace = stringdata[10];
-            MovableDistance = stringdata[11];
-            Offset = stringdata[12];
-            Penetration = stringdata[13];
-            ABS_Volume_Diff = stringdata[14];
-            ABS_Volume_SUM = stringdata[15];
-            ClashVolume = stringdata[16];
+            Topology = stringdata[3];
+            ClashType = stringdata[4];
+            Adjusted_Severity = stringdata[5];
+            Severity = stringdata[6];
+            Clearance = stringdata[7];
+            Offset = stringdata[8];
+            Penetration = stringdata[9];
+            ABS_Volume_Diff = stringdata[10];
+            ABS_Volume_SUM = stringdata[11];
+            ClashVolume = stringdata[12];
+            MovabilityResult = stringdata[13];
+            MovableSpace = stringdata[14];
+            MovableDistance = stringdata[15];
+            MovabilityValue_X_P = stringdata[16];
+            MovabilityValue_X_N = stringdata[17];
+            MovabilityValue_Y_P = stringdata[18];
+            MovabilityValue_Y_N = stringdata[19];
+            MovabilityValue_Z_P = stringdata[20];
+            MovabilityValue_Z_N = stringdata[21];
+            Element1Type = stringdata[22];
+            Element2Type = stringdata[23];
         }
     }
 }

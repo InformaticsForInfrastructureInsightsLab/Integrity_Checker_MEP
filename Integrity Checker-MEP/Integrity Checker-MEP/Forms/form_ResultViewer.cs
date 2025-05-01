@@ -16,11 +16,9 @@ using Autodesk.Navisworks.Api;
 using Color = Autodesk.Navisworks.Api.Color;
 using ListviewTest;
 using Integrity_Checker_MEP;
-using ComApi = Autodesk.Navisworks.Api.Interop.ComApi;
-using ComApiBridge = Autodesk.Navisworks.Api.ComApi.ComApiBridge;
-using Autodesk.Navisworks.Api.ComApi;
-using Autodesk.Navisworks.Api.Interop;
-using Autodesk.Navisworks.Api.Interop.ComApi;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Integrity_Checker_MEP.Forms;
 
 namespace ClashTest2
 {
@@ -28,7 +26,7 @@ namespace ClashTest2
     {
 
         // List for data
-        List<ClashData> dataList = new List<ClashData>();
+        public List<ClashData> dataList = new List<ClashData>();
         List<ClashData> dataHardList = new List<ClashData>();
         List<ClashData> dataSoftList = new List<ClashData>();
         List<ClashData> dataNullList = new List<ClashData>();
@@ -40,29 +38,39 @@ namespace ClashTest2
             Element1Guid,
             Element2Guid,
             Type,
-            MovabilityValue,
             Topology,
-            HardClashType,
-            SoftClashType,
+            ClashType,
             Severity,
+            Adjusted_Severity,
             Clearance,
-            MovabilityResult,
-            MovablSpace,
-            MovableDistance,
             Offset,
             Penetration,
             ABS_Volume_Diff,
             ABS_Volume_SUM,
-            ClashVolume
+            ClashVolume,
+            MovabilityResult,
+            MovablSpace,
+            MovableDistance,
+            MovabilityValue_X_P,
+            MovabilityValue_X_N,
+            MovabilityValue_Y_P,
+            MovabilityValue_Y_N,
+            MovabilityValue_Z_P,
+            MovabilityValue_Z_N
         }
 
         // bool for checked column header
         private bool[] headerBool;
 
-        // number of each result
-        private int major_hard = 0, major_soft = 0;
-        private int medium_hard = 0, medium_soft = 0;
-        private int minor_hard = 0, minor_soft = 0;
+        // number of each result - adjusted
+        public int major_hard = 0, major_soft = 0;
+        public int medium_hard = 0, medium_soft = 0;
+        public int minor_hard = 0, minor_soft = 0;
+
+        // number of each result - origin
+        public int major_hard_origin = 0, major_soft_origin = 0;
+        public int medium_hard_origin = 0, medium_soft_origin = 0;
+        public int minor_hard_origin = 0, minor_soft_origin = 0;
 
         // string for 2 selected guid
         private string guid1;
@@ -138,10 +146,10 @@ namespace ClashTest2
 
             foreach (ClashData clash in dataList)
             {
-                if (clash.HardClashType == "   ")
+                if (clash.Type == "Soft")
                 {
                     dataSoftList.Add(clash);
-                    switch(clash.Severity)
+                    switch(clash.Adjusted_Severity)
                     {
                         case "Major":
                             major_soft++;  break;
@@ -151,10 +159,10 @@ namespace ClashTest2
                             minor_soft++; break;
                     }
                 }
-                else if (clash.SoftClashType == "   ")
+                else if (clash.Type == "Hard")
                 {
                     dataHardList.Add(clash);
-                    switch (clash.Severity)
+                    switch (clash.Adjusted_Severity)
                     {
                         case "Major":
                             major_hard++; break;
@@ -162,6 +170,31 @@ namespace ClashTest2
                             medium_hard++; break;
                         case "Minor":
                             minor_hard++; break;
+                    }
+                }
+
+                if (clash.Type == "Soft")
+                {
+                    switch (clash.Severity)
+                    {
+                        case "Major":
+                            major_soft_origin++; break;
+                        case "Medium":
+                            medium_soft_origin++; break;
+                        case "Minor":
+                            minor_soft_origin++; break;
+                    }
+                }
+                else if (clash.Type == "Hard")
+                {
+                    switch (clash.Severity)
+                    {
+                        case "Major":
+                            major_hard_origin++; break;
+                        case "Medium":
+                            medium_hard_origin++; break;
+                        case "Minor":
+                            minor_hard_origin++; break;
                     }
                 }
             }
@@ -186,7 +219,7 @@ namespace ClashTest2
                 string path = "C:\\objectinfo\\ResultFile.csv";
                 StreamReader file = new StreamReader(path);
                 string firstLine = file.ReadLine();
-                string[] header = firstLine.Split(',');
+                string[] header = firstLine.Split(',').Skip(0).Take(folv.Columns.Count).ToArray();
 
                 SelectHeader selectHeader = new SelectHeader();
                 selectHeader.initializeHeaderBool(header.Length);
@@ -198,10 +231,10 @@ namespace ClashTest2
                 addDataToList();
 
                 // Only group by severity -> if canceled can be grouped by other headers
-                folv.AlwaysGroupByColumn = Severity;
+                folv.AlwaysGroupByColumn = Adjusted_Severity;
                 // MVC pattern -> check objectListView 
                 folv.SetObjects(dataList);
-                folv.BuildGroups(Severity, SortOrder.None);
+                folv.BuildGroups(Adjusted_Severity, SortOrder.None);
 
                 tog_Hard.Checked = true;
                 tog_Soft.Checked = true;
@@ -366,10 +399,8 @@ namespace ClashTest2
                 }
                 Element2Guid.IsVisible = headerBool[(int)Header.Element2Guid];
                 Type.IsVisible = headerBool[(int)Header.Type];
-                MovabilityValue.IsVisible = headerBool[(int)Header.Severity];
                 Topology.IsVisible = headerBool[(int)Header.Topology];
-                HardClashType.IsVisible = headerBool[(int)Header.HardClashType];
-                SoftClashType.IsVisible = headerBool[(int)Header.SoftClashType];
+                ClashType.IsVisible = headerBool[(int)Header.ClashType];
                 Severity.IsVisible = headerBool[(int)Header.Severity];
                 Clearance.IsVisible = headerBool[(int)Header.Clearance];
                 MovabilityResult.IsVisible = headerBool[(int)Header.MovabilityResult];
@@ -444,14 +475,26 @@ namespace ClashTest2
                 SelectObjectWithGUID(folv.SelectedItem.GetSubItem((int)Header.Element2Guid).Text);
             }
         }
+
+        private void click_btn_load_chat(object sender, EventArgs e)
+        {
+            Chat chat = new Chat();
+            Chat.ShowMyWindow();
+        }
+
+        private void click_btn_dashboard(object sender, EventArgs e)
+        {
+            Form_Dashboard dashboard = new Form_Dashboard();
+            dashboard.Show();
+        }
         #endregion
 
         #region Navisworks
 
         public Document doc;
         Color[] colors = { Color.Green, Color.Red }; //부재에 칠할 색
-        bool trans = false;
-        bool hide = false;
+        public bool trans = false;
+        public bool hide = false;
         ModelItemCollection invertItemCollection = new ModelItemCollection(); // 선택 부재 외 나머지 부재
 
         /// <summary>

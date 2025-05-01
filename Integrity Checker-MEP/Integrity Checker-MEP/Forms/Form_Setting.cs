@@ -17,7 +17,7 @@ namespace Integrity_Checker_MEP {
         public bool show_fromparent = false; //부재의 GUID가 부모의 GUID를 가져온 것인지 표시(접두사 fromparent_ 추가)
         public bool export_Result = true; //결과 파일 추출
         public bool export_AllinOne = true; //모든 결과를 한 파일로 통합하여 추출
-        public bool export_UselessClash = false; //불필요한 간섭 결과를 나열한 파일 추출
+        public bool export_UselessClash = true; //불필요한 간섭 결과를 나열한 파일 추출
         public bool export_SameIfcSystem = false; //동일한 IfcSystem을 가지는 MEP부재를 나열한 파일 추출
         public bool export_Properties = true; //Properties파일 추출
         public bool cut_Properties = false; //Properties파일 분할

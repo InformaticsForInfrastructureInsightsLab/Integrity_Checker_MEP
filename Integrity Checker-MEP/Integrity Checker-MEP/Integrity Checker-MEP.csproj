@@ -12,6 +12,9 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,8 +70,11 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
+    <Reference Include="OxyPlot, Version=2.2.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.Core.2.2.0\lib\net462\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.WindowsForms, Version=2.2.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.WindowsForms.2.2.0\lib\net462\OxyPlot.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <Private>True</Private>
@@ -76,6 +82,7 @@
     <Reference Include="PresentationFramework">
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
@@ -101,6 +108,7 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
+    <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -136,58 +144,56 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat.cs" />
     <Compile Include="ClashChecker.cs" />
     <Compile Include="ClashData.cs" />
-    <Compile Include="IFCLoad.cs">
+    <Compile Include="Dashboard\DashboardBarchart.cs" />
+    <Compile Include="Dashboard\DashboardPieChart.cs" />
+    <Compile Include="Dashboard\DashboardUtils.cs" />
+    <Compile Include="Forms\Form_Dashboard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IFCLoad.Designer.cs">
+    <Compile Include="Forms\Form_Dashboard.Designer.cs">
+      <DependentUpon>Form_Dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\IFCLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\IFCLoad.Designer.cs">
       <DependentUpon>IFCLoad.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_ImageOption.cs">
+    <Compile Include="Forms\form_ImageOption.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_ImageOption.Designer.cs">
+    <Compile Include="Forms\form_ImageOption.Designer.cs">
       <DependentUpon>form_ImageOption.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_ResultViewer.cs">
+    <Compile Include="Forms\form_ResultViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_ResultViewer.designer.cs">
+    <Compile Include="Forms\form_ResultViewer.designer.cs">
       <DependentUpon>form_ResultViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_SelectRow.cs">
+    <Compile Include="Forms\form_SelectRow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_SelectRow.designer.cs">
+    <Compile Include="Forms\form_SelectRow.designer.cs">
       <DependentUpon>form_SelectRow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Setting.cs">
+    <Compile Include="Forms\Form_Setting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Setting.Designer.cs">
+    <Compile Include="Forms\Form_Setting.Designer.cs">
       <DependentUpon>Form_Setting.cs</DependentUpon>
     </Compile>
-    <Compile Include="From_Log.cs">
+    <Compile Include="Forms\From_Log.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="From_Log.Designer.cs">
+    <Compile Include="Forms\From_Log.Designer.cs">
       <DependentUpon>From_Log.cs</DependentUpon>
     </Compile>
     <Compile Include="CollapsibleListView.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageCreator.cs" />
     <Compile Include="ImageCreatorBase.cs" />
@@ -206,28 +212,25 @@
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Form_Dashboard.resx">
+      <DependentUpon>Form_Dashboard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form_ImageOption.resx">
+    <EmbeddedResource Include="Forms\form_ImageOption.resx">
       <DependentUpon>form_ImageOption.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_ResultViewer.resx">
+    <EmbeddedResource Include="Forms\form_ResultViewer.resx">
       <DependentUpon>form_ResultViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_SelectRow.resx">
+    <EmbeddedResource Include="Forms\form_SelectRow.resx">
       <DependentUpon>form_SelectRow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Setting.resx">
+    <EmbeddedResource Include="Forms\Form_Setting.resx">
       <DependentUpon>Form_Setting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="From_Log.resx">
+    <EmbeddedResource Include="Forms\From_Log.resx">
       <DependentUpon>From_Log.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="IFCLoad.resx">
+    <EmbeddedResource Include="Forms\IFCLoad.resx">
       <DependentUpon>IFCLoad.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -251,4 +254,11 @@ mkdir "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\Im
 xcopy /Y "$(ProjectDir)Images" "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins\$(TargetName)\Images"
 xcopy /Y "$(SolutionDir)ObjectListView\ObjectListView\bin\Debug\ObjectListView.dll" "C:\Program Files\Autodesk\Navisworks Manage 2023\Plugins"</PostBuildEvent>
   </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>이 프로젝트는 이 컴퓨터에 없는 NuGet 패키지를 참조합니다. 해당 패키지를 다운로드하려면 NuGet 패키지 복원을 사용하십시오. 자세한 내용은 http://go.microsoft.com/fwlink/?LinkID=322105를 참조하십시오. 누락된 파일은 {0}입니다.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets" Condition="Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.2\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" />
 </Project>
