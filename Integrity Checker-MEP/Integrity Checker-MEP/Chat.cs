@@ -74,8 +74,9 @@ namespace Integrity_Checker_MEP
 
         private void FindElement([MarshalAs(UnmanagedType.LPWStr)] string guid1, [MarshalAs(UnmanagedType.LPWStr)] string guid2)
         {
-            MessageBox.Show(guid1+"/"+guid2, "guid", MessageBoxButtons.OK);
-            form_ResultViewer rv = new form_ResultViewer();
+            MessageBox.Show( (guid1==guid2 ? guid1 : guid1+"/"+guid2),
+                "info", MessageBoxButtons.OK);
+            form_ResultViewer rv = MainClass.rv;
             rv.trans = true;
             rv.SelectClash(guid1, guid2);
         }
