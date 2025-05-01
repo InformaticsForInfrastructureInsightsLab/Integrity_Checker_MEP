@@ -44,8 +44,8 @@ namespace Integrity_Checker_MEP.Forms
             this.Elem2Guid = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Adjusted_Severity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Penetration = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.MovabilityResult = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.tabControlMain.SuspendLayout();
             this.tabDashboard.SuspendLayout();
@@ -115,8 +115,8 @@ namespace Integrity_Checker_MEP.Forms
             this.folv.AllColumns.Add(this.Elem2Guid);
             this.folv.AllColumns.Add(this.Severity);
             this.folv.AllColumns.Add(this.Adjusted_Severity);
-            this.folv.AllColumns.Add(this.olvColumn1);
-            this.folv.AllColumns.Add(this.olvColumn2);
+            this.folv.AllColumns.Add(this.Penetration);
+            this.folv.AllColumns.Add(this.MovabilityResult);
             this.folv.CellEditUseWholeCell = false;
             this.folv.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Elem1Type,
@@ -125,8 +125,8 @@ namespace Integrity_Checker_MEP.Forms
             this.Elem2Guid,
             this.Severity,
             this.Adjusted_Severity,
-            this.olvColumn1,
-            this.olvColumn2});
+            this.Penetration,
+            this.MovabilityResult});
             this.folv.Cursor = System.Windows.Forms.Cursors.Default;
             this.folv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.folv.HideSelection = false;
@@ -137,6 +137,7 @@ namespace Integrity_Checker_MEP.Forms
             this.folv.TabIndex = 0;
             this.folv.UseCellFormatEvents = true;
             this.folv.UseCompatibleStateImageBehavior = false;
+            this.folv.UseFiltering = true;
             this.folv.View = System.Windows.Forms.View.Details;
             this.folv.VirtualMode = true;
             // 
@@ -176,17 +177,17 @@ namespace Integrity_Checker_MEP.Forms
             this.Adjusted_Severity.Text = "Adjusted Severity";
             this.Adjusted_Severity.Width = 100;
             // 
-            // olvColumn1
+            // Penetration
             // 
-            this.olvColumn1.AspectName = "Penetration";
-            this.olvColumn1.Text = "Penetration";
-            this.olvColumn1.Width = 80;
+            this.Penetration.AspectName = "Penetration";
+            this.Penetration.Text = "Penetration";
+            this.Penetration.Width = 80;
             // 
-            // olvColumn2
+            // MovabilityResult
             // 
-            this.olvColumn2.AspectName = "MovabilityResult";
-            this.olvColumn2.Text = "MovabilityResult";
-            this.olvColumn2.Width = 125;
+            this.MovabilityResult.AspectName = "MovabilityResult";
+            this.MovabilityResult.Text = "MovabilityResult";
+            this.MovabilityResult.Width = 125;
             // 
             // tableLayout
             // 
@@ -232,7 +233,7 @@ namespace Integrity_Checker_MEP.Forms
         private BrightIdeasSoftware.OLVColumn Elem2Guid;
         private BrightIdeasSoftware.OLVColumn Severity;
         private BrightIdeasSoftware.OLVColumn Adjusted_Severity;
-        private OLVColumn olvColumn1;
-        private OLVColumn olvColumn2;
+        private OLVColumn Penetration;
+        private OLVColumn MovabilityResult;
     }
 }
