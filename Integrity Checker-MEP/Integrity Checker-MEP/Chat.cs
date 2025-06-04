@@ -40,6 +40,9 @@ namespace Integrity_Checker_MEP
         [DllImport("Dll1.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.StdCall)]
         private static extern void ForwardAnswer([MarshalAs(UnmanagedType.LPWStr)] string result, [MarshalAs(UnmanagedType.LPWStr)] string schema);
 
+        [DllImport("Dll1.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        private static extern void ForwardGraphKey(string result);
+
         [DllImport("Dll1.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern void ShowMyWindow();
         #endregion
@@ -48,12 +51,15 @@ namespace Integrity_Checker_MEP
         GUIDDelegate guidExport;
 
         public Chat()
-        {   // 콜백 등록
+        {
+            // 콜백 등록
             callback = new CallbackDelegate(ReceiveMessageFromCpp);
             RegisterCallback(callback);
 
             guidExport = new GUIDDelegate(FindElement);
             RegisterGUIDExportFunc(guidExport);
+
+            GetGraphKeys();
         }
 
         private void ReceiveMessageFromCpp()
@@ -104,6 +110,32 @@ namespace Integrity_Checker_MEP
                     {
                         MessageBox.Show(ex.Message, "error", MessageBoxButtons.OK);
                     }
+                }
+            }
+        }
+
+        private async void GetGraphKeys()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string url = "http://117.17.196.59:3116/graph_keys";
+                HttpResponseMessage response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    try
+                    {
+                        ForwardGraphKey(String.Copy(responseBody));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "error", MessageBoxButtons.OK);
+                    }
+                }
+                else
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show(responseBody, "error", MessageBoxButtons.OK);
                 }
             }
         }
