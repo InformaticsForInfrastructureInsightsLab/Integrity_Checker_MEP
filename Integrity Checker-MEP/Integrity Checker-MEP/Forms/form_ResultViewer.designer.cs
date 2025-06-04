@@ -377,6 +377,7 @@
             this.folv.View = System.Windows.Forms.View.Details;
             this.folv.VirtualMode = true;
             this.folv.SelectionChanged += new System.EventHandler(this.folv_SelectionChanged);
+            this.folv.SelectedIndexChanged += new System.EventHandler(this.folv_SelectedIndexChanged);
             // 
             // Element1Guid
             // 
@@ -395,7 +396,7 @@
             // Type
             // 
             this.Type.AspectName = "Type";
-            this.Type.Text = "Clash Type";
+            this.Type.Text = "Clash";
             this.Type.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Type.Width = 93;
             // 
@@ -406,11 +407,12 @@
             this.Topology.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Topology.Width = 127;
             // 
-            // SoftClashType
+            // ClashType
             // 
             this.ClashType.AspectName = "ClashType";
-            this.ClashType.Text = "clash type";
+            this.ClashType.Text = "ClashType";
             this.ClashType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ClashType.Width = 103;
             // 
             // Adjusted_Severity
             // 
@@ -418,13 +420,12 @@
             this.Adjusted_Severity.Text = "Adjusted Severity";
             this.Adjusted_Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            this.ClashType.Width = 103;
-            // 
             // Severity
             // 
             this.Severity.AspectName = "Severity";
             this.Severity.Text = "Severity";
             this.Severity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Clearance
             // 
             this.Clearance.AspectName = "Clearance";
@@ -529,7 +530,6 @@
             this.MovabilityValue_Z_N.Text = "MovabilityValue_Z_N";
             this.MovabilityValue_Z_N.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.MovabilityValue_Z_N.Width = 98;
-
             // 
             // form_ResultViewer
             // 

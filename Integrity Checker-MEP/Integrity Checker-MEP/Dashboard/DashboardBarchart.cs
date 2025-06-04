@@ -135,7 +135,15 @@ namespace Integrity_Checker_MEP
                 else
                 {
                     int severity = DashboardUtils.MapSeverity(cd.Adjusted_Severity);
-                    softClashDict[cd.ClashType][severity]++;
+                    try
+                    {
+                        softClashDict[cd.ClashType][severity]++;
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        continue;
+                    }
+
                 }
 
             }
@@ -172,7 +180,14 @@ namespace Integrity_Checker_MEP
                 else
                 {
                     int severity = DashboardUtils.MapSeverity(cd.Severity);
-                    softClashDict[cd.ClashType][severity]++;
+                    try
+                    {
+                        softClashDict[cd.ClashType][severity]++;
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        continue;
+                    }
                 }
                 
             }
