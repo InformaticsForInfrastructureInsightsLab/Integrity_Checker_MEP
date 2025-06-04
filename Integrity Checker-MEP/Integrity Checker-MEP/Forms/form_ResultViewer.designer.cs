@@ -377,7 +377,6 @@
             this.folv.View = System.Windows.Forms.View.Details;
             this.folv.VirtualMode = true;
             this.folv.SelectionChanged += new System.EventHandler(this.folv_SelectionChanged);
-            this.folv.SelectedIndexChanged += new System.EventHandler(this.folv_SelectedIndexChanged);
             // 
             // Element1Guid
             // 
