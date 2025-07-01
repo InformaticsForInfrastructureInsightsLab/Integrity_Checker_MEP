@@ -319,7 +319,7 @@
             this.folv.AllColumns.Add(this.Type);
             this.folv.AllColumns.Add(this.Topology);
             this.folv.AllColumns.Add(this.ClashType);
-            this.folv.AllColumns.Add(this.Adjusted_Severity);
+            //this.folv.AllColumns.Add(this.Adjusted_Severity);
             this.folv.AllColumns.Add(this.Severity);
             this.folv.AllColumns.Add(this.Clearance);
             this.folv.AllColumns.Add(this.Offset);
@@ -346,7 +346,7 @@
             this.Type,
             this.Topology,
             this.ClashType,
-            this.Adjusted_Severity,
+            //this.Adjusted_Severity,
             this.Severity,
             this.Clearance,
             this.Offset,

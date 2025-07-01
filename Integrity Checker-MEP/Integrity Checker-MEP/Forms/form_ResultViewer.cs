@@ -231,10 +231,10 @@ namespace ClashTest2
                 addDataToList();
 
                 // Only group by severity -> if canceled can be grouped by other headers
-                folv.AlwaysGroupByColumn = Adjusted_Severity;
+                folv.AlwaysGroupByColumn = Severity;
                 // MVC pattern -> check objectListView 
                 folv.SetObjects(dataList);
-                folv.BuildGroups(Adjusted_Severity, SortOrder.None);
+                folv.BuildGroups(Severity, SortOrder.None);
 
                 tog_Hard.Checked = true;
                 tog_Soft.Checked = true;
@@ -422,13 +422,13 @@ namespace ClashTest2
             minorHard.Visible = true;
             minorSoft.Visible = true;
 
-            majorHard.Text = "MAJOR_H:" + major_hard.ToString();
-            mediumHard.Text = "MEDIUM_H:" + medium_hard.ToString();
-            minorHard.Text = "MINOR_H:" + minor_hard.ToString();
+            majorHard.Text = "MAJOR_HARD:" + major_hard_origin.ToString();
+            mediumHard.Text = "MEDIUM_HARD:" + medium_hard_origin.ToString();
+            minorHard.Text = "MINOR_HARD:" + minor_hard_origin.ToString();
 
-            majorSoft.Text = "MAJOR_H:" + major_soft.ToString();
-            mediumSoft.Text = "MEDIUM_H:" + medium_soft.ToString();
-            minorSoft.Text = "MINOR_H:" + minor_soft.ToString();
+            majorSoft.Text = "MAJOR_SOFT:" + major_soft_origin.ToString();
+            mediumSoft.Text = "MEDIUM_SOFT:" + medium_soft_origin.ToString();
+            minorSoft.Text = "MINOR_SOFT:" + minor_soft_origin.ToString();
         }
 
         /// <summary>
