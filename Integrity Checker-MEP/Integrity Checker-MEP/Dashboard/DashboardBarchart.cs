@@ -94,27 +94,27 @@ namespace Integrity_Checker_MEP
                 Title = "minor",
                 IsStacked = true,
                 FillColor = OxyColors.Blue,
-                LabelFormatString = "{0:0}", 
-                LabelPlacement = LabelPlacement.Inside,
-                TextColor = OxyColors.Black
+                LabelFormatString = "{0:##;;}", 
+                LabelPlacement = LabelPlacement.Middle,
+                TextColor = OxyColors.White
             };
             var mediumSeries = new BarSeries
             {
                 Title = "medium",
                 IsStacked = true,
                 FillColor = OxyColors.Green,
-                LabelFormatString = "{0:0}",
-                LabelPlacement = LabelPlacement.Inside,
-                TextColor = OxyColors.Black
+                LabelFormatString = "{0:##;;}",
+                LabelPlacement = LabelPlacement.Middle,
+                TextColor = OxyColors.White
             };
             var majorSeries = new BarSeries
             {
                 Title = "major",
                 IsStacked = true,
                 FillColor = OxyColors.Red,
-                LabelFormatString = "{0:0}",
-                LabelPlacement = LabelPlacement.Inside,
-                TextColor = OxyColors.Black
+                LabelFormatString = "{0:##;;}",
+                LabelPlacement = LabelPlacement.Middle,
+                TextColor = OxyColors.White
             };
 
             minorSeries.Items.AddRange(minor);
