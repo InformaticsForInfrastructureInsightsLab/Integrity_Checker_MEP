@@ -89,9 +89,33 @@ namespace Integrity_Checker_MEP
             };
             model.Axes.Add(valueAxis);
 
-            var minorSeries = new BarSeries { Title = "minor", IsStacked = true, FillColor = OxyColors.Blue };
-            var mediumSeries = new BarSeries { Title = "medium", IsStacked = true, FillColor = OxyColors.Green };
-            var majorSeries = new BarSeries { Title = "major", IsStacked = true, FillColor = OxyColors.Red };
+            var minorSeries = new BarSeries
+            {
+                Title = "minor",
+                IsStacked = true,
+                FillColor = OxyColors.Blue,
+                LabelFormatString = "{0:0}", 
+                LabelPlacement = LabelPlacement.Inside,
+                TextColor = OxyColors.Black
+            };
+            var mediumSeries = new BarSeries
+            {
+                Title = "medium",
+                IsStacked = true,
+                FillColor = OxyColors.Green,
+                LabelFormatString = "{0:0}",
+                LabelPlacement = LabelPlacement.Inside,
+                TextColor = OxyColors.Black
+            };
+            var majorSeries = new BarSeries
+            {
+                Title = "major",
+                IsStacked = true,
+                FillColor = OxyColors.Red,
+                LabelFormatString = "{0:0}",
+                LabelPlacement = LabelPlacement.Inside,
+                TextColor = OxyColors.Black
+            };
 
             minorSeries.Items.AddRange(minor);
             mediumSeries.Items.AddRange(medium);
