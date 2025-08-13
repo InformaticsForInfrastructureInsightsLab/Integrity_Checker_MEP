@@ -147,6 +147,21 @@
     <Compile Include="Chat.cs" />
     <Compile Include="ClashChecker.cs" />
     <Compile Include="ClashData.cs" />
+    <Compile Include="ClashResultCls.cs" />
+    <Compile Include="ClashResultProcessor.cs" />
+    <Compile Include="ClashTestCls.cs" />
+    <Compile Include="ClashTestManager.cs" />
+    <Compile Include="customTest.cs" />
+    <Compile Include="ExtendedWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileManager.cs" />
+    <Compile Include="FormLogger.cs" />
+    <Compile Include="IfcSystemData.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="ProjectSettings.cs" />
+    <Compile Include="ReportGenerator.cs" />
+    <Compile Include="ServerUploader.cs" />
     <Compile Include="Dashboard\DashboardBarchart.cs" />
     <Compile Include="Dashboard\DashboardPieChart.cs" />
     <Compile Include="Dashboard\DashboardUtils.cs" />
@@ -195,9 +210,11 @@
     <Compile Include="CollapsibleListView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ImageCreator.cs" />
-    <Compile Include="ImageCreatorBase.cs" />
-    <Compile Include="ImageCreator_new.cs" />
+    <Compile Include="ImageCreation\IImageCreationStrategy.cs" />
+    <Compile Include="ImageCreation\ImageCreationStrategyBase.cs" />
+    <Compile Include="ImageCreation\SimpleImageStrategy.cs" />
+    <Compile Include="ImageCreation\ComplexImageStrategy.cs" />
+    <Compile Include="ImageCreation\ImageService.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="MessageBoxEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
