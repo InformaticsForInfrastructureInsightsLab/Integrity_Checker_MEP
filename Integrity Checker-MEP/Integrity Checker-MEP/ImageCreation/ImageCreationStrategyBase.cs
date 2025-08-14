@@ -11,6 +11,7 @@ using System.Security.Principal;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text; // For StringBuilder
+using System.Windows.Forms;
 
 namespace Integrity_Checker_MEP.ImageCreation
 {
@@ -130,7 +131,7 @@ namespace Integrity_Checker_MEP.ImageCreation
         protected void SaveImageToFile(Document doc, ModelItemCollection items, string filePath, string testName, ClashResult clResult, int imageIndex = 0)
         {
             // Ensure directory exists and has write permissions
-            DirectoryInfo dirInfo = new DirectoryInfo(Path.GetDirectoryName(filePath));
+            DirectoryInfo dirInfo = new DirectoryInfo(filePath);
             if (!dirInfo.Exists)
             {
                 dirInfo.Create();
@@ -151,7 +152,7 @@ namespace Integrity_Checker_MEP.ImageCreation
             {
                 string item1_ifcguid = GetInfo(items.ElementAtOrDefault(0), "요소", "IfcGUID");
                 string item2_ifcguid = GetInfo(items.ElementAtOrDefault(1), "요소", "IfcGUID");
-                string fileName = $"{item1_ifcguid}+{item2_ifcguid}_{imageIndex}.png";
+                string fileName = $"{item1_ifcguid}+{item2_ifcguid}_{imageIndex}.png";                
                 string fullPath = Path.Combine(filePath, fileName);
                 clashImage.Save(fullPath, ImageFormat.Png);
             }

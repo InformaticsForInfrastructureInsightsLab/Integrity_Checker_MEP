@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
@@ -76,6 +76,11 @@ namespace ClashTest2
         private string guid1;
         private string guid2;
 
+        private const string ResultCsvPath = "C:\\objectinfo\\ResultFile.csv";
+        private const string ServerUrl = "http://117.17.196.59:3116/final";
+        private const string ScreenshotDirectory = "C:\\objectinfo";
+        private const int GuidColumnWidth = 81;
+
         #region Form
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace ClashTest2
         }
 
         /// <summary>
-        /// Gets data from C:\\objectinfo\\ResultFile.csv
+        /// Gets data from C:\objectinfo\ResultFile.csv
         /// </summary>
         /// <returns></returns>
         List<ClashData> getData()
@@ -105,8 +110,7 @@ namespace ClashTest2
 
             try
             {
-                string path = "C:\\objectinfo\\ResultFile.csv";
-                StreamReader file = new StreamReader(path);
+                StreamReader file = new StreamReader(ResultCsvPath);
                 string firstLine = file.ReadLine();
 
                 while (!file.EndOfStream)
@@ -149,54 +153,29 @@ namespace ClashTest2
                 if (clash.Type == "Soft")
                 {
                     dataSoftList.Add(clash);
-                    switch(clash.Adjusted_Severity)
-                    {
-                        case "Major":
-                            major_soft++;  break;
-                        case "Medium":
-                            medium_soft++; break;
-                        case "Minor":
-                            minor_soft++; break;
-                    }
+                    IncrementSeverityCounts(clash, ref major_soft, ref medium_soft, ref minor_soft, isAdjusted: true);
+                    IncrementSeverityCounts(clash, ref major_soft_origin, ref medium_soft_origin, ref minor_soft_origin, isAdjusted: false);
                 }
                 else if (clash.Type == "Hard")
                 {
                     dataHardList.Add(clash);
-                    switch (clash.Adjusted_Severity)
-                    {
-                        case "Major":
-                            major_hard++; break;
-                        case "Medium":
-                            medium_hard++; break;
-                        case "Minor":
-                            minor_hard++; break;
-                    }
+                    IncrementSeverityCounts(clash, ref major_hard, ref medium_hard, ref minor_hard, isAdjusted: true);
+                    IncrementSeverityCounts(clash, ref major_hard_origin, ref medium_hard_origin, ref minor_hard_origin, isAdjusted: false);
                 }
+            }
+        }
 
-                if (clash.Type == "Soft")
-                {
-                    switch (clash.Severity)
-                    {
-                        case "Major":
-                            major_soft_origin++; break;
-                        case "Medium":
-                            medium_soft_origin++; break;
-                        case "Minor":
-                            minor_soft_origin++; break;
-                    }
-                }
-                else if (clash.Type == "Hard")
-                {
-                    switch (clash.Severity)
-                    {
-                        case "Major":
-                            major_hard_origin++; break;
-                        case "Medium":
-                            medium_hard_origin++; break;
-                        case "Minor":
-                            minor_hard_origin++; break;
-                    }
-                }
+        private void IncrementSeverityCounts(ClashData clash, ref int major, ref int medium, ref int minor, bool isAdjusted)
+        {
+            string severity = isAdjusted ? clash.Adjusted_Severity : clash.Severity;
+            switch (severity)
+            {
+                case "Major":
+                    major++; break;
+                case "Medium":
+                    medium++; break;
+                case "Minor":
+                    minor++; break;
             }
         }
 
@@ -216,8 +195,7 @@ namespace ClashTest2
             }
             try
             {
-                string path = "C:\\objectinfo\\ResultFile.csv";
-                StreamReader file = new StreamReader(path);
+                StreamReader file = new StreamReader(ResultCsvPath);
                 string firstLine = file.ReadLine();
                 string[] header = firstLine.Split(',').Skip(0).Take(folv.Columns.Count).ToArray();
 
@@ -263,20 +241,17 @@ namespace ClashTest2
         /// <returns></returns>
         private async Task downloadFromServer()
         {
-            string serverUrl = "http://117.17.196.59:3116/final"; // 서버 주소를 적절히 변경하세요
-            string downloadDir = "C:\\objectinfo\\"; // 다운로드할 디렉토리를 적절히 변경하세요
-
             using (HttpClient httpClient = new HttpClient())
             {
                 // GET 요청을 보내고 응답을 받습니다.
-                HttpResponseMessage response = await httpClient.GetAsync(serverUrl);
+                HttpResponseMessage response = await httpClient.GetAsync(ServerUrl);
 
                 if (response.IsSuccessStatusCode)
                 {
                     // 응답으로 받은 파일을 저장합니다.
                     using (Stream contentStream = await response.Content.ReadAsStreamAsync())
                     {
-                        string filePath = Path.Combine(downloadDir, "ResultFile.csv");
+                        string filePath = Path.Combine(ScreenshotDirectory, "ResultFile.csv");
                         using (FileStream fileStream = File.Create(filePath))
                         {
                             await contentStream.CopyToAsync(fileStream);
@@ -320,31 +295,13 @@ namespace ClashTest2
         /// <param name="e"></param>
         private void tog_Hard_CheckedChanged(object sender, EventArgs e)
         {
-            if (tog_Hard.Checked && tog_Soft.Checked)
-            {
-                folv.SetObjects(dataList);
-            }
-            else if (!tog_Hard.Checked && tog_Soft.Checked)
-            {
-                folv.SetObjects(dataSoftList);
-            }
-            else if (tog_Hard.Checked && !tog_Soft.Checked)
-            {
-                folv.SetObjects(dataHardList);
-            }
-            else if (!tog_Hard.Checked && !tog_Soft.Checked)
-            {
-                folv.SetObjects(dataNullList);
-            }
-
+            UpdateObjectListView();
         }
 
         /// <summary>
-        /// When Soft button is checked
+        /// Update list view based on toggle buttons
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tog_Soft_CheckedChanged(object sender, EventArgs e)
+        private void UpdateObjectListView()
         {
             if (tog_Hard.Checked && tog_Soft.Checked)
             {
@@ -358,11 +315,21 @@ namespace ClashTest2
             {
                 folv.SetObjects(dataHardList);
             }
-            else if (!tog_Hard.Checked && !tog_Soft.Checked)
+            else
             {
                 folv.SetObjects(dataNullList);
             }
+        }
 
+
+        /// <summary>
+        /// When Soft button is checked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tog_Soft_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateObjectListView();
         }
 
         /// <summary>
@@ -395,7 +362,7 @@ namespace ClashTest2
                 }
                 else
                 {
-                    folv.Columns[(int)Header.Element1Guid].Width = 81;
+                    folv.Columns[(int)Header.Element1Guid].Width = GuidColumnWidth;
                 }
                 Element2Guid.IsVisible = headerBool[(int)Header.Element2Guid];
                 Type.IsVisible = headerBool[(int)Header.Type];
@@ -414,21 +381,21 @@ namespace ClashTest2
         /// Show label for each Severity_ClashType
         /// Show numbers of each Severity_ClashType
         /// </summary>
-        private void showEachClashNuminfo() {
-            majorHard.Visible = true;
-            majorSoft.Visible = true;
-            mediumHard.Visible = true;
-            mediumSoft.Visible = true;
-            minorHard.Visible = true;
-            minorSoft.Visible = true;
+        private void showEachClashNuminfo()
+        {
+            SetLabel(majorHard, "MAJOR_H", major_hard);
+            SetLabel(mediumHard, "MEDIUM_H", medium_hard);
+            SetLabel(minorHard, "MINOR_H", minor_hard);
 
-            majorHard.Text = "MAJOR_H:" + major_hard.ToString();
-            mediumHard.Text = "MEDIUM_H:" + medium_hard.ToString();
-            minorHard.Text = "MINOR_H:" + minor_hard.ToString();
+            SetLabel(majorSoft, "MAJOR_S", major_soft);
+            SetLabel(mediumSoft, "MEDIUM_S", medium_soft);
+            SetLabel(minorSoft, "MINOR_S", minor_soft);
+        }
 
-            majorSoft.Text = "MAJOR_H:" + major_soft.ToString();
-            mediumSoft.Text = "MEDIUM_H:" + medium_soft.ToString();
-            minorSoft.Text = "MINOR_H:" + minor_soft.ToString();
+        private void SetLabel(Label label, string prefix, int count)
+        {
+            label.Text = $"{prefix}: {count}";
+            label.Visible = true;
         }
 
         /// <summary>
@@ -558,7 +525,7 @@ namespace ClashTest2
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btn_Screenshot_Click(object sender, EventArgs e) {
-            string path = @"C:\objectinfo\";
+            string path = ScreenshotDirectory;
             string fileName = $"Screenshot {guid1} - {guid2}.jpg";
             Autodesk.Navisworks.Api.View currentView = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView;
             Bitmap bmp = Autodesk.Navisworks.Api.Application.ActiveDocument.ActiveView.GenerateImage(ImageGenerationStyle.ScenePlusOverlay, currentView.Width, currentView.Height);
