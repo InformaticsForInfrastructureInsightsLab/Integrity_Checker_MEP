@@ -119,7 +119,7 @@ namespace Integrity_Checker_MEP
                 {
                     _logger.Log("파일 출력 시작 : All in One");
                     string allInOnePath = Path.Combine(ProjectSettings.OutputFolderPath, ProjectSettings.AllInOneReportName);
-                    File.WriteAllText(allInOnePath, allInOneSb.ToString());
+                    File.WriteAllText(allInOnePath, allInOneSb.ToString(), Encoding.UTF8);
                     _logger.Log("파일 출력 완료 : AllinOne");
                 }
                 #endregion
