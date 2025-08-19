@@ -160,17 +160,16 @@ namespace Integrity_Checker_MEP
                     if (_settings.export_UselessClash) { _listUselessClashes.Add(nwissue); _listUselessReasons.Add("[1]" + temp1); }
                     continue;
                 }
-                string temp11 = ""; try { temp11 = GetInfo(nwissue.Item1.FindFirstObjectAncestor(), "항목", "유형"); } catch { }
-                if (temp11.Contains("IfcPipeFitting") || temp11.Contains("IfcValve"))
-                {
-                    if (_settings.export_UselessClash) { _listUselessClashes.Add(nwissue); _listUselessReasons.Add("[1]" + temp11); }
-                    continue;
-                }
-
                 string temp2 = GetInfo(nwissue.Item2, "항목", "유형");
                 if (string.Compare(temp2, "IfcDistributionPort") == 0 || temp2.Contains("IfcDistributionSystem") || temp2.Contains("IfcPipeFitting") || temp2.Contains("IfcValve"))
                 {
                     if (_settings.export_UselessClash) { _listUselessClashes.Add(nwissue); _listUselessReasons.Add("[2]" + temp2); }
+                    continue;
+                }
+                string temp11 = ""; try { temp11 = GetInfo(nwissue.Item1.FindFirstObjectAncestor(), "항목", "유형"); } catch { }
+                if (temp11.Contains("IfcPipeFitting") || temp11.Contains("IfcValve"))
+                {
+                    if (_settings.export_UselessClash) { _listUselessClashes.Add(nwissue); _listUselessReasons.Add("[1]" + temp11); }
                     continue;
                 }
                 string temp22 = ""; try { temp22 = GetInfo(nwissue.Item2.FindFirstObjectAncestor(), "항목", "유형"); } catch { }
@@ -196,8 +195,8 @@ namespace Integrity_Checker_MEP
                     distance = nwissue.Distance,
                     Namespace1 = GetInfo(nwissue.Item1, "항목", "소스 파일").Replace(".ifc", ""),
                     Namespace2 = GetInfo(nwissue.Item2, "항목", "소스 파일").Replace(".ifc", ""),
-                    path1ID = GetElementID(nwissue.Item1),
-                    path2ID = GetElementID(nwissue.Item2)
+                    path1ID = GetInfo(nwissue.Item1, "요소", "IfcGUID"),
+                    path2ID = GetInfo(nwissue.Item2, "요소", "IfcGUID")
                 };
 
                 #region IfcSystem이 동일한 MEP부재 모으기

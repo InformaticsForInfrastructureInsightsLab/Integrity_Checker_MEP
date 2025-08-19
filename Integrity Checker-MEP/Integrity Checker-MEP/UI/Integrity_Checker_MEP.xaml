@@ -8,42 +8,42 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Autodesk.Navisworks.Gui.Roamer.AIRLook;assembly=navisworks.gui.roamer">
 
-    <RibbonTab Id="IntegrityCheckerTab" Title="Integrity_Checker_MEP">
-        <RibbonPanel x:Uid="RibbonPane1_1">
-            <RibbonPanelSource x:Uid="RibbonPanelSource_RibbonPanel_1" Title="Sample Button">
+	<RibbonTab Id="IntegrityCheckerTab" Title="Integrity_Checker_MEP">
+		<RibbonPanel x:Uid="RibbonPane1_1">
+			<RibbonPanelSource x:Uid="RibbonPanelSource_RibbonPanel_1" Title="Sample Button">
 
-                <local:NWRibbonButton x:Uid="Button_1" Id="Clash_Checker"
+				<local:NWRibbonButton x:Uid="Button_1" Id="Clash_Checker"
                             Size="Large"
                             ShowText="True"
                             Text="Clash Checker"
                             Orientation="Vertical"/>
-                <RibbonSeparator x:Uid="RibbonSeparator_1"/>
-                <local:NWRibbonButton x:Uid="Button_2" Id="Result_Receiver"
+				<RibbonSeparator x:Uid="RibbonSeparator_1"/>
+				<local:NWRibbonButton x:Uid="Button_2" Id="Result_Receiver"
                             Size="Large"
                             ShowText="True"
                             Text="Result Receiver"
                             Orientation="Vertical"/>
 
-            </RibbonPanelSource>
-        </RibbonPanel>
+			</RibbonPanelSource>
+		</RibbonPanel>
 
-        <RibbonPanel x:Uid="RibbonPanel_2">
-            <RibbonPanelSource x:Uid="RibbonPanelSource_RibbonPanel_2" Title="Sample SplitButton">
-                <local:NWRibbonSplitButton x:Uid="SplitBtn1" Id="Split_Button" 
+		<RibbonPanel x:Uid="RibbonPanel_2">
+			<RibbonPanelSource x:Uid="RibbonPanelSource_RibbonPanel_2" Title="Sample SplitButton">
+				<local:NWRibbonSplitButton x:Uid="SplitBtn1" Id="Split_Button"
                                           Size="Large" Orientation="Vertical">
-                    <local:NWRibbonButton x:Uid="Button_3" Id="Clash_Checker_split"
+					<local:NWRibbonButton x:Uid="Button_3" Id="Clash_Checker_split"
                             Size="Large"
                             ShowText="True"
                             Text="Clash_Checker"
                             Orientation="Vertical"/>
-                    <local:NWRibbonButton x:Uid="Button_2" Id="Result_Receiver_split"
+					<local:NWRibbonButton x:Uid="Button_2" Id="Result_Receiver_split"
                             Size="Large"
-                            ShowText="True"                        
+                            ShowText="True"
                             Text="Result_Receiver"
                             Orientation="Vertical"/>
-                </local:NWRibbonSplitButton>
-            </RibbonPanelSource>
-        </RibbonPanel>
-    </RibbonTab>
+				</local:NWRibbonSplitButton>
+			</RibbonPanelSource>
+		</RibbonPanel>
+	</RibbonTab>
 
 </RibbonControl>

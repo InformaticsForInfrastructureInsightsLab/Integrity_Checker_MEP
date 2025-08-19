@@ -10,7 +10,6 @@ using Autodesk.Navisworks.Api.Clash;
 
 namespace Integrity_Checker_MEP
 {
-    [Plugin("Integrity_Checker_MEP.ClashChecker", "ID6", DisplayName = "Integrity Checker MEP")]
     public class ClashChecker : AddInPlugin
     {
         public override int Execute(params string[] parameters)
