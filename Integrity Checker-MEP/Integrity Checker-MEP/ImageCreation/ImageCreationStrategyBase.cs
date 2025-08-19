@@ -61,7 +61,7 @@ namespace Integrity_Checker_MEP.ImageCreation
         protected void AddToItemsToShow(Document doc, string[] levelInfo, ModelItemCollection modelItemsToShow,
             ModelItemCollection modelItemToTransparant, string className, string[] systeminfo)
         {
-            if (levelInfo == null) return;
+            if (levelInfo == null || levelInfo.Length < 2 || systeminfo == null || systeminfo.Length < 2) return;
 
             Search search = new Search();
             Search search2 = new Search();

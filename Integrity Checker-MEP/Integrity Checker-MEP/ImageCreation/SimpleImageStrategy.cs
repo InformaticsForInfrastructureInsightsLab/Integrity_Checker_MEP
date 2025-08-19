@@ -70,13 +70,13 @@ namespace Integrity_Checker_MEP.ImageCreation
             string systemInfo1 = GetInfo(item1, "요소", "IfcSystem");
             string systemInfo2 = GetInfo(item2, "요소", "IfcSystem");
 
-            if (SetBackground) // Using property from base class
-            {
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] { systemInfo1, systemInfo2 });
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcCurtainWall", new string[] { systemInfo1, systemInfo2 });
-            }
+            //if (SetBackground) 
+            //{
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] { systemInfo1, systemInfo2 });
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcCurtainWall", new string[] { systemInfo1, systemInfo2 });
+            //}
 
             modelItemsToHide.CopyFrom(modelItemsToShow);
             doc.CurrentSelection.CopyFrom(modelItemsToShow);
@@ -98,10 +98,10 @@ namespace Integrity_Checker_MEP.ImageCreation
             modelItemToTransparant.Remove(items.ElementAtOrDefault(0));
             modelItemToTransparant.Remove(items.ElementAtOrDefault(1));
 
-            if (IsTransparant) // Using property from base class
-            {
-                doc.Models.OverridePermanentTransparency(modelItemToTransparant, Transparancy);
-            }
+            //if (IsTransparant)
+            //{
+            //    doc.Models.OverridePermanentTransparency(modelItemToTransparant, Transparancy);
+            //}
 
             string testsideNamePath = Path.Combine(directoryPath, "단순-다각도이미지", testName); // Using ProjectSettings
 

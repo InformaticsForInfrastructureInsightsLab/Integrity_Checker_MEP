@@ -58,8 +58,17 @@ namespace Integrity_Checker_MEP.ImageCreation
                 foreach (ModelItem item in guid_dictionary[item1.InstanceGuid])
                 {
                     items.Add(item);
-                    // Original code removed the key here, which might be problematic if multiple clashes share the same item1.
-                    // guid_dictionary.Remove(item1.InstanceGuid); 
+                    guid_dictionary.Remove(item1.InstanceGuid);
+                }
+            }
+
+            string item1class = GetInfo(item1, "요소", "IfcClass");
+            List<String> itemclass = new List<String>();
+            if (guid_dictionary.ContainsKey(item1.InstanceGuid))
+            {
+                foreach (ModelItem item in guid_dictionary[item1.InstanceGuid])
+                {
+                    itemclass.Add(GetInfo(item, "요소", "IfcClass"));
                 }
             }
 
@@ -88,21 +97,21 @@ namespace Integrity_Checker_MEP.ImageCreation
                 }
             }
 
-            if (SetBackground) // Using property from base class
-            {
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] { systemInfo1 }.Concat(systemInfo2).ToArray());
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcCurtainWall", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcSlab", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcDoor", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcColumn", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
-                AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
-                    modelItemsToShow, modelItemToTransparant, "IfcWindow", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
-            }
+            //if (SetBackground) // Using property from base class
+            //{
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcWall", new string[] { systemInfo1 }.Concat(systemInfo2).ToArray());
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcCurtainWall", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcSlab", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcDoor", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcColumn", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
+            //    AddToItemsToShow(doc, new string[] { levelInfo1, levelInfo2 },
+            //        modelItemsToShow, modelItemToTransparant, "IfcWindow", new string[] { "a", "b" }); // Hardcoded systeminfo, needs review
+            //}
 
             modelItemsToHide.CopyFrom(modelItemsToShow);
             doc.CurrentSelection.CopyFrom(modelItemsToShow);
@@ -129,10 +138,12 @@ namespace Integrity_Checker_MEP.ImageCreation
                 modelItemToTransparant.Remove(items.ElementAtOrDefault(i));
             }
 
-            if (IsTransparant) // Using property from base class
-            {
-                doc.Models.OverridePermanentTransparency(modelItemToTransparant, Transparancy);
-            }
+            // modelItemToTransparant.Remove(items.ElementAtOrDefault(1));
+            // Adjust transparancy(false일 경우엔 투명도를 적용하지 않음)
+            //if (transparent)
+            //{
+            //    doc.Models.OverridePermanentTransparency(modelItemToTransparant, transparancy);
+            //}
 
             string testsideNamePath = Path.Combine(directoryPath, "복합-다각도이미지", testName); // Using ProjectSettings
 

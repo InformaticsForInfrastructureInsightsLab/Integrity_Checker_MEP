@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
-using System.Threading.Tasks; // For Parallel.ForEach
+using System.Threading.Tasks;
 
 namespace Integrity_Checker_MEP.ImageCreation
 {
@@ -81,11 +81,6 @@ namespace Integrity_Checker_MEP.ImageCreation
             DocumentClash documentClash = doc.GetClash();
             DocumentClashTests oDCT = documentClash.TestsData;
 
-            // Using Parallel.ForEach as in original ImageCreatorBase, but ensure thread-safety for shared resources.
-            // For _processedResultsList, it's better to collect results and then add them.
-            // For guid_dictionary, it's already locked in ComplexImageStrategy.
-            
-            // Using ConcurrentBag to safely add items in parallel
             var tempProcessedResults = new System.Collections.Concurrent.ConcurrentBag<(string, ClashResult)>();
 
             Parallel.ForEach(oDCT.Tests.Cast<ClashTest>(), (ClashTest test) =>
@@ -101,9 +96,6 @@ namespace Integrity_Checker_MEP.ImageCreation
                         if (results.Contains(r.DisplayName))
                         {
                             tempProcessedResults.Add((test.DisplayName, r));
-                            // The original code also populated complex.guid_dictionary here.
-                            // This logic should ideally be part of the ComplexImageStrategy's MakeImage or a separate processing step.
-                            // For now, I'll keep the original logic of populating it here, but it's not ideal.
                             if (!(r.Distance > 0))
                             {
                                 lock (_complexStrategy.guid_dictionary) // Ensure thread-safety
@@ -122,7 +114,6 @@ namespace Integrity_Checker_MEP.ImageCreation
             _processedResultsList.AddRange(tempProcessedResults);
         }
 
-        // This method replaces the static ImageCreatorBase.extract
         private void ExtractClashResults(GroupItem group, List<ClashResult> outedResults)
         {
             foreach (SavedItem child in group.Children)
