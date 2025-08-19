@@ -144,24 +144,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Chat.cs" />
-    <Compile Include="ClashChecker.cs" />
-    <Compile Include="ClashData.cs" />
-    <Compile Include="ClashResultCls.cs" />
-    <Compile Include="ClashResultProcessor.cs" />
-    <Compile Include="ClashTestCls.cs" />
-    <Compile Include="ClashTestManager.cs" />
-    <Compile Include="customTest.cs" />
-    <Compile Include="ExtendedWebClient.cs">
+    <Compile Include="Services\Chat.cs" />
+    <Compile Include="Clash\ClashChecker.cs" />
+    <Compile Include="Clash\ClashData.cs" />
+    <Compile Include="Clash\ClashResultCls.cs" />
+    <Compile Include="Clash\ClashResultProcessor.cs" />
+    <Compile Include="Clash\ClashTestCls.cs" />
+    <Compile Include="Clash\ClashTestManager.cs" />
+    <Compile Include="Clash\customTest.cs" />
+    <Compile Include="Services\ExtendedWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FileManager.cs" />
-    <Compile Include="FormLogger.cs" />
-    <Compile Include="IfcSystemData.cs" />
-    <Compile Include="ILogger.cs" />
-    <Compile Include="ProjectSettings.cs" />
-    <Compile Include="ReportGenerator.cs" />
-    <Compile Include="ServerUploader.cs" />
+    <Compile Include="Services\FileManager.cs" />
+    <Compile Include="Logging\FormLogger.cs" />
+    <Compile Include="Data\IfcSystemData.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Settings\ProjectSettings.cs" />
+    <Compile Include="Services\ReportGenerator.cs" />
+    <Compile Include="Services\ServerUploader.cs" />
     <Compile Include="Dashboard\DashboardBarchart.cs" />
     <Compile Include="Dashboard\DashboardPieChart.cs" />
     <Compile Include="Dashboard\DashboardUtils.cs" />
@@ -207,7 +207,7 @@
     <Compile Include="Forms\From_Log.Designer.cs">
       <DependentUpon>From_Log.cs</DependentUpon>
     </Compile>
-    <Compile Include="CollapsibleListView.cs">
+    <Compile Include="UI\CollapsibleListView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ImageCreation\IImageCreationStrategy.cs" />
@@ -215,12 +215,12 @@
     <Compile Include="ImageCreation\SimpleImageStrategy.cs" />
     <Compile Include="ImageCreation\ComplexImageStrategy.cs" />
     <Compile Include="ImageCreation\ImageService.cs" />
-    <Compile Include="MainClass.cs" />
-    <Compile Include="MessageBoxEx.cs" />
+    <Compile Include="Core\MainClass.cs" />
+    <Compile Include="UI\MessageBoxEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Integrity_Checker_MEP.xaml">
+    <Page Include="UI\Integrity_Checker_MEP.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
