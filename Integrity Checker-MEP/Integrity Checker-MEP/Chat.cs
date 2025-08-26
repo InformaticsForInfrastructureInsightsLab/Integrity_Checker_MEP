@@ -47,6 +47,15 @@ namespace Integrity_Checker_MEP
         public static extern void ShowMyWindow();
         #endregion
 
+        #region cookie
+        private static readonly HttpClientHandler handler = new HttpClientHandler
+        {
+            CookieContainer = new System.Net.CookieContainer(),
+            UseCookies = true
+        };
+        private static readonly HttpClient client = new HttpClient(handler);
+        #endregion
+
         CallbackDelegate callback;
         GUIDDelegate guidExport;
 
@@ -73,11 +82,10 @@ namespace Integrity_Checker_MEP
 
         private async void Question(string message, string prevContext)
         {
-            using (HttpClient client = new HttpClient())
             {
                 string url = "http://117.17.196.59:1131/question";
 
-                var data = new { user_question = message, prev_context = prevContext == "" ? "None" : prevContext };
+                var data = new { user_question = message };
                 string jsonData = JsonConvert.SerializeObject(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
