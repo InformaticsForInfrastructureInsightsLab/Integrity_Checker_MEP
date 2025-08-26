@@ -72,9 +72,11 @@ namespace Integrity_Checker_MEP
                     imageService.SaveImages(imageTasks, sideImagePath);
                 }
                 
-                // The GetSpaceHeights logic has been removed for this refactoring.
-                // It can be added back into the ClashResultProcessor if needed.
-                string infoFile = null; 
+                string infoFile = null;
+                if (form_setting.export_Properties)
+                {
+                    infoFile = clashResultProcessor.GeneratePropertiesFile();
+                }
 
                 // Create Zip and Upload
                 if (form_setting.Make_ZipFile)

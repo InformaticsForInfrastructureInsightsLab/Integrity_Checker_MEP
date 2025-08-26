@@ -1,5 +1,6 @@
 using Autodesk.Navisworks.Api;
 using Autodesk.Navisworks.Api.Clash;
+using Autodesk.Navisworks.Api.DocumentParts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -200,8 +201,57 @@ namespace Integrity_Checker_MEP
                 };
 
                 #region IfcSystem이 동일한 MEP부재 모으기
-                // ... (omitted for brevity, logic is complex)
-                #endregion
+                        // IfcSystem이 동일한 MEP 간의 간섭은 간섭으로 판단 하지 않음
+                        
+                        //두 부재가 mep일 때
+                        if ((oEachResult.Namespace1.Contains("COMM") && oEachResult.Namespace2.Contains("COMM"))
+                            || (oEachResult.Namespace1.Contains("COMM") && oEachResult.Namespace2.Contains("ELEC"))
+                            || (oEachResult.Namespace1.Contains("COMM") && oEachResult.Namespace2.Contains("FIRE"))
+                            || (oEachResult.Namespace1.Contains("COMM") && oEachResult.Namespace2.Contains("MECH"))
+                            || (oEachResult.Namespace1.Contains("ELEC") && oEachResult.Namespace2.Contains("ELEC"))
+                            || (oEachResult.Namespace1.Contains("ELEC") && oEachResult.Namespace2.Contains("FIRE"))
+                            || (oEachResult.Namespace1.Contains("ELEC") && oEachResult.Namespace2.Contains("MECH"))
+                            || (oEachResult.Namespace1.Contains("FIRE") && oEachResult.Namespace2.Contains("FIRE"))
+                            || (oEachResult.Namespace1.Contains("FIRE") && oEachResult.Namespace2.Contains("MECH"))
+                            || (oEachResult.Namespace1.Contains("MECH") && oEachResult.Namespace2.Contains("MECH"))) {
+                            oEachResult.IfcSystem1 = "";
+                            oEachResult.IfcSystem2 = "";
+                            try {
+                                oEachResult.IfcSystem1 = $"{GetInfo(nwissue.Item1, "요소", "IfcSystem")}";
+                            } 
+                            catch { // 가끔 간섭을 일으킨 부재가 IfcSystem 속성을 가지지 않을 때가 있으므로 해당 부재의 부모의 IfcSystem 확인
+                                try {
+                                    oEachResult.IfcSystem1 = $"{GetInfo(nwissue.Item1.FindFirstObjectAncestor(), "요소", "IfcSystem")}";
+                                    if (string.IsNullOrEmpty(oEachResult.IfcSystem1)) oEachResult.IfcSystem1 = "";
+                                }
+                                catch {
+                                    oEachResult.IfcSystem1 = "";
+                                }
+                            }
+                            try {
+                                oEachResult.IfcSystem2 = $"{GetInfo(nwissue.Item2, "요소", "IfcSystem")}";
+                                if (string.IsNullOrEmpty(oEachResult.IfcSystem2)) oEachResult.IfcSystem2 = "";
+                            }
+                            catch {
+                                try {
+                                    oEachResult.IfcSystem2 = $"{GetInfo(nwissue.Item2.FindFirstObjectAncestor(), "요소", "IfcSystem")}";
+                                }
+                                catch {
+                                    oEachResult.IfcSystem2 = "";
+                                }
+                            }
+
+                            //둘이 빈칸이 아니고 같으면 제거
+                            if (!oEachResult.IfcSystem1.Equals("")) {
+                                if (string.Compare(oEachResult.IfcSystem1, oEachResult.IfcSystem2) == 0) {
+                                    if (_settings.export_SameIfcSystem) {
+                                        _listSameIfcSystem.Add(new IfcSystemData(nwissue, oEachResult.IfcSystem1, oEachResult.IfcSystem2, oEachResult.Namespace1));
+                                    }
+                                    continue;
+                                }
+                            }
+                        }
+                        #endregion
 
                 if (string.Compare(oEachResult.path1ID, oEachResult.path2ID) == 0)
                 {
@@ -239,7 +289,130 @@ namespace Integrity_Checker_MEP
                 temp[10] = result.IfcSystem1;
                 temp[11] = result.IfcSystem2;
 
-                // ... Filtering logic for duplicates and distance ...
+                #region 중복제거 : 최초 등장 간섭 외 제거(간섭거리가 가장 작은 간섭 외 제거)
+                //CurtainWall은 CurtainWall끼리만 비교
+                StringBuilder sb_multi = new StringBuilder();
+                sb_multi.Append(temp[1]).Append(temp[2]).Append(temp[4]).Append(temp[5]);
+
+                StringBuilder sb_iscur = new StringBuilder();
+                sb_iscur.Append(temp[3]).Append(temp[6]);
+
+                if (sb_iscur.ToString().Contains("IfcCurtainWall"))
+                {
+                    if (multiObjects_Cur.Contains(sb_multi.ToString()))
+                    {
+                        if (_settings.export_UselessClash)
+                        {
+                            _listUselessClashes2.Add(result);
+                            _listUselessReasons2.Add("동일 간섭 존재(CurtainWall)");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        multiObjects_Cur.Add(sb_multi.ToString());
+                    }
+                }
+                else
+                {
+                    if (multiObjects.Contains(sb_multi.ToString()))
+                    {
+                        if (_settings.export_UselessClash)
+                        {
+                            _listUselessClashes2.Add(result);
+                            _listUselessReasons2.Add("동일 간섭 존재");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        multiObjects.Add(sb_multi.ToString());
+                    }
+                }
+                #endregion
+
+                #region str-mep가 아닌 간섭에서 distance가 0이하 ~ -0.01m초과인 간섭 제외
+                double dis = result.distance;
+                if (temp[1].Contains("Str"))
+                {
+                    // str-str 간섭
+                    if (temp[4].Contains("Str"))
+                    {
+                        if (Math.Round(dis, 3) <= 0 && dis > -10)
+                        {
+                            if (dis == 0)
+                            {
+                                StringBuilder _sb = new StringBuilder();
+                                _sb.Append(temp[2]).Append(temp[5]);
+                                if (_lstStrDupl.Contains(_sb.ToString()))
+                                { // Duplicate에 존재 시 제거하지 않음
+                                    temp[7] = "Hard";
+                                }
+                                else
+                                {
+                                    _listUselessClashes2.Add(result);
+                                    _listUselessReasons2.Add("거리 0 간섭");
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                _listUselessClashes2.Add(result);
+                                _listUselessReasons2.Add("공차 내 간섭");
+                                continue;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (temp[1] == "Arch" && temp[4] == "Arch")
+                    {
+                        if (Math.Round(dis, 3) <= 0 && dis > -10)
+                        {
+                            if (dis == 0)
+                            {
+                                StringBuilder _sb = new StringBuilder();
+                                _sb.Append(temp[2]).Append(temp[5]);
+                                if (_lstArchDupl.Contains(_sb.ToString()))
+                                {// Duplicate에 존재 시 제거하지 않음
+                                    temp[7] = "Hard";
+                                }
+                                else
+                                {
+                                    _listUselessClashes2.Add(result);
+                                    _listUselessReasons2.Add("거리 0 간섭");
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                _listUselessClashes2.Add(result);
+                                _listUselessReasons2.Add("공차 내 간섭");
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Math.Round(dis, 3) <= 0 && dis > -10)
+                        {
+                            if (dis == 0)
+                            {
+                                _listUselessClashes2.Add(result);
+                                _listUselessReasons2.Add("거리 0 간섭");
+                                continue;
+                            }
+                            else
+                            {
+                                _listUselessClashes2.Add(result);
+                                _listUselessReasons2.Add("공차 내 간섭");
+                                continue;
+                            }
+                        }
+                    }
+                }
+                #endregion
 
                 csvData.Add(temp);
                 if (temp[7] == "Hard") clashNumList.Add(temp[0]);
@@ -289,6 +462,160 @@ namespace Integrity_Checker_MEP
                 catch { info = item.FindFirstObjectAncestor().PropertyCategories.FindCategoryByDisplayName(category)?.Properties.FindPropertyByDisplayName(property)?.Value.ToString(); }
             }
             return info;
+        }
+
+        public string GeneratePropertiesFile()
+        {
+            _logger.Log("층간 높이 측정 시작");
+            Document doc = _document;
+            ModelItemCollection itemCollection = new ModelItemCollection();
+            DocumentModels models = doc.Models;
+
+            if (models.Count == 0)
+            {
+                _logger.Log("(경고) 불러온 모델이 없습니다.");
+                return null;
+            }
+
+            Dictionary<string, double> heights = new Dictionary<string, double>();
+            List<string[]> props = new List<string[]>();
+
+            for (int i = 0; i < models.Count; i++)
+            {
+                if (models[i].FileName.ToUpper().Contains("COMM")
+                    || models[i].FileName.ToUpper().Contains("ELEC")
+                    || models[i].FileName.ToUpper().Contains("FIRE")
+                    || models[i].FileName.ToUpper().Contains("MECH")) continue;
+                itemCollection.AddRange(ItemsFromRoot(models[i]));
+            }
+
+            for (int i = 0; i < itemCollection.Count; i++)
+            {
+                string type = GetInfo(itemCollection[i], "항목", "유형");
+                if (type.Equals("IfcDistributionPort") || type.Equals("IfcDistributionSystem") || type.Equals("IfcValve") || type.Equals("IfcPipeFitting"))
+                {
+                    itemCollection.Remove(itemCollection[i]);
+                    i--; 
+                }
+            }
+
+            _logger.Log("    딕셔너리 생성 시작");
+            ModelItem item = null;
+            for (int i = 0; i < itemCollection.Count; i++)
+            {
+                item = itemCollection[i];
+                try
+                {
+                    string[] temp = new string[3];
+                    temp[0] = GetElementID(item);
+                    temp[1] = GetInfo(item, "요소", "IfcClass");
+                    if (temp[1].Equals("IfcDistributionPort") || temp[1].Equals("IfcDistributionSystem") || temp[1].Equals("IfcOpeningElement")) continue;
+
+                    temp[2] = GetInfo(item, "요소", "IfcSpatialContainer");
+                    if (string.IsNullOrEmpty(temp[2]))
+                    {
+                        temp[2] = GetInfo(item, "항목", "도면층");
+                    }
+                    if (!string.IsNullOrEmpty(temp[2]) && !heights.ContainsKey(temp[2]))
+                    {
+                        heights.Add(temp[2], 0f);
+                    }
+                    props.Add(temp);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Log(ex.ToString());
+                }
+            }
+            _logger.Log("    딕셔너리 생성 완료");
+
+            Dictionary<string, double> newHeights = new Dictionary<string, double>();
+            _logger.Log("    층간 최대값 찾기 시작");
+            try
+            {
+                foreach (var level in heights.Keys)
+                {
+                    HashSet<double> height_walls = new HashSet<double>();
+                    for (int i = 0; i < itemCollection.Count; i++)
+                    {
+                        if (!string.IsNullOrEmpty(GetInfo(itemCollection[i], "요소", "IfcSpatialContainer")) && string.Compare(GetInfo(itemCollection[i], "요소", "IfcSpatialContainer"), level) == 0)
+                        {
+                            if (!string.IsNullOrEmpty(GetInfo(itemCollection[i], "요소", "IfcSpatialContainer")) && string.Compare(GetInfo(itemCollection[i], "요소", "IfcClass"), "IfcWall") == 0)
+                            {
+                                try
+                                {
+                                    double h = double.Parse(GetInfo(itemCollection[i], "Constraints", "Unconnected Height").Split(':')[1]);
+                                    double offsetValue = 0;
+                                    string s_offset = GetInfo(itemCollection[i], "Constraints", "Base Offset");
+                                    if (!string.IsNullOrEmpty(s_offset))
+                                    {
+                                        offsetValue = double.Parse(s_offset.Split(':')[1]);
+                                    }
+                                    height_walls.Add(Math.Abs(h + offsetValue));
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.Log(ex.ToString());
+                                    return null;
+                                }
+                            }
+                        }
+                    }
+                    if (height_walls.Count != 0)
+                    {
+                        newHeights.Add(level, height_walls.Max());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex.ToString());
+            }
+
+            List<string[]> newprops = new List<string[]>();
+            try
+            {
+                for (int i = 0; i < props.Count; i++)
+                {
+                    if (props[i] != null)
+                    {
+                        if (newHeights.ContainsKey(props[i][2]))
+                        {
+                            props[i][2] = (newHeights[props[i][2]] * _offset).ToString("F3");
+                            newprops.Add(props[i]);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.ToString());
+            }
+            _logger.Log("    층간 최대값 찾기 완료");
+
+            List<string[]> ifcspace = new List<string[]>();
+            for (int i = 0; i < newprops.Count; i++)
+            {
+                if (string.Compare(newprops[i][1], "IfcSpace") == 0)
+                {
+                    ifcspace.Add(newprops[i]);
+                }
+            }
+
+            string[] header2 = new string[3];
+            header2[0] = "Guid";
+            header2[1] = "Type";
+            header2[2] = "Level_height";
+            ifcspace.Insert(0, header2);
+
+            _reportGenerator.SaveCsvFile("Properties", ifcspace);
+            _logger.Log("층간 높이 측정 완료");
+            return "Properties.csv";
+        }
+
+        public IEnumerable<ModelItem> ItemsFromRoot(Model model)
+        {
+            return model.RootItem.Descendants.Where(x => x.HasGeometry);
         }
     }
 }
